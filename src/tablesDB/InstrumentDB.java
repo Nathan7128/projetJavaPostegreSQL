@@ -11,9 +11,9 @@ import java.util.List;
 public class InstrumentDB {
 
     public static int add(Instrument instrument) {
-        var sql = "INSERT INTO Instrument(" +
-                "IdInstrument, NumSerie, IdModele, Couleur, Prix, Photo) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+        var sql = "INSERT INTO public.\"Instrument\"(\n" +
+                "\t\"IdInstrument\", \"NumSerie\", \"IdModele\", \"Couleur\", \"Prix\", \"Photo\")\n" +
+                "\tVALUES (?, ?, ?, ?, ?, ?);";
 
         try (var conn =  DB.connect();
              var pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -40,9 +40,8 @@ public class InstrumentDB {
 
     public static List<Instrument> findAll() {
         var instruments = new ArrayList<Instrument>();
-
-        var sql = "SELECT IdInstrument, NumSerie, IdModele, Couleur, Prix, Photo " +
-                "FROM Instrument ORDER BY IdInstrument";
+        var sql = "SELECT \"IdInstrument\", \"NumSerie\", \"IdModele\", \"Couleur\", \"Prix\", \"Photo\"\n" +
+                "\tFROM public.\"Instrument\";";
 
         try (var conn =  DB.connect();
              var stmt = conn.createStatement()) {
@@ -66,8 +65,8 @@ public class InstrumentDB {
     }
 
     public static Instrument findById(int id){
-        var sql = "SELECT IdInstrument, NumSerie, IdModele, Couleur, Prix, Photo " +
-                "FROM Instrument WHERE IdInstrument=?";
+        var sql = "SELECT \"IdInstrument\", \"NumSerie\", \"IdModele\", \"Couleur\", \"Prix\", \"Photo\"\n" +
+                "\tFROM public.\"Instrument\" WHERE \"IdInstrument\"=?;";
         try (var conn =  DB.connect();
              var pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
@@ -89,9 +88,9 @@ public class InstrumentDB {
     }
 
     public static int update(String id, String numSerie, String idModele, String couleur, int prix, String photo) {
-        var sql = "UPDATE Instrument " +
-                "SET IdInstrument=?, NumSerie=?, IdModele=?, Couleur=?, Prix=?, Photo=? " +
-                "WHERE IdInstrument=";
+        var sql = "UPDATE public.\"Instrument\"\n" +
+                "\tSET \"IdInstrument\"=?, \"NumSerie\"=?, \"IdModele\"=?, \"Couleur\"=?, \"Prix\"=?, \"Photo\"=?\n" +
+                "\tWHERE \"IdInstrument\"=?;";
 
         int affectedRows = 0;
 
@@ -113,7 +112,8 @@ public class InstrumentDB {
     }
 
     public static int delete(int id) {
-        var sql = "DELETE FROM Instrument WHERE IdInstrument=?";
+        var sql = "DELETE FROM public.\"Instrument\"\n" +
+                "\tWHERE \"IdInstrument\"=?;";
         try (var conn  = DB.connect();
              var pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);

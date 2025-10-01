@@ -9,7 +9,5 @@ public class InstrumentsPanel {
 
     public InstrumentsPanel() {
         super();
-
-
     }
 }

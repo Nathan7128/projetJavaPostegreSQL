@@ -19,6 +19,9 @@ public class FenetrePrincipale extends JFrame {
 
         // Initialisation de la barre de menu
         initBarreMenu();
+
+        JTable tableauInstruments = new JTable(new TableauInstruments());
+        contentPane.add(new JScrollPane(tableauInstruments), BorderLayout.CENTER);
     }
 
     private void initBarreMenu() {
