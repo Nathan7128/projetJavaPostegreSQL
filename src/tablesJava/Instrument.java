@@ -2,15 +2,15 @@ package tablesJava;
 
 public class Instrument {
 
-    private String id;
+    private int id;
     private String numSerie;
-    private String idModele;
+    private int idModele;
     private String couleur;
     private int prix;
     private String photo;
 
 
-    public Instrument(String id, String numSerie, String idModele, String couleur, int prix, String photo) {
+    public Instrument(int id, String numSerie, int idModele, String couleur, int prix, String photo) {
         this.id = id;
         this.numSerie = numSerie;
         this.idModele = idModele;
@@ -20,7 +20,7 @@ public class Instrument {
     }
 
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -28,7 +28,7 @@ public class Instrument {
         this.numSerie = numSerie;
     }
 
-    public void setIdModele(String idModele) {
+    public void setIdModele(int idModele) {
         this.idModele = idModele;
     }
 
@@ -44,7 +44,7 @@ public class Instrument {
         this.photo = photo;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -52,7 +52,7 @@ public class Instrument {
         return numSerie;
     }
 
-    public String getIdModele() {
+    public int getIdModele() {
         return idModele;
     }
 

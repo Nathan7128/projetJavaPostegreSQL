@@ -2,13 +2,16 @@ package tablesDB;
 
 import database.DB;
 import tablesJava.Instrument;
+import tablesJava.Modele;
 
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class InstrumentDB {
+public class InstrumentsDB {
 
     public static int add(Instrument instrument) {
         var sql = "INSERT INTO public.\"Instrument\"(\n" +
@@ -18,9 +21,9 @@ public class InstrumentDB {
         try (var conn =  DB.connect();
              var pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            pstmt.setString(1, instrument.getId());
+            pstmt.setInt(1, instrument.getId());
             pstmt.setString(2, instrument.getNumSerie());
-            pstmt.setString(3, instrument.getIdModele());
+            pstmt.setInt(3, instrument.getIdModele());
             pstmt.setString(4, instrument.getCouleur());
             pstmt.setInt(5, instrument.getPrix());
             pstmt.setString(6, instrument.getPhoto());
@@ -49,9 +52,9 @@ public class InstrumentDB {
 
             while (rs.next()) {
                 var instrument = new Instrument(
-                        rs.getString("IdInstrument"),
+                        rs.getInt("IdInstrument"),
                         rs.getString("NumSerie"),
-                        rs.getString("IdModele"),
+                        rs.getInt("IdModele"),
                         rs.getString("Couleur"),
                         rs.getInt("Prix"),
                         rs.getString("Photo")
@@ -64,6 +67,20 @@ public class InstrumentDB {
         return instruments;
     }
 
+    public static Map<String, Integer> getAllIDsInstruments() {
+        List<Instrument> instruments = findAll();
+        Map<String, Integer> idsInstruments = new HashMap<>();
+
+        for (Instrument instrument : instruments) {
+            int id = instrument.getId();
+            String num_serie = instrument.getNumSerie();
+            String cle = id + " (" + num_serie + ")";
+            idsInstruments.put(cle, id);
+        }
+
+        return idsInstruments;
+    }
+
     public static Instrument findById(int id){
         var sql = "SELECT \"IdInstrument\", \"NumSerie\", \"IdModele\", \"Couleur\", \"Prix\", \"Photo\"\n" +
                 "\tFROM public.\"Instrument\" WHERE \"IdInstrument\"=?;";
@@ -73,9 +90,9 @@ public class InstrumentDB {
             var rs = pstmt.executeQuery();
             if (rs.next()) {
                 return new Instrument(
-                        rs.getString("IdInstrument"),
+                        rs.getInt("IdInstrument"),
                         rs.getString("NumSerie"),
-                        rs.getString("IdModele"),
+                        rs.getInt("IdModele"),
                         rs.getString("Couleur"),
                         rs.getInt("Prix"),
                         rs.getString("Photo")
@@ -87,7 +104,7 @@ public class InstrumentDB {
         return null;
     }
 
-    public static int update(String id, String numSerie, String idModele, String couleur, int prix, String photo) {
+    public static int update(int id, String numSerie, int idModele, String couleur, int prix, String photo) {
         var sql = "UPDATE public.\"Instrument\"\n" +
                 "\tSET \"IdInstrument\"=?, \"NumSerie\"=?, \"IdModele\"=?, \"Couleur\"=?, \"Prix\"=?, \"Photo\"=?\n" +
                 "\tWHERE \"IdInstrument\"=?;";
@@ -96,9 +113,9 @@ public class InstrumentDB {
 
         try (var conn  = DB.connect();
              var pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, id);
+            pstmt.setInt(1, id);
             pstmt.setString(2, numSerie);
-            pstmt.setString(3, idModele);
+            pstmt.setInt(3, idModele);
             pstmt.setString(4, couleur);
             pstmt.setInt(5, prix);
             pstmt.setString(6, photo);
