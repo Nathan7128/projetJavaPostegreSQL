@@ -1,5 +1,6 @@
 package gui.tableaux;
 
+import tablesDB.ClientsDB;
 import tablesDB.MarquesDB;
 import tablesJava.Marque;
 
@@ -11,6 +12,13 @@ public class TableauMarques extends Tableau<Marque> {
                 MarquesDB.findAll(),
                 new String[]{"IdMarque", "Nom", "SiteWeb"}
         );
+    }
+
+    @Override
+    public void rafraichir() {
+        donnees.clear();
+        donnees = MarquesDB.findAll();
+        fireTableDataChanged();
     }
 
     @Override

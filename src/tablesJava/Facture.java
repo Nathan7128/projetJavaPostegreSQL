@@ -5,12 +5,13 @@ public class Facture {
 
     private int id;
     private int idClient;
+    private int idInstrument;
     private Date date;
 
 
-    public Facture(int id, int id_marque, Date date) {
+    public Facture(int id, int id_client, Date date) {
         this.id = id;
-        this.idClient = id_marque;
+        this.idClient = id_client;
         this.date = date;
     }
 
@@ -19,7 +20,7 @@ public class Facture {
         this.id = id;
     }
 
-    public void setIdClient(int id_marque) { this.idClient = id_marque; }
+    public void setIdClient(int id_client) { this.idClient = id_client; }
 
     public void setDate(Date date) {
         this.date = date;

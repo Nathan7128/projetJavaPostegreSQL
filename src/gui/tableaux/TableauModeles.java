@@ -1,5 +1,6 @@
 package gui.tableaux;
 
+import tablesDB.ClientsDB;
 import tablesDB.ModelesDB;
 import tablesJava.Modele;
 
@@ -11,6 +12,13 @@ public class TableauModeles extends Tableau<Modele> {
                 ModelesDB.findAll(),
                 new String[]{"IdModele", "IdMarque", "Nom"}
         );
+    }
+
+    @Override
+    public void rafraichir() {
+        donnees.clear();
+        donnees = ModelesDB.findAll();
+        fireTableDataChanged();
     }
 
     @Override

@@ -2,6 +2,7 @@ package gui.onglets;
 
 import gui.dialogues.FenetreAjouterModele;
 import gui.tableaux.TableauModeles;
+import tablesDB.MarquesDB;
 import tablesDB.ModelesDB;
 import tablesJava.Modele;
 
@@ -13,15 +14,15 @@ import java.awt.event.ActionListener;
 public class OngletModeles extends Onglet {
     private ModelesDB modelesDB = new ModelesDB();
     private TableauModeles tableau = new TableauModeles();
-    private JButton bAjouter;
+    private JTable jTableau;
+    private JScrollPane tableau_defilant;
+    private JButton bAjouter, bSupprimer;
 
     public OngletModeles() {
         super("Modeles", "src/gui/images/icone_modeles.png");
 
-        JScrollPane tableau_defilant = new JScrollPane(new JTable(tableau));
-        tableau_defilant.setBorder(BorderFactory.createEmptyBorder(20, 100, 20, 100)); // marges pour centrer visuellement
+        construireTableau();
 
-        add(tableau_defilant, BorderLayout.CENTER);
         bAjouter = new JButton("Ajouter");
         bAjouter.addActionListener(new ActionListener() {
             @Override
@@ -29,8 +30,30 @@ public class OngletModeles extends Onglet {
                 ajouterModele();
             }
         });
+        bSupprimer = new JButton("Supprimer");
+        bSupprimer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                supprimerModele();
+            }
+        });
 
-        add(bAjouter, BorderLayout.SOUTH);
+        JPanel boutons = new JPanel();
+        boutons.add(bAjouter);
+        boutons.add(bSupprimer);
+
+        add(boutons, BorderLayout.SOUTH);
+    }
+
+    private void construireTableau() {
+        jTableau = new JTable(tableau);
+        tableau_defilant = new JScrollPane(jTableau);
+        tableau_defilant.setBorder(BorderFactory.createEmptyBorder(20, 100, 20, 100));
+        add(tableau_defilant, BorderLayout.CENTER);
+    }
+
+    public void rafraichir() {
+        tableau.rafraichir();
     }
 
     public void ajouterModele() {
@@ -38,5 +61,26 @@ public class OngletModeles extends Onglet {
         FenetreAjouterModele fenetreAjouterModele = new FenetreAjouterModele((JFrame) parent);
         Modele modele = fenetreAjouterModele.afficherEtRecuperer();
         tableau.addDonnee(modele);
+    }
+
+    public void supprimerModele() {
+        int[] selection = jTableau.getSelectedRows();
+
+        if (selection.length > 0) {
+            int option = JOptionPane.showConfirmDialog(this,
+                    "La suppression de ce/ces modèles supprimera les instruments associés, voulez vous continuer ?",
+                    "Suppression du modèle",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+
+            if(option == JOptionPane.OK_OPTION) {
+                for(int i = selection.length - 1; i >= 0; i--){
+                    int index = selection[i];
+                    int id_modele = (int) tableau.getValueAt(index, 0);
+                    tableau.supprDonnee(index);
+                    ModelesDB.delete(id_modele);
+                }
+            }
+        }
     }
 }

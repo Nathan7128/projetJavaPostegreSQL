@@ -8,7 +8,7 @@ import java.awt.*;
 public class FenetrePrincipale extends JFrame {
 
     private JPanel contentPane;
-
+    JTabbedPane onglets;
     private JToolBar barreOutils;
 
     public FenetrePrincipale() {
@@ -16,11 +16,16 @@ public class FenetrePrincipale extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setExtendedState(MAXIMIZED_BOTH);
 
-        // Création du conteneur principal
+//        Création du conteneur principal
         contentPane = new JPanel(new BorderLayout());
         setContentPane(contentPane);
 
-        // Création du JTabbedPane
+//        Création de la liste des onglets de la fenêtre
+        onglets = creerOnglets();
+        contentPane.add(onglets, BorderLayout.CENTER);
+    }
+
+    private JTabbedPane creerOnglets() {
         JTabbedPane onglets = new JTabbedPane();
 
         OngletInstruments ongletInstruments = new OngletInstruments();
@@ -38,59 +43,14 @@ public class FenetrePrincipale extends JFrame {
         OngletFactures ongletFactures = new OngletFactures();
         onglets.addTab(ongletFactures.getTitre(), ongletFactures.getIcone(), ongletFactures);
 
-        // Ajout du JTabbedPane dans la fenêtre principale
-        contentPane.add(onglets, BorderLayout.CENTER);
-    }
+        // 🔥 ChangeListener commun à tous les onglets
+        onglets.addChangeListener(e -> {
+            Component ongletSelectionne = onglets.getSelectedComponent();
+            if (ongletSelectionne instanceof Onglet) {
+                ((Onglet) ongletSelectionne).rafraichir();
+            }
+        });
 
-//    private void initBarreMenu() {
-//        barreOutils = new JToolBar();
-//        barreOutils.setFloatable(false);
-//        barreOutils.setPreferredSize(new Dimension(0, 50));
-//        barreOutils.setLayout(new BoxLayout(barreOutils, BoxLayout.X_AXIS));
-//        barreOutils.add(Box.createHorizontalGlue());
-//
-//        Image icone_factures = new ImageIcon("src/gui/images/icone_factures.png").getImage();
-//        icone_factures = icone_factures.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-//        JButton btnFacture = new JButton(new ImageIcon(icone_factures));
-//        btnFacture.setToolTipText("Factures");
-//        barreOutils.add(btnFacture);
-//
-//        barreOutils.addSeparator();
-//
-//        Image icone_clients = new ImageIcon("src/gui/images/icone_clients.png").getImage();
-//        icone_clients = icone_clients.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-//        JButton btnClients = new JButton(new ImageIcon(icone_clients));
-//        btnClients.setToolTipText("Clients");
-//        barreOutils.add(btnClients);
-//
-//        barreOutils.addSeparator();
-//
-//        Image icone_instruments = new ImageIcon("src/gui/images/icone_instruments.png").getImage();
-//        icone_instruments = icone_instruments.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-//        JButton btnInstruments = new JButton(new ImageIcon(icone_instruments));
-//        btnInstruments.setToolTipText("Instruments");
-//        barreOutils.add(btnInstruments);
-//
-//        barreOutils.addSeparator();
-//
-//        Image icone_modeles = new ImageIcon("src/gui/images/icone_modeles.png").getImage();
-//        icone_modeles = icone_modeles.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-//        JButton btnModeles = new JButton(new ImageIcon(icone_modeles));
-//        btnModeles.setToolTipText("Modèles");
-//        barreOutils.add(btnModeles);
-//
-//        barreOutils.addSeparator();
-//
-//        Image icone_marques = new ImageIcon("src/gui/images/icone_marques.png").getImage();
-//        icone_marques = icone_marques.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-//        JButton btnMarques = new JButton(new ImageIcon(icone_marques));
-//        btnMarques.setToolTipText("Marques");
-//        barreOutils.add(btnMarques);
-//
-//        barreOutils.addSeparator();
-//
-//        barreOutils.add(Box.createHorizontalGlue());
-//
-//        contentPane.add(barreOutils, BorderLayout.NORTH);
-//    }
+        return onglets;
+    }
 }

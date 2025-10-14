@@ -4,7 +4,7 @@ import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
 abstract class Tableau<T> extends AbstractTableModel {
-    protected final List<T> donnees;
+    protected List<T> donnees;
     private final String[] entetes;
 
     Tableau(List<T> donnees, String[] entetes) {
@@ -32,6 +32,14 @@ abstract class Tableau<T> extends AbstractTableModel {
 
         fireTableRowsInserted(donnees.size() - 1, donnees.size() - 1);
     }
+
+    public void supprDonnee(int index) {
+        donnees.remove(index);
+
+        fireTableRowsDeleted(index, index);
+    }
+
+    public abstract void rafraichir();
 
     @Override
     public abstract Object getValueAt(int rowIndex, int columnIndex);

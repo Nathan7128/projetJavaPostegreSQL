@@ -1,5 +1,6 @@
 package gui.tableaux;
 
+import tablesDB.ClientsDB;
 import tablesDB.FacturesDB;
 import tablesJava.Facture;
 
@@ -11,6 +12,13 @@ public class TableauFactures extends Tableau<Facture> {
                 FacturesDB.findAll(),
                 new String[]{"IdFacture", "IdClient", "Date"}
         );
+    }
+
+    @Override
+    public void rafraichir() {
+        donnees.clear();
+        donnees = FacturesDB.findAll();
+        fireTableDataChanged();
     }
 
     @Override

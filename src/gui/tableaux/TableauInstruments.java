@@ -1,5 +1,6 @@
 package gui.tableaux;
 
+import tablesDB.ClientsDB;
 import tablesDB.InstrumentsDB;
 import tablesJava.Instrument;
 
@@ -11,6 +12,13 @@ public class TableauInstruments extends Tableau<Instrument> {
                 InstrumentsDB.findAll(),
                 new String[]{"IdInstrument", "NumSerie", "IdModele", "Couleur", "Prix", "Photo"}
         );
+    }
+
+    @Override
+    public void rafraichir() {
+        donnees.clear();
+        donnees = InstrumentsDB.findAll();
+        fireTableDataChanged();
     }
 
     @Override
