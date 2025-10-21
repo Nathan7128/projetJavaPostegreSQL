@@ -2,9 +2,7 @@ package gui.onglets;
 
 import gui.dialogues.FenetreAjouterModele;
 import gui.tableaux.TableauModeles;
-import tablesDB.MarquesDB;
 import tablesDB.ModelesDB;
-import tablesJava.Modele;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class OngletModeles extends Onglet {
-    private ModelesDB modelesDB = new ModelesDB();
     private TableauModeles tableau = new TableauModeles();
     private JTable jTableau;
     private JScrollPane tableau_defilant;

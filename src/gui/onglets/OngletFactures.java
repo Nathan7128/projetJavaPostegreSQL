@@ -3,8 +3,6 @@ package gui.onglets;
 import gui.dialogues.FenetreAjouterFacture;
 import gui.tableaux.TableauFactures;
 import tablesDB.FacturesDB;
-import tablesDB.ModelesDB;
-import tablesJava.Facture;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class OngletFactures extends Onglet {
-    private FacturesDB facturesDB = new FacturesDB();
     private TableauFactures tableau = new TableauFactures();
     private JTable jTableau;
     private JScrollPane tableau_defilant;
@@ -53,15 +50,9 @@ public class OngletFactures extends Onglet {
         add(tableau_defilant, BorderLayout.CENTER);
     }
 
-    public void rafraichir() {
-        tableau.rafraichir();
-    }
-
     public void ajouterFacture() {
         Window parent = SwingUtilities.getWindowAncestor(this);
-        FenetreAjouterFacture fenetreAjouterFacture = new FenetreAjouterFacture((JFrame) parent);
-        Facture facture = fenetreAjouterFacture.afficherEtRecuperer();
-        tableau.addDonnee(facture);
+        FenetreAjouterFacture fenetreAjouterFacture = new FenetreAjouterFacture((JFrame) parent, tableau);
     }
 
     public void supprimerFacture() {

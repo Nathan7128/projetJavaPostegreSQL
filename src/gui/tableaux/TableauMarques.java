@@ -1,6 +1,5 @@
 package gui.tableaux;
 
-import tablesDB.ClientsDB;
 import tablesDB.MarquesDB;
 import tablesJava.Marque;
 

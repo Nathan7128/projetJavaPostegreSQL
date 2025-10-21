@@ -3,8 +3,6 @@ package gui.onglets;
 import gui.dialogues.FenetreAjouterMarque;
 import gui.tableaux.TableauMarques;
 import tablesDB.MarquesDB;
-import tablesDB.ModelesDB;
-import tablesJava.Marque;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class OngletMarques extends Onglet {
-    private MarquesDB marquesDB = new MarquesDB();
     private TableauMarques tableau = new TableauMarques();
     private JTable jTableau;
     private JScrollPane tableau_defilant;

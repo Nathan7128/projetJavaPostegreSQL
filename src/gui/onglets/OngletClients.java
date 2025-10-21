@@ -3,8 +3,6 @@ package gui.onglets;
 import gui.dialogues.FenetreAjouterClient;
 import gui.tableaux.TableauClients;
 import tablesDB.ClientsDB;
-import tablesDB.ModelesDB;
-import tablesJava.Client;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class OngletClients extends Onglet {
-    private ClientsDB clientsDB = new ClientsDB();
     private TableauClients tableau = new TableauClients();
     private JTable jTableau;
     private JScrollPane tableau_defilant;

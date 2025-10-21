@@ -1,5 +1,6 @@
 package gui.dialogues;
 
+import gui.tableaux.TableauClients;
 import tablesDB.ClientsDB;
 import tablesJava.Client;
 
@@ -7,27 +8,24 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Map;
 
 public class FenetreAjouterClient extends JDialog {
 
     private Client clientCree = null;
 
-    private final JSpinner champIdClient = new JSpinner((new SpinnerNumberModel(0, 0, 100, 1)));
     private final JTextField champNom = new JTextField(15);
     private final JTextField champPrenom = new JTextField(15);
     private final JTextField champAdresse = new JTextField(15);
     private final JTextField champEmail = new JTextField(15);
+    private TableauClients tableauClients;
 
-    public FenetreAjouterClient(JFrame parent) {
+    public FenetreAjouterClient(JFrame parent, TableauClients tableauClients) {
         super(parent, "Ajouter un client", true);
+        this.tableauClients = tableauClients;
         setLayout(new BorderLayout(10, 10));
 
 
-        JPanel panelForm = new JPanel(new GridLayout(5, 2, 20, 20));
-
-        panelForm.add(new JLabel("Identifiant du client :"));
-        panelForm.add(champIdClient);
+        JPanel panelForm = new JPanel(new GridLayout(4, 2, 20, 20));
 
         panelForm.add(new JLabel("Nom :"));
         panelForm.add(champNom);
@@ -69,24 +67,16 @@ public class FenetreAjouterClient extends JDialog {
     }
 
     private void creerClient() {
-        int id_client = (int) champIdClient.getValue();
+        int id_client = ClientsDB.createNewId();
         String nom = champNom.getText().trim();
         String prenom = champPrenom.getText().trim();
         String adresse = champAdresse.getText().trim();
         String email = champEmail.getText().trim();
 
-
-        // Vérifie si l'identifiant existe déjà
-        if (ClientsDB.getAllIDsClients().containsValue(id_client)) {
-            JOptionPane.showMessageDialog(this,
-                    "L'identifiant " + id_client + " existe déjà.",
-                    "Erreur",
-                    JOptionPane.ERROR_MESSAGE);
-        }
         // Vérifie si un champ obligatoire est vide
-        else if (nom.isEmpty() || prenom.isEmpty()) {
+        if (nom.isEmpty() || prenom.isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                    "Veuillez remplir tous les champs obligatoires.",
+                    "Veuillez remplir tous les champs obligatoires (Nom et Prénom).",
                     "Erreur",
                     JOptionPane.WARNING_MESSAGE);
         }
@@ -94,12 +84,8 @@ public class FenetreAjouterClient extends JDialog {
         else {
             clientCree = new Client(id_client, nom, prenom, adresse, email);
             ClientsDB.add(clientCree);
+            tableauClients.addDonnee(clientCree);
             dispose();
         }
-    }
-
-    public Client afficherEtRecuperer() {
-        setVisible(true);
-        return clientCree;
     }
 }

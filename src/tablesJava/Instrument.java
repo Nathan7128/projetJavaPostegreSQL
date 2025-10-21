@@ -20,29 +20,29 @@ public class Instrument {
     }
 
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setNumSerie(String numSerie) {
-        this.numSerie = numSerie;
-    }
-
-    public void setIdModele(int idModele) {
-        this.idModele = idModele;
-    }
-
-    public void setCouleur(String couleur) {
-        this.couleur = couleur;
-    }
-
-    public void setPrix(int prix) {
-        this.prix = prix;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
+//    public void setId(int id) {
+//        this.id = id;
+//    }
+//
+//    public void setNumSerie(String numSerie) {
+//        this.numSerie = numSerie;
+//    }
+//
+//    public void setIdModele(int idModele) {
+//        this.idModele = idModele;
+//    }
+//
+//    public void setCouleur(String couleur) {
+//        this.couleur = couleur;
+//    }
+//
+//    public void setPrix(int prix) {
+//        this.prix = prix;
+//    }
+//
+//    public void setPhoto(String photo) {
+//        this.photo = photo;
+//    }
 
     public int getId() {
         return id;

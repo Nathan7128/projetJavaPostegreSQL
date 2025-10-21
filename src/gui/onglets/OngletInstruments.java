@@ -2,8 +2,6 @@ package gui.onglets;
 
 import gui.tableaux.TableauInstruments;
 import tablesDB.InstrumentsDB;
-import tablesDB.ModelesDB;
-import tablesJava.Instrument;
 import gui.dialogues.FenetreAjouterInstrument;
 
 import javax.swing.*;
@@ -12,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.awt.*;
 
 public class OngletInstruments extends Onglet {
-    private InstrumentsDB instrumentsDB = new InstrumentsDB();
     private TableauInstruments tableau = new TableauInstruments();
     private JTable jTableau;
     private JScrollPane tableau_defilant;
@@ -52,35 +49,19 @@ public class OngletInstruments extends Onglet {
         add(tableau_defilant, BorderLayout.CENTER);
     }
 
-    public void rafraichir() {
-        tableau.rafraichir();
-    }
-
     public void ajouterInstrument() {
         Window parent = SwingUtilities.getWindowAncestor(this);
-        FenetreAjouterInstrument fenetreAjouterInstrument = new FenetreAjouterInstrument((JFrame) parent);
-        Instrument instrument = fenetreAjouterInstrument.afficherEtRecuperer();
-        tableau.addDonnee(instrument);
+        FenetreAjouterInstrument fenetreAjouterInstrument = new FenetreAjouterInstrument((JFrame) parent, tableau);
     }
 
     public void supprimerInstrument() {
         int[] selection = jTableau.getSelectedRows();
 
-        if (selection.length > 0) {
-            int option = JOptionPane.showConfirmDialog(this,
-                    "La suppression de ce/ces instruments supprimera les factures associées, voulez vous continuer ?",
-                    "Suppression de l'instrument",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
-
-            if(option == JOptionPane.OK_OPTION) {
-                for(int i = selection.length - 1; i >= 0; i--){
-                    int index = selection[i];
-                    int id_instrument = (int) tableau.getValueAt(index, 0);
-                    tableau.supprDonnee(index);
-                    InstrumentsDB.delete(id_instrument);
-                }
-            }
+        for(int i = selection.length - 1; i >= 0; i--){
+            int index = selection[i];
+            int id_instrument = (int) tableau.getValueAt(index, 0);
+            tableau.supprDonnee(index);
+            InstrumentsDB.delete(id_instrument);
         }
     }
 }

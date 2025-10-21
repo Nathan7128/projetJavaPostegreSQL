@@ -1,5 +1,6 @@
 package gui.dialogues;
 
+import gui.tableaux.TableauInstruments;
 import tablesDB.InstrumentsDB;
 import tablesDB.ModelesDB;
 import tablesJava.*;
@@ -13,23 +14,21 @@ public class FenetreAjouterInstrument extends JDialog {
 
     private Instrument instrumentCree = null;
 
-    private final JSpinner champIdInstrument = new JSpinner((new SpinnerNumberModel(0, 0, 100, 1)));
     private final JTextField champNumSerie = new JTextField(15);
     private final Map<String, Integer> allIDsModeles = ModelesDB.getAllIDsModeles();
     private final JComboBox champModele = new JComboBox(allIDsModeles.keySet().toArray());
     private final JTextField champCouleur = new JTextField(15);
     private final JSpinner champPrix = new JSpinner((new SpinnerNumberModel(0, 0, 10000, 1)));
     private final JTextField champPhoto = new JTextField(15);
+    private TableauInstruments tableauInstruments;
 
-    public FenetreAjouterInstrument(JFrame parent) {
+    public FenetreAjouterInstrument(JFrame parent, TableauInstruments tableauInstruments) {
         super(parent, "Ajouter un instrument", true);
+        this.tableauInstruments = tableauInstruments;
         setLayout(new BorderLayout(10, 10));
 
 
-        JPanel panelForm = new JPanel(new GridLayout(6, 2, 20, 20));
-
-        panelForm.add(new JLabel("Identifiant de l'instrument :"));
-        panelForm.add(champIdInstrument);
+        JPanel panelForm = new JPanel(new GridLayout(5, 2, 20, 20));
 
         panelForm.add(new JLabel("Numéro de série :"));
         panelForm.add(champNumSerie);
@@ -74,24 +73,17 @@ public class FenetreAjouterInstrument extends JDialog {
     }
 
     private void creerInstrument() {
-        int id_instrument = (int) champIdInstrument.getValue();
+        int id_instrument = InstrumentsDB.createNewId();
         String num_serie = champNumSerie.getText().trim();
         int id_modele = allIDsModeles.get((String) champModele.getSelectedItem());
         String couleur = champCouleur.getText().trim();
         int prix = (int) champPrix.getValue();
         String photo = champPhoto.getText().trim();
 
-        // Vérifie si l'identifiant existe déjà
-        if (InstrumentsDB.getAllIDsInstruments().containsValue(id_instrument)) {
-            JOptionPane.showMessageDialog(this,
-                    "L'identifiant " + id_instrument + " existe déjà.",
-                    "Erreur",
-                    JOptionPane.ERROR_MESSAGE);
-        }
         // Vérifie si un champ obligatoire est vide
-        else if (num_serie.isEmpty() || couleur.isEmpty() || photo.isEmpty()) {
+        if (num_serie.isEmpty() || couleur.isEmpty() || photo.isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                    "Veuillez remplir tous les champs obligatoires.",
+                    "Veuillez remplir tous les champs obligatoires (Numéro de série, Couleur et Photo).",
                     "Erreur",
                     JOptionPane.WARNING_MESSAGE);
         }
@@ -99,12 +91,8 @@ public class FenetreAjouterInstrument extends JDialog {
         else {
             instrumentCree = new Instrument(id_instrument, num_serie, id_modele, couleur, prix, photo);
             InstrumentsDB.add(instrumentCree);
+            tableauInstruments.addDonnee(instrumentCree);
             dispose();
         }
-    }
-
-    public Instrument afficherEtRecuperer() {
-        setVisible(true);
-        return instrumentCree;
     }
 }
