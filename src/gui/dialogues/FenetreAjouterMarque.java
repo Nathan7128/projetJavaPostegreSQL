@@ -1,5 +1,6 @@
 package gui.dialogues;
 
+import gui.tableaux.TableauMarques;
 import tablesDB.MarquesDB;
 import tablesJava.Marque;
 
@@ -12,19 +13,17 @@ public class FenetreAjouterMarque extends JDialog {
 
     private Marque marqueCreee = null;
 
-    private final JSpinner champIdMarque = new JSpinner((new SpinnerNumberModel(0, 0, 100, 1)));
     private final JTextField champNom = new JTextField(15);
     private final JTextField champSiteWeb = new JTextField(15);
+    private TableauMarques tableauMarques;
 
-    public FenetreAjouterMarque(JFrame parent) {
+    public FenetreAjouterMarque(JFrame parent, TableauMarques tableauMarques) {
         super(parent, "Ajouter une marque", true);
+        this.tableauMarques = tableauMarques;
+
         setLayout(new BorderLayout(10, 10));
 
-
-        JPanel panelForm = new JPanel(new GridLayout(3, 2, 20, 20));
-
-        panelForm.add(new JLabel("Identifiant de la marque :"));
-        panelForm.add(champIdMarque);
+        JPanel panelForm = new JPanel(new GridLayout(2, 2, 20, 20));
 
         panelForm.add(new JLabel("Nom :"));
         panelForm.add(champNom);
@@ -60,21 +59,14 @@ public class FenetreAjouterMarque extends JDialog {
     }
 
     private void creerMarque() {
-        int id_marque = (int) champIdMarque.getValue();
+        int id_marque = MarquesDB.createNewId();
         String nom = champNom.getText().trim();
         String site_web = champSiteWeb.getText().trim();
 
-        // Vérifie si l'identifiant existe déjà
-        if (MarquesDB.getAllIDsMarques().containsValue(id_marque)) {
-            JOptionPane.showMessageDialog(this,
-                    "L'identifiant " + id_marque + " existe déjà.",
-                    "Erreur",
-                    JOptionPane.ERROR_MESSAGE);
-        }
         // Vérifie si un champ obligatoire est vide
-        else if (nom.isEmpty()) {
+        if (nom.isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                    "Veuillez remplir tous les champs obligatoires.",
+                    "Veuillez remplir tous les champs obligatoires (Nom).",
                     "Erreur",
                     JOptionPane.WARNING_MESSAGE);
         }
@@ -82,12 +74,8 @@ public class FenetreAjouterMarque extends JDialog {
         else {
             marqueCreee = new Marque(id_marque, nom, site_web);
             MarquesDB.add(marqueCreee);
+            tableauMarques.addDonnee(marqueCreee);
             dispose();
         }
-    }
-
-    public Marque afficherEtRecuperer() {
-        setVisible(true);
-        return marqueCreee;
     }
 }

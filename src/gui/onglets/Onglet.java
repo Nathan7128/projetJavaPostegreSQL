@@ -25,9 +25,6 @@ public class Onglet extends JPanel {
         add(titreOnglet, BorderLayout.NORTH);
     }
 
-    public void rafraichir() {
-    }
-
     public Icon getIcone() {
         return icone;
     }

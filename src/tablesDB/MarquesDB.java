@@ -60,6 +60,24 @@ public class MarquesDB {
         return marques;
     }
 
+    public static int createNewId() {
+        var sql = "SELECT MAX(\"IdMarque\") AS id_max\n" +
+                "\tFROM public.\"Marque\";";
+        int idMax = 0;
+
+        try (var conn =  DB.connect();
+             var stmt = conn.prepareStatement(sql)) {
+
+            var rs = stmt.executeQuery();
+            if (rs.next()) {
+                idMax = rs.getInt("id_max");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return idMax;
+    }
+
     public static Map<String, Integer> getAllIDsMarques() {
         List<Marque> marques = findAll();
         Map<String, Integer> idsMarques = new HashMap<>();
@@ -74,46 +92,46 @@ public class MarquesDB {
         return idsMarques;
     }
 
-    public static Marque findById(int id){
-        var sql = "SELECT \"IdMarque\", \"Nom\", \"SiteWeb\"\n" +
-                "\tFROM public.\"Marque\" WHERE \"IdMarque\"=?;";
-        try (var conn =  DB.connect();
-             var pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
-            var rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return new Marque(
-                        rs.getInt("IdMarque"),
-                        rs.getString("Nom"),
-                        rs.getString("SiteWeb")
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    public static Marque findById(int id){
+//        var sql = "SELECT \"IdMarque\", \"Nom\", \"SiteWeb\"\n" +
+//                "\tFROM public.\"Marque\" WHERE \"IdMarque\"=?;";
+//        try (var conn =  DB.connect();
+//             var pstmt = conn.prepareStatement(sql)) {
+//            pstmt.setInt(1, id);
+//            var rs = pstmt.executeQuery();
+//            if (rs.next()) {
+//                return new Marque(
+//                        rs.getInt("IdMarque"),
+//                        rs.getString("Nom"),
+//                        rs.getString("SiteWeb")
+//                );
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
-    public static int update(int id, String nom, String site_web) {
-        var sql = "UPDATE public.\"Marque\"\n" +
-                "\tSET \"IdMarque\", \"Nom\", \"SiteWeb\"=?\n" +
-                "\tWHERE \"IdMarque\"=?;";
-
-        int affectedRows = 0;
-
-        try (var conn  = DB.connect();
-             var pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
-            pstmt.setString(2, nom);
-            pstmt.setString(3, site_web);
-
-            affectedRows = pstmt.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return affectedRows;
-    }
+//    public static int update(int id, String nom, String site_web) {
+//        var sql = "UPDATE public.\"Marque\"\n" +
+//                "\tSET \"IdMarque\", \"Nom\", \"SiteWeb\"=?\n" +
+//                "\tWHERE \"IdMarque\"=?;";
+//
+//        int affectedRows = 0;
+//
+//        try (var conn  = DB.connect();
+//             var pstmt = conn.prepareStatement(sql)) {
+//            pstmt.setInt(1, id);
+//            pstmt.setString(2, nom);
+//            pstmt.setString(3, site_web);
+//
+//            affectedRows = pstmt.executeUpdate();
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return affectedRows;
+//    }
 
     public static int delete(int id) {
         var sql = "DELETE FROM public.\"Marque\"\n" +

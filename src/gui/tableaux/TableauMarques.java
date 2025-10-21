@@ -15,13 +15,6 @@ public class TableauMarques extends Tableau<Marque> {
     }
 
     @Override
-    public void rafraichir() {
-        donnees.clear();
-        donnees = MarquesDB.findAll();
-        fireTableDataChanged();
-    }
-
-    @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Marque marque = donnees.get(rowIndex);
 

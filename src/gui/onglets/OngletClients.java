@@ -52,35 +52,19 @@ public class OngletClients extends Onglet {
         add(tableau_defilant, BorderLayout.CENTER);
     }
 
-    public void rafraichir() {
-        tableau.rafraichir();
-    }
-
     public void ajouterClient() {
         Window parent = SwingUtilities.getWindowAncestor(this);
-        FenetreAjouterClient fenetreAjouterClient = new FenetreAjouterClient((JFrame) parent);
-        Client client = fenetreAjouterClient.afficherEtRecuperer();
-        tableau.addDonnee(client);
+        FenetreAjouterClient fenetreAjouterClient = new FenetreAjouterClient((JFrame) parent, tableau);
     }
 
     public void supprimerClient() {
         int[] selection = jTableau.getSelectedRows();
 
-        if (selection.length > 0) {
-            int option = JOptionPane.showConfirmDialog(this,
-                    "La suppression de ce/ces clients supprimera les factures associées, voulez vous continuer ?",
-                    "Suppression du client",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
-
-            if(option == JOptionPane.OK_OPTION) {
-                for(int i = selection.length - 1; i >= 0; i--){
-                    int index = selection[i];
-                    int id_client = (int) tableau.getValueAt(index, 0);
-                    tableau.supprDonnee(index);
-                    ClientsDB.delete(id_client);
-                }
-            }
+        for(int i = selection.length - 1; i >= 0; i--){
+            int index = selection[i];
+            int id_client = (int) tableau.getValueAt(index, 0);
+            tableau.supprDonnee(index);
+            ClientsDB.delete(id_client);
         }
     }
 }

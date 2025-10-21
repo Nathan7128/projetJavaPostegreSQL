@@ -64,6 +64,24 @@ public class ClientsDB {
         return clients;
     }
 
+    public static int createNewId() {
+        var sql = "SELECT MAX(\"IdClient\") AS id_max\n" +
+                "\tFROM public.\"Client\";";
+        int idMax = 0;
+
+        try (var conn =  DB.connect();
+             var stmt = conn.prepareStatement(sql)) {
+
+            var rs = stmt.executeQuery();
+            if (rs.next()) {
+                idMax = rs.getInt("id_max");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return idMax;
+    }
+
     public static Map<String, Integer> getAllIDsClients() {
         List<Client> clients = findAll();
         Map<String, Integer> idsClients = new HashMap<>();
@@ -79,50 +97,50 @@ public class ClientsDB {
         return idsClients;
     }
 
-    public static Client findById(int id){
-        var sql = "SELECT \"IdClient\", \"Nom\", \"Prenom\", \"Adresse\", \"Email\"\n" +
-                "\tFROM public.\"Client\" WHERE \"IdClient\"=?;";
-        try (var conn =  DB.connect();
-             var pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
-            var rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return new Client(
-                        rs.getInt("IdClient"),
-                        rs.getString("Nom"),
-                        rs.getString("Prenom"),
-                        rs.getString("Adresse"),
-                        rs.getString("Mail")
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    public static Client findById(int id){
+//        var sql = "SELECT \"IdClient\", \"Nom\", \"Prenom\", \"Adresse\", \"Email\"\n" +
+//                "\tFROM public.\"Client\" WHERE \"IdClient\"=?;";
+//        try (var conn =  DB.connect();
+//             var pstmt = conn.prepareStatement(sql)) {
+//            pstmt.setInt(1, id);
+//            var rs = pstmt.executeQuery();
+//            if (rs.next()) {
+//                return new Client(
+//                        rs.getInt("IdClient"),
+//                        rs.getString("Nom"),
+//                        rs.getString("Prenom"),
+//                        rs.getString("Adresse"),
+//                        rs.getString("Mail")
+//                );
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
-    public static int update(int id, String nom, String prenom, String adresse, String email) {
-        var sql = "UPDATE public.\"Client\"\n" +
-                "\tSET \"IdClient\"=?, \"Nom\"=?, \"Prenom\"=?, \"Adresse\"=?, \"Email\"=?\n" +
-                "\tWHERE \"IdClient\"=?;";
-
-        int affectedRows = 0;
-
-        try (var conn  = DB.connect();
-             var pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
-            pstmt.setString(2, nom);
-            pstmt.setString(3, prenom);
-            pstmt.setString(4, adresse);
-            pstmt.setString(5, email);
-
-            affectedRows = pstmt.executeUpdate();
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return affectedRows;
-    }
+//    public static int update(int id, String nom, String prenom, String adresse, String email) {
+//        var sql = "UPDATE public.\"Client\"\n" +
+//                "\tSET \"IdClient\"=?, \"Nom\"=?, \"Prenom\"=?, \"Adresse\"=?, \"Email\"=?\n" +
+//                "\tWHERE \"IdClient\"=?;";
+//
+//        int affectedRows = 0;
+//
+//        try (var conn  = DB.connect();
+//             var pstmt = conn.prepareStatement(sql)) {
+//            pstmt.setInt(1, id);
+//            pstmt.setString(2, nom);
+//            pstmt.setString(3, prenom);
+//            pstmt.setString(4, adresse);
+//            pstmt.setString(5, email);
+//
+//            affectedRows = pstmt.executeUpdate();
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return affectedRows;
+//    }
 
     public static int delete(int id) {
         var sql = "DELETE FROM public.\"Client\"\n" +

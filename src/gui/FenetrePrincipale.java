@@ -43,14 +43,6 @@ public class FenetrePrincipale extends JFrame {
         OngletFactures ongletFactures = new OngletFactures();
         onglets.addTab(ongletFactures.getTitre(), ongletFactures.getIcone(), ongletFactures);
 
-        // 🔥 ChangeListener commun à tous les onglets
-        onglets.addChangeListener(e -> {
-            Component ongletSelectionne = onglets.getSelectedComponent();
-            if (ongletSelectionne instanceof Onglet) {
-                ((Onglet) ongletSelectionne).rafraichir();
-            }
-        });
-
         return onglets;
     }
 }

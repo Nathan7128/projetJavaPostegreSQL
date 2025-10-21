@@ -14,15 +14,15 @@ public class Modele {
     }
 
 
-    public void setId(int id) {
-        this.id = id;
-    }
+//    public void setId(int id) {
+//        this.id = id;
+//    }
 
-    public void setIdMarque(int id_marque) { this.idMarque = id_marque; }
+//    public void setIdMarque(int id_marque) { this.idMarque = id_marque; }
 
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
+//    public void setNom(String nom) {
+//        this.nom = nom;
+//    }
 
     public int getId() {
         return id;

@@ -14,13 +14,6 @@ public class TableauClients extends Tableau<Client> {
     }
 
     @Override
-    public void rafraichir() {
-        donnees.clear();
-        donnees = ClientsDB.findAll();
-        fireTableDataChanged();
-    }
-
-    @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Client client = donnees.get(rowIndex);
 

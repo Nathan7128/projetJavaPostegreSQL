@@ -1,5 +1,6 @@
 package gui.dialogues;
 
+import gui.tableaux.TableauModeles;
 import tablesDB.ModelesDB;
 import tablesDB.MarquesDB;
 import tablesJava.Modele;
@@ -14,20 +15,18 @@ public class FenetreAjouterModele extends JDialog {
 
     private Modele modeleCree = null;
 
-    private final JSpinner champIdModele = new JSpinner((new SpinnerNumberModel(0, 0, 100, 1)));
     private final Map<String, Integer> allIDsMarques = MarquesDB.getAllIDsMarques();
     private final JComboBox champMarque = new JComboBox(allIDsMarques.keySet().toArray());
     private final JTextField champNom = new JTextField(15);
+    private TableauModeles tableauModeles;
 
-    public FenetreAjouterModele(JFrame parent) {
+    public FenetreAjouterModele(JFrame parent, TableauModeles tableauModeles) {
         super(parent, "Ajouter un modèle", true);
+        this.tableauModeles = tableauModeles;
         setLayout(new BorderLayout(10, 10));
 
 
         JPanel panelForm = new JPanel(new GridLayout(3, 2, 20, 20));
-
-        panelForm.add(new JLabel("Identifiant du modèle :"));
-        panelForm.add(champIdModele);
 
         panelForm.add(new JLabel("Marque :"));
         panelForm.add(champMarque);
@@ -63,21 +62,14 @@ public class FenetreAjouterModele extends JDialog {
     }
 
     private void creerModele() {
-        int id_modele = (int) champIdModele.getValue();
+        int id_modele = ModelesDB.createNewId();
         int id_marque = allIDsMarques.get((String) champMarque.getSelectedItem());
         String nom = champNom.getText().trim();
 
-        // Vérifie si l'identifiant existe déjà
-        if (ModelesDB.getAllIDsModeles().containsValue(id_modele)) {
-            JOptionPane.showMessageDialog(this,
-                    "L'identifiant " + id_modele + " existe déjà.",
-                    "Erreur",
-                    JOptionPane.ERROR_MESSAGE);
-        }
         // Vérifie si un champ obligatoire est vide
-        else if (nom.isEmpty()) {
+        if (nom.isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                    "Veuillez remplir tous les champs obligatoires.",
+                    "Veuillez remplir tous les champs obligatoires (Nom).",
                     "Erreur",
                     JOptionPane.WARNING_MESSAGE);
         }
@@ -85,12 +77,8 @@ public class FenetreAjouterModele extends JDialog {
         else {
             modeleCree = new Modele(id_modele, id_marque, nom);
             ModelesDB.add(modeleCree);
+            tableauModeles.addDonnee(modeleCree);
             dispose();
         }
-    }
-
-    public Modele afficherEtRecuperer() {
-        setVisible(true);
-        return modeleCree;
     }
 }

@@ -39,8 +39,6 @@ abstract class Tableau<T> extends AbstractTableModel {
         fireTableRowsDeleted(index, index);
     }
 
-    public abstract void rafraichir();
-
     @Override
     public abstract Object getValueAt(int rowIndex, int columnIndex);
 }

@@ -52,35 +52,19 @@ public class OngletModeles extends Onglet {
         add(tableau_defilant, BorderLayout.CENTER);
     }
 
-    public void rafraichir() {
-        tableau.rafraichir();
-    }
-
     public void ajouterModele() {
         Window parent = SwingUtilities.getWindowAncestor(this);
-        FenetreAjouterModele fenetreAjouterModele = new FenetreAjouterModele((JFrame) parent);
-        Modele modele = fenetreAjouterModele.afficherEtRecuperer();
-        tableau.addDonnee(modele);
+        FenetreAjouterModele fenetreAjouterModele = new FenetreAjouterModele((JFrame) parent, tableau);
     }
 
     public void supprimerModele() {
         int[] selection = jTableau.getSelectedRows();
 
-        if (selection.length > 0) {
-            int option = JOptionPane.showConfirmDialog(this,
-                    "La suppression de ce/ces modèles supprimera les instruments associés, voulez vous continuer ?",
-                    "Suppression du modèle",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
-
-            if(option == JOptionPane.OK_OPTION) {
-                for(int i = selection.length - 1; i >= 0; i--){
-                    int index = selection[i];
-                    int id_modele = (int) tableau.getValueAt(index, 0);
-                    tableau.supprDonnee(index);
-                    ModelesDB.delete(id_modele);
-                }
-            }
+        for(int i = selection.length - 1; i >= 0; i--){
+            int index = selection[i];
+            int id_modele = (int) tableau.getValueAt(index, 0);
+            tableau.supprDonnee(index);
+            ModelesDB.delete(id_modele);
         }
     }
 }

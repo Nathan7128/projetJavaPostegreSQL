@@ -12,18 +12,17 @@ public class Marque {
         this.siteWeb = site_web;
     }
 
+//    public void setId(int id) {
+//        this.id = id;
+//    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+//    public void setNom(String nom) {
+//        this.nom = nom;
+//    }
 
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public void setSiteWeb(String site_web) {
-        this.siteWeb = site_web;
-    }
+//    public void setSiteWeb(String site_web) {
+//        this.siteWeb = site_web;
+//    }
 
     public int getId() {
         return id;

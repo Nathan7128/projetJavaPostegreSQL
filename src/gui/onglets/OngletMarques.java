@@ -52,35 +52,19 @@ public class OngletMarques extends Onglet {
         add(tableau_defilant, BorderLayout.CENTER);
     }
 
-    public void rafraichir() {
-        tableau.rafraichir();
-    }
-
     public void ajouterMarque() {
         Window parent = SwingUtilities.getWindowAncestor(this);
-        FenetreAjouterMarque fenetreAjouterMarque = new FenetreAjouterMarque((JFrame) parent);
-        Marque marque = fenetreAjouterMarque.afficherEtRecuperer();
-        tableau.addDonnee(marque);
+        FenetreAjouterMarque fenetreAjouterMarque = new FenetreAjouterMarque((JFrame) parent, tableau);
     }
 
     public void supprimerMarque() {
         int[] selection = jTableau.getSelectedRows();
 
-        if (selection.length > 0) {
-            int option = JOptionPane.showConfirmDialog(this,
-                    "La suppression de cette/ces marques supprimera les modèles associés, voulez vous continuer ?",
-                    "Suppression de la marque",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
-
-            if(option == JOptionPane.YES_OPTION) {
-                for(int i = selection.length - 1; i >= 0; i--){
-                    int index = selection[i];
-                    int id_marque = (int) tableau.getValueAt(index, 0);
-                    tableau.supprDonnee(index);
-                    MarquesDB.delete(id_marque);
-                }
-            }
+        for(int i = selection.length - 1; i >= 0; i--){
+            int index = selection[i];
+            int id_marque = (int) tableau.getValueAt(index, 0);
+            tableau.supprDonnee(index);
+            MarquesDB.delete(id_marque);
         }
     }
 }
