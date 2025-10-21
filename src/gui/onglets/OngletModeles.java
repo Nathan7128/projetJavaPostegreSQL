@@ -52,6 +52,7 @@ public class OngletModeles extends Onglet {
     public void ajouterModele() {
         Window parent = SwingUtilities.getWindowAncestor(this);
         FenetreAjouterModele fenetreAjouterModele = new FenetreAjouterModele((JFrame) parent, tableau);
+        fenetreAjouterModele.setVisible(true);
     }
 
     public void supprimerModele() {

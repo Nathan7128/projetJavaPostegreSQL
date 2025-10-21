@@ -53,6 +53,7 @@ public class OngletFactures extends Onglet {
     public void ajouterFacture() {
         Window parent = SwingUtilities.getWindowAncestor(this);
         FenetreAjouterFacture fenetreAjouterFacture = new FenetreAjouterFacture((JFrame) parent, tableau);
+        fenetreAjouterFacture.setVisible(true);
     }
 
     public void supprimerFacture() {

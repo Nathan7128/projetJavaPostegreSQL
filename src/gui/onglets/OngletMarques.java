@@ -52,6 +52,7 @@ public class OngletMarques extends Onglet {
     public void ajouterMarque() {
         Window parent = SwingUtilities.getWindowAncestor(this);
         FenetreAjouterMarque fenetreAjouterMarque = new FenetreAjouterMarque((JFrame) parent, tableau);
+        fenetreAjouterMarque.setVisible(true);
     }
 
     public void supprimerMarque() {

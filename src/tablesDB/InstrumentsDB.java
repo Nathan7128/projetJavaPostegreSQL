@@ -76,7 +76,7 @@ public class InstrumentsDB {
 
             var rs = stmt.executeQuery();
             if (rs.next()) {
-                idMax = rs.getInt("id_max");
+                idMax = rs.getInt("id_max") + 1;
             }
         } catch (SQLException e) {
             e.printStackTrace();

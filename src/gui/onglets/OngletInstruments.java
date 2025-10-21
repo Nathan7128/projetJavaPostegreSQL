@@ -52,6 +52,7 @@ public class OngletInstruments extends Onglet {
     public void ajouterInstrument() {
         Window parent = SwingUtilities.getWindowAncestor(this);
         FenetreAjouterInstrument fenetreAjouterInstrument = new FenetreAjouterInstrument((JFrame) parent, tableau);
+        fenetreAjouterInstrument.setVisible(true);
     }
 
     public void supprimerInstrument() {

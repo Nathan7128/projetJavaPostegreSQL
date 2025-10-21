@@ -52,6 +52,7 @@ public class OngletClients extends Onglet {
     public void ajouterClient() {
         Window parent = SwingUtilities.getWindowAncestor(this);
         FenetreAjouterClient fenetreAjouterClient = new FenetreAjouterClient((JFrame) parent, tableau);
+        fenetreAjouterClient.setVisible(true);
     }
 
     public void supprimerClient() {

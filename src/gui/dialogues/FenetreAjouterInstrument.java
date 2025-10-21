@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Map;
 
 public class FenetreAjouterInstrument extends JDialog {
@@ -19,7 +20,7 @@ public class FenetreAjouterInstrument extends JDialog {
     private final JComboBox champModele = new JComboBox(allIDsModeles.keySet().toArray());
     private final JTextField champCouleur = new JTextField(15);
     private final JSpinner champPrix = new JSpinner((new SpinnerNumberModel(0, 0, 10000, 1)));
-    private final JTextField champPhoto = new JTextField(15);
+    private final JFileChooser champPhoto = new JFileChooser(new File(System.getProperty("user.dir") + "/imagesInstruments"));
     private TableauInstruments tableauInstruments;
 
     public FenetreAjouterInstrument(JFrame parent, TableauInstruments tableauInstruments) {
@@ -42,7 +43,7 @@ public class FenetreAjouterInstrument extends JDialog {
         panelForm.add(new JLabel("Prix (€) :"));
         panelForm.add(champPrix);
 
-        panelForm.add(new JLabel("Photo (URL / chemin) :"));
+        panelForm.add(new JButton("Sélectionner une image dans les fichiers"));
         panelForm.add(champPhoto);
 
         add(panelForm, BorderLayout.CENTER);
@@ -78,7 +79,7 @@ public class FenetreAjouterInstrument extends JDialog {
         int id_modele = allIDsModeles.get((String) champModele.getSelectedItem());
         String couleur = champCouleur.getText().trim();
         int prix = (int) champPrix.getValue();
-        String photo = champPhoto.getText().trim();
+        String photo = champPhoto.getName();
 
         // Vérifie si un champ obligatoire est vide
         if (num_serie.isEmpty() || couleur.isEmpty() || photo.isEmpty()) {
