@@ -1,5 +1,6 @@
 package gui.onglets;
 
+import gui.fenetresImages.FenetreImageInstrument;
 import gui.tableaux.TableauInstruments;
 import tablesDB.InstrumentsDB;
 import gui.fenetresajouter.FenetreAjouterInstrument;
@@ -20,6 +21,7 @@ public class OngletInstruments extends Onglet {
     private JTable jTableau;
     private JScrollPane tableau_defilant;
     private JButton bAjouter, bSupprimer, bModifier, bAfficher;
+    private JLabel imageInstrument = new JLabel();
 
     public OngletInstruments() {
         super("Instruments", Constants.cheminIconeOngletInstruments);
@@ -51,9 +53,18 @@ public class OngletInstruments extends Onglet {
         bAfficher.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    afficherInstrument();
-                } catch (IOException ex) {
+                if (imageInstrument.getIcon() == null) {
+                    System.out.println("good");
+                    try {
+                        afficherInstrument();
+                    }
+                    catch (IOException ex) {
+                    }
+                }
+                else {
+                    remove(imageInstrument);
+                    imageInstrument.setIcon(null);
+                    add(tableau_defilant);
                 }
             }
         });
@@ -67,20 +78,20 @@ public class OngletInstruments extends Onglet {
         add(boutons, BorderLayout.SOUTH);
     }
 
-    private void construireTableau() {
+    public void construireTableau() {
         jTableau = new JTable(tableau);
         tableau_defilant = new JScrollPane(jTableau);
         tableau_defilant.setBorder(BorderFactory.createEmptyBorder(20, 100, 20, 100));
         add(tableau_defilant, BorderLayout.CENTER);
     }
 
-    private void ajouterInstrument() {
+    public void ajouterInstrument() {
         Window parent = SwingUtilities.getWindowAncestor(this);
         FenetreAjouterInstrument fenetreAjouterInstrument = new FenetreAjouterInstrument((JFrame) parent, tableau);
         fenetreAjouterInstrument.setVisible(true);
     }
 
-    private void supprimerInstrument() {
+    public void supprimerInstrument() {
         int[] selection = jTableau.getSelectedRows();
 
         for(int i = selection.length - 1; i >= 0; i--){
@@ -91,7 +102,7 @@ public class OngletInstruments extends Onglet {
         }
     }
 
-    private void modifierInstrument() {
+    public void modifierInstrument() {
         int[] selection = jTableau.getSelectedRows();
         if (selection.length != 1) {
             JOptionPane.showMessageDialog(this,
@@ -101,7 +112,7 @@ public class OngletInstruments extends Onglet {
         }
     }
 
-    private void afficherInstrument() throws IOException {
+    public void afficherInstrument() throws IOException {
         int[] selection = jTableau.getSelectedRows();
         if (selection.length != 1) {
             JOptionPane.showMessageDialog(this,
@@ -130,17 +141,9 @@ public class OngletInstruments extends Onglet {
         }
         else {
             BufferedImage photoInstrument = ImageIO.read(fichierPhoto);
-            dessinerImage(getGraphics(), new JLabel(new ImageIcon(photoInstrument)));
+            imageInstrument.setIcon(new ImageIcon(photoInstrument));
+            remove(tableau_defilant);
+            add(imageInstrument);
         }
-    }
-
-    void dessinerImage(Graphics g, JLabel labelImage) {
-        Graphics bufferGraphics;
-        Image offscreen;
-        offscreen = createImage(getWidth(),getHeight());
-        bufferGraphics = offscreen.getGraphics();
-        bufferGraphics.setColor(Color.WHITE);
-        bufferGraphics.fillRect(0,0,getWidth(), getHeight());
-        g.drawImage(labelImage);
     }
 }
