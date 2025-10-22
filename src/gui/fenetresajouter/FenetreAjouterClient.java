@@ -1,4 +1,4 @@
-package gui.dialogues;
+package gui.fenetresajouter;
 
 import gui.tableaux.TableauClients;
 import tablesDB.ClientsDB;

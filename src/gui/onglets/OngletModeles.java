@@ -1,6 +1,6 @@
 package gui.onglets;
 
-import gui.dialogues.FenetreAjouterModele;
+import gui.fenetresajouter.FenetreAjouterModele;
 import gui.tableaux.TableauModeles;
 import tablesDB.ModelesDB;
 

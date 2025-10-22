@@ -98,28 +98,28 @@ public class InstrumentsDB {
         return idsInstruments;
     }
 
-//    public static Instrument findById(int id){
-//        var sql = "SELECT \"IdInstrument\", \"NumSerie\", \"IdModele\", \"Couleur\", \"Prix\", \"Photo\"\n" +
-//                "\tFROM public.\"Instrument\" WHERE \"IdInstrument\"=?;";
-//        try (var conn =  DB.connect();
-//             var pstmt = conn.prepareStatement(sql)) {
-//            pstmt.setInt(1, id);
-//            var rs = pstmt.executeQuery();
-//            if (rs.next()) {
-//                return new Instrument(
-//                        rs.getInt("IdInstrument"),
-//                        rs.getString("NumSerie"),
-//                        rs.getInt("IdModele"),
-//                        rs.getString("Couleur"),
-//                        rs.getInt("Prix"),
-//                        rs.getString("Photo")
-//                );
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
+    public static Instrument findById(int id){
+        var sql = "SELECT \"IdInstrument\", \"NumSerie\", \"IdModele\", \"Couleur\", \"Prix\", \"Photo\"\n" +
+                "\tFROM public.\"Instrument\" WHERE \"IdInstrument\"=?;";
+        try (var conn =  DB.connect();
+             var pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            var rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return new Instrument(
+                        rs.getInt("IdInstrument"),
+                        rs.getString("NumSerie"),
+                        rs.getInt("IdModele"),
+                        rs.getString("Couleur"),
+                        rs.getInt("Prix"),
+                        rs.getString("Photo")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 //
 //    public static int update(int id, String numSerie, int idModele, String couleur, int prix, String photo) {
 //        var sql = "UPDATE public.\"Instrument\"\n" +

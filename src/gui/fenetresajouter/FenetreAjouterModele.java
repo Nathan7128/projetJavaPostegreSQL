@@ -1,35 +1,38 @@
-package gui.dialogues;
+package gui.fenetresajouter;
 
-import gui.tableaux.TableauMarques;
+import gui.tableaux.TableauModeles;
+import tablesDB.ModelesDB;
 import tablesDB.MarquesDB;
-import tablesJava.Marque;
+import tablesJava.Modele;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 
-public class FenetreAjouterMarque extends JDialog {
+public class FenetreAjouterModele extends JDialog {
 
-    private Marque marqueCreee = null;
+    private Modele modeleCree = null;
 
+    private final Map<String, Integer> allIDsMarques = MarquesDB.getAllIDsMarques();
+    private final JComboBox champMarque = new JComboBox(allIDsMarques.keySet().toArray());
     private final JTextField champNom = new JTextField(15);
-    private final JTextField champSiteWeb = new JTextField(15);
-    private TableauMarques tableauMarques;
+    private TableauModeles tableauModeles;
 
-    public FenetreAjouterMarque(JFrame parent, TableauMarques tableauMarques) {
-        super(parent, "Ajouter une marque", true);
-        this.tableauMarques = tableauMarques;
-
+    public FenetreAjouterModele(JFrame parent, TableauModeles tableauModeles) {
+        super(parent, "Ajouter un modèle", true);
+        this.tableauModeles = tableauModeles;
         setLayout(new BorderLayout(10, 10));
 
-        JPanel panelForm = new JPanel(new GridLayout(2, 2, 20, 20));
+
+        JPanel panelForm = new JPanel(new GridLayout(3, 2, 20, 20));
+
+        panelForm.add(new JLabel("Marque :"));
+        panelForm.add(champMarque);
 
         panelForm.add(new JLabel("Nom :"));
         panelForm.add(champNom);
-
-        panelForm.add(new JLabel("Site Web :"));
-        panelForm.add(champSiteWeb);
 
         add(panelForm, BorderLayout.CENTER);
 
@@ -46,7 +49,7 @@ public class FenetreAjouterMarque extends JDialog {
         boutonValider.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                creerMarque();
+                creerModele();
             }
         });
 
@@ -58,10 +61,10 @@ public class FenetreAjouterMarque extends JDialog {
         setLocationRelativeTo(parent);
     }
 
-    private void creerMarque() {
-        int id_marque = MarquesDB.createNewId();
+    private void creerModele() {
+        int id_modele = ModelesDB.createNewId();
+        int id_marque = allIDsMarques.get((String) champMarque.getSelectedItem());
         String nom = champNom.getText().trim();
-        String site_web = champSiteWeb.getText().trim();
 
         // Vérifie si un champ obligatoire est vide
         if (nom.isEmpty()) {
@@ -72,9 +75,9 @@ public class FenetreAjouterMarque extends JDialog {
         }
         // Si tout est correct
         else {
-            marqueCreee = new Marque(id_marque, nom, site_web);
-            MarquesDB.add(marqueCreee);
-            tableauMarques.addDonnee(marqueCreee);
+            modeleCree = new Modele(id_modele, id_marque, nom);
+            ModelesDB.add(modeleCree);
+            tableauModeles.addDonnee(modeleCree);
             dispose();
         }
     }

@@ -1,6 +1,6 @@
 package gui.onglets;
 
-import gui.dialogues.FenetreAjouterMarque;
+import gui.fenetresajouter.FenetreAjouterMarque;
 import gui.tableaux.TableauMarques;
 import tablesDB.MarquesDB;
 

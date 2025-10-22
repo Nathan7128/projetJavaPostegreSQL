@@ -1,6 +1,6 @@
 package gui.onglets;
 
-import gui.dialogues.FenetreAjouterClient;
+import gui.fenetresajouter.FenetreAjouterClient;
 import gui.tableaux.TableauClients;
 import tablesDB.ClientsDB;
 

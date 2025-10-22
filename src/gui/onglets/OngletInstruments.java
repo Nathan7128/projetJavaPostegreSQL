@@ -2,21 +2,27 @@ package gui.onglets;
 
 import gui.tableaux.TableauInstruments;
 import tablesDB.InstrumentsDB;
-import gui.dialogues.FenetreAjouterInstrument;
+import gui.fenetresajouter.FenetreAjouterInstrument;
+import tablesJava.Instrument;
+import utils.Constants;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class OngletInstruments extends Onglet {
     private TableauInstruments tableau = new TableauInstruments();
     private JTable jTableau;
     private JScrollPane tableau_defilant;
-    private JButton bAjouter, bSupprimer;
+    private JButton bAjouter, bSupprimer, bModifier, bAfficher;
 
     public OngletInstruments() {
-        super("Instruments", "src/gui/images/icone_instruments.png");
+        super("Instruments", Constants.cheminIconeOngletInstruments);
 
         construireTableau();
 
@@ -34,10 +40,29 @@ public class OngletInstruments extends Onglet {
                 supprimerInstrument();
             }
         });
+        bModifier = new JButton("Modifier");
+        bModifier.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                modifierInstrument();
+            }
+        });
+        bAfficher = new JButton("Afficher");
+        bAfficher.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    afficherInstrument();
+                } catch (IOException ex) {
+                }
+            }
+        });
 
         JPanel boutons = new JPanel();
         boutons.add(bAjouter);
         boutons.add(bSupprimer);
+        boutons.add(bModifier);
+        boutons.add(bAfficher);
 
         add(boutons, BorderLayout.SOUTH);
     }
@@ -49,13 +74,13 @@ public class OngletInstruments extends Onglet {
         add(tableau_defilant, BorderLayout.CENTER);
     }
 
-    public void ajouterInstrument() {
+    private void ajouterInstrument() {
         Window parent = SwingUtilities.getWindowAncestor(this);
         FenetreAjouterInstrument fenetreAjouterInstrument = new FenetreAjouterInstrument((JFrame) parent, tableau);
         fenetreAjouterInstrument.setVisible(true);
     }
 
-    public void supprimerInstrument() {
+    private void supprimerInstrument() {
         int[] selection = jTableau.getSelectedRows();
 
         for(int i = selection.length - 1; i >= 0; i--){
@@ -64,5 +89,58 @@ public class OngletInstruments extends Onglet {
             tableau.supprDonnee(index);
             InstrumentsDB.delete(id_instrument);
         }
+    }
+
+    private void modifierInstrument() {
+        int[] selection = jTableau.getSelectedRows();
+        if (selection.length != 1) {
+            JOptionPane.showMessageDialog(this,
+                    "Veuillez choisir exactement 1 instrument à modifier.",
+                    "Erreur",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private void afficherInstrument() throws IOException {
+        int[] selection = jTableau.getSelectedRows();
+        if (selection.length != 1) {
+            JOptionPane.showMessageDialog(this,
+                    "Veuillez choisir exactement 1 instrument à afficher.",
+                    "Erreur",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+
+        int index = selection[0];
+        int id_instrument = (int) tableau.getValueAt(index, 0);
+        Instrument instrument = InstrumentsDB.findById(id_instrument);
+        String photo = instrument.getPhoto();
+        String cheminPhoto = Constants.cheminPhotosInstruments + Constants.sep + photo;
+        File fichierPhoto = new File(cheminPhoto);
+        if (photo == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Veuillez choisir une photo pour cet instrument.",
+                    "Erreur",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+        else if (!(fichierPhoto.exists())) {
+            JOptionPane.showMessageDialog(this,
+                    "L'image " + photo + " est introuvable dans le dossier " + Constants.cheminPhotosInstruments + " .",
+                    "Erreur",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+        else {
+            BufferedImage photoInstrument = ImageIO.read(fichierPhoto);
+            dessinerImage(getGraphics(), new JLabel(new ImageIcon(photoInstrument)));
+        }
+    }
+
+    void dessinerImage(Graphics g, JLabel labelImage) {
+        Graphics bufferGraphics;
+        Image offscreen;
+        offscreen = createImage(getWidth(),getHeight());
+        bufferGraphics = offscreen.getGraphics();
+        bufferGraphics.setColor(Color.WHITE);
+        bufferGraphics.fillRect(0,0,getWidth(), getHeight());
+        g.drawImage(labelImage);
     }
 }

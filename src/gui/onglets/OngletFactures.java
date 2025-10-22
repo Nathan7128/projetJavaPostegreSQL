@@ -1,6 +1,6 @@
 package gui.onglets;
 
-import gui.dialogues.FenetreAjouterFacture;
+import gui.fenetresajouter.FenetreAjouterFacture;
 import gui.tableaux.TableauFactures;
 import tablesDB.FacturesDB;
 

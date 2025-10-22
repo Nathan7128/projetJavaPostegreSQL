@@ -1,10 +1,11 @@
-package gui.dialogues;
+package gui.fenetresajouter;
 
 import gui.tableaux.TableauInstruments;
 import tablesDB.InstrumentsDB;
 import tablesDB.ModelesDB;
 import tablesJava.*;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +21,8 @@ public class FenetreAjouterInstrument extends JDialog {
     private final JComboBox champModele = new JComboBox(allIDsModeles.keySet().toArray());
     private final JTextField champCouleur = new JTextField(15);
     private final JSpinner champPrix = new JSpinner((new SpinnerNumberModel(0, 0, 10000, 1)));
-    private final JFileChooser champPhoto = new JFileChooser(new File(System.getProperty("user.dir") + "/imagesInstruments"));
+    private String champPhoto = null;
+    private final JFileChooser selectPhoto = new JFileChooser();
     private TableauInstruments tableauInstruments;
 
     public FenetreAjouterInstrument(JFrame parent, TableauInstruments tableauInstruments) {
@@ -28,6 +30,7 @@ public class FenetreAjouterInstrument extends JDialog {
         this.tableauInstruments = tableauInstruments;
         setLayout(new BorderLayout(10, 10));
 
+        creerSelecteurPhoto();
 
         JPanel panelForm = new JPanel(new GridLayout(5, 2, 20, 20));
 
@@ -43,8 +46,15 @@ public class FenetreAjouterInstrument extends JDialog {
         panelForm.add(new JLabel("Prix (€) :"));
         panelForm.add(champPrix);
 
-        panelForm.add(new JButton("Sélectionner une image dans les fichiers"));
-        panelForm.add(champPhoto);
+        panelForm.add(new JLabel("Photo :"));
+        JButton bPhoto = new JButton("Choisir un fichier");
+        bPhoto.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                choisirPhoto();
+            }
+        });
+        panelForm.add(bPhoto);
 
         add(panelForm, BorderLayout.CENTER);
 
@@ -73,24 +83,38 @@ public class FenetreAjouterInstrument extends JDialog {
         setLocationRelativeTo(parent);
     }
 
+    private void creerSelecteurPhoto() {
+        File dossierFixe = new File(System.getProperty("user.dir") + "/imagesInstruments");
+        selectPhoto.setCurrentDirectory(dossierFixe);
+        selectPhoto.setAcceptAllFileFilterUsed(false);
+        FileNameExtensionFilter typeFichier = new FileNameExtensionFilter("Images (png, jpg ou jpeg)", "png", "jpg", "jpeg");
+        selectPhoto.addChoosableFileFilter(typeFichier);
+    }
+
+    private void choisirPhoto() {
+        int r = selectPhoto.showOpenDialog(null);
+        if (r == JFileChooser.APPROVE_OPTION) {
+            champPhoto = selectPhoto.getSelectedFile().getName();
+        }
+    }
+
     private void creerInstrument() {
         int id_instrument = InstrumentsDB.createNewId();
         String num_serie = champNumSerie.getText().trim();
         int id_modele = allIDsModeles.get((String) champModele.getSelectedItem());
         String couleur = champCouleur.getText().trim();
         int prix = (int) champPrix.getValue();
-        String photo = champPhoto.getName();
 
         // Vérifie si un champ obligatoire est vide
-        if (num_serie.isEmpty() || couleur.isEmpty() || photo.isEmpty()) {
+        if (num_serie.isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                    "Veuillez remplir tous les champs obligatoires (Numéro de série, Couleur et Photo).",
+                    "Veuillez remplir tous les champs obligatoires (Numéro de série).",
                     "Erreur",
                     JOptionPane.WARNING_MESSAGE);
         }
         // Si tout est correct
         else {
-            instrumentCree = new Instrument(id_instrument, num_serie, id_modele, couleur, prix, photo);
+            instrumentCree = new Instrument(id_instrument, num_serie, id_modele, couleur, prix, champPhoto);
             InstrumentsDB.add(instrumentCree);
             tableauInstruments.addDonnee(instrumentCree);
             dispose();

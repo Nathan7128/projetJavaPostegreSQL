@@ -3,13 +3,15 @@ package gui.tableaux;
 import tablesDB.InstrumentsDB;
 import tablesJava.Instrument;
 
+import javax.swing.*;
+
 
 public class TableauInstruments extends Tableau<Instrument> {
 
     public TableauInstruments() {
         super(
                 InstrumentsDB.findAll(),
-                new String[]{"IdInstrument", "NumSerie", "IdModele", "Couleur", "Prix", "Photo"}
+                new String[]{"IdInstrument", "NumSerie", "IdModele", "Couleur", "Prix"}
         );
     }
 
@@ -23,7 +25,6 @@ public class TableauInstruments extends Tableau<Instrument> {
             case 2 -> instrument.getIdModele();
             case 3 -> instrument.getCouleur();
             case 4 -> instrument.getPrix();
-            case 5 -> instrument.getPhoto();
             default -> null;
         };
     }
