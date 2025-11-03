@@ -1,9 +1,9 @@
 package gui.tableaux;
 
-import tablesDB.InstrumentsDB;
-import tablesJava.Instrument;
+import tablesdb.InstrumentsDB;
+import tablesjava.Instrument;
 
-import javax.swing.*;
+import java.util.Comparator;
 
 
 public class TableauInstruments extends Tableau<Instrument> {
@@ -27,5 +27,11 @@ public class TableauInstruments extends Tableau<Instrument> {
             case 4 -> instrument.getPrix();
             default -> null;
         };
+    }
+
+    public void modifierLigne(int ligne, Instrument instrument) {
+        donnees.set(ligne, instrument);
+        donnees.sort(Comparator.comparingInt(Instrument::getId));
+        fireTableDataChanged();
     }
 }

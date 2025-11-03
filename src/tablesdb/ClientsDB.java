@@ -1,7 +1,7 @@
-package tablesDB;
+package tablesdb;
 
 import database.DB;
-import tablesJava.Client;
+import tablesjava.Client;
 
 import java.sql.SQLException;
 import java.sql.Statement;

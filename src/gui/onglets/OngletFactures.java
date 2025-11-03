@@ -2,7 +2,7 @@ package gui.onglets;
 
 import gui.fenetresajouter.FenetreAjouterFacture;
 import gui.tableaux.TableauFactures;
-import tablesDB.FacturesDB;
+import tablesdb.FacturesDB;
 
 import javax.swing.*;
 import java.awt.*;

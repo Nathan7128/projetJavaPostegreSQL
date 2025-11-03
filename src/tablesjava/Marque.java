@@ -1,4 +1,4 @@
-package tablesJava;
+package tablesjava;
 
 public class Marque {
 

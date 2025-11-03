@@ -2,7 +2,7 @@ package gui.onglets;
 
 import gui.fenetresajouter.FenetreAjouterClient;
 import gui.tableaux.TableauClients;
-import tablesDB.ClientsDB;
+import tablesdb.ClientsDB;
 
 import javax.swing.*;
 import java.awt.*;

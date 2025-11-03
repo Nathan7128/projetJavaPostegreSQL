@@ -1,7 +1,7 @@
 package gui.tableaux;
 
-import tablesDB.MarquesDB;
-import tablesJava.Marque;
+import tablesdb.MarquesDB;
+import tablesjava.Marque;
 
 
 public class TableauMarques extends Tableau<Marque> {

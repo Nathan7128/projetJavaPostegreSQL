@@ -1,9 +1,9 @@
 package gui.fenetresajouter;
 
 import gui.tableaux.TableauFactures;
-import tablesDB.ClientsDB;
-import tablesDB.FacturesDB;
-import tablesJava.Facture;
+import tablesdb.ClientsDB;
+import tablesdb.FacturesDB;
+import tablesjava.Facture;
 
 import javax.swing.*;
 import java.awt.*;

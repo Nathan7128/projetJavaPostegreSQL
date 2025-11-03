@@ -1,4 +1,4 @@
-package tablesJava;
+package tablesjava;
 import java.sql.Date;
 
 public class Facture {

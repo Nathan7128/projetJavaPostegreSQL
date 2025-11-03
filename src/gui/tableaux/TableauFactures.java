@@ -1,7 +1,7 @@
 package gui.tableaux;
 
-import tablesDB.FacturesDB;
-import tablesJava.Facture;
+import tablesdb.FacturesDB;
+import tablesjava.Facture;
 
 
 public class TableauFactures extends Tableau<Facture> {

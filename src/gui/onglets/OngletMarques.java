@@ -2,7 +2,7 @@ package gui.onglets;
 
 import gui.fenetresajouter.FenetreAjouterMarque;
 import gui.tableaux.TableauMarques;
-import tablesDB.MarquesDB;
+import tablesdb.MarquesDB;
 
 import javax.swing.*;
 import java.awt.*;

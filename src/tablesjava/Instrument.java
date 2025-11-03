@@ -1,4 +1,4 @@
-package tablesJava;
+package tablesjava;
 
 public class Instrument {
 
@@ -24,25 +24,25 @@ public class Instrument {
 //        this.id = id;
 //    }
 //
-//    public void setNumSerie(String numSerie) {
-//        this.numSerie = numSerie;
-//    }
-//
-//    public void setIdModele(int idModele) {
-//        this.idModele = idModele;
-//    }
-//
-//    public void setCouleur(String couleur) {
-//        this.couleur = couleur;
-//    }
-//
-//    public void setPrix(int prix) {
-//        this.prix = prix;
-//    }
-//
-//    public void setPhoto(String photo) {
-//        this.photo = photo;
-//    }
+    public void setNumSerie(String numSerie) {
+        this.numSerie = numSerie;
+    }
+
+    public void setIdModele(int idModele) {
+        this.idModele = idModele;
+    }
+
+    public void setCouleur(String couleur) {
+        this.couleur = couleur;
+    }
+
+    public void setPrix(int prix) {
+        this.prix = prix;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 
     public int getId() {
         return id;

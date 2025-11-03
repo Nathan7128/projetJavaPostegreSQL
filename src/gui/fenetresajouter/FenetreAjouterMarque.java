@@ -1,8 +1,8 @@
 package gui.fenetresajouter;
 
 import gui.tableaux.TableauMarques;
-import tablesDB.MarquesDB;
-import tablesJava.Marque;
+import tablesdb.MarquesDB;
+import tablesjava.Marque;
 
 import javax.swing.*;
 import java.awt.*;

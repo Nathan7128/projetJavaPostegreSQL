@@ -1,8 +1,8 @@
 package gui.fenetresajouter;
 
 import gui.tableaux.TableauClients;
-import tablesDB.ClientsDB;
-import tablesJava.Client;
+import tablesdb.ClientsDB;
+import tablesjava.Client;
 
 import javax.swing.*;
 import java.awt.*;

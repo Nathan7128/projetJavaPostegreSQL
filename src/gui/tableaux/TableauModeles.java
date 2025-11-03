@@ -1,7 +1,7 @@
 package gui.tableaux;
 
-import tablesDB.ModelesDB;
-import tablesJava.Modele;
+import tablesdb.ModelesDB;
+import tablesjava.Modele;
 
 
 public class TableauModeles extends Tableau<Modele> {

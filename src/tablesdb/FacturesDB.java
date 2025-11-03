@@ -1,28 +1,25 @@
-package tablesDB;
+package tablesdb;
 
 import database.DB;
-import tablesJava.Marque;
+import tablesjava.Facture;
 
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class MarquesDB {
+public class FacturesDB {
 
-    public static int add(Marque marque) {
-        var sql = "INSERT INTO public.\"Marque\"(\n" +
-                "\t\"IdMarque\", \"Nom\", \"SiteWeb\")\n" +
+    public static int add(Facture facture) {
+        var sql = "INSERT INTO public.\"Facture\"(\n" +
+                "\t\"IdFacture\", \"IdClient\", \"Date\")\n" +
                 "\tVALUES (?, ?, ?);";
 
         try (var conn =  DB.connect();
              var pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            pstmt.setInt(1, marque.getId());
-            pstmt.setString(2, marque.getNom());
-            pstmt.setString(3, marque.getSiteWeb());
+            pstmt.setInt(1, facture.getId());
+            pstmt.setInt(2, facture.getIdClient());
+            pstmt.setDate(3, facture.getDate());
 
             int insertedRow = pstmt.executeUpdate();
             if (insertedRow > 0) {
@@ -37,32 +34,32 @@ public class MarquesDB {
         return -1;
     }
 
-    public static List<Marque> findAll() {
-        var marques = new ArrayList<Marque>();
-        var sql = "SELECT \"IdMarque\", \"Nom\", \"SiteWeb\"\n" +
-                "\tFROM public.\"Marque\";";
+    public static List<Facture> findAll() {
+        var factures = new ArrayList<Facture>();
+        var sql = "SELECT \"IdFacture\", \"IdClient\", \"Date\"\n" +
+                "\tFROM public.\"Facture\";";
 
         try (var conn =  DB.connect();
              var stmt = conn.createStatement()) {
             var rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-                var marque = new Marque(
-                        rs.getInt("IdMarque"),
-                        rs.getString("Nom"),
-                        rs.getString("SiteWeb")
+                var facture = new Facture(
+                        rs.getInt("IdFacture"),
+                        rs.getInt("IdClient"),
+                        rs.getDate("Date")
                 );
-                marques.add(marque);
+                factures.add(facture);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return marques;
+        return factures;
     }
 
     public static int createNewId() {
-        var sql = "SELECT MAX(\"IdMarque\") AS id_max\n" +
-                "\tFROM public.\"Marque\";";
+        var sql = "SELECT MAX(\"IdFacture\") AS id_max\n" +
+                "\tFROM public.\"Facture\";";
         int idMax = 0;
 
         try (var conn =  DB.connect();
@@ -78,32 +75,32 @@ public class MarquesDB {
         return idMax;
     }
 
-    public static Map<String, Integer> getAllIDsMarques() {
-        List<Marque> marques = findAll();
-        Map<String, Integer> idsMarques = new HashMap<>();
+    public static Map<String, Integer> getAllIDsFactures() {
+        List<Facture> factures = findAll();
+        Map<String, Integer> idsFactures = new HashMap<>();
 
-        for (Marque marque : marques) {
-            int id = marque.getId();
-            String nom = marque.getNom();
-            String cle = id + " (" + nom + ")";
-            idsMarques.put(cle, id);
+        for (Facture facture : factures) {
+            int id = facture.getId();
+            java.sql.Date date = facture.getDate();
+            String cle = id + " (" + date.toString() + ")";
+            idsFactures.put(cle, id);
         }
 
-        return idsMarques;
+        return idsFactures;
     }
 
-//    public static Marque findById(int id){
-//        var sql = "SELECT \"IdMarque\", \"Nom\", \"SiteWeb\"\n" +
-//                "\tFROM public.\"Marque\" WHERE \"IdMarque\"=?;";
+//    public static Facture findById(int id){
+//        var sql = "SELECT \"IdFacture\", \"IdClient\", \"Date\"\n" +
+//                "\tFROM public.\"Facture\" WHERE \"IdFacture\"=?;";
 //        try (var conn =  DB.connect();
 //             var pstmt = conn.prepareStatement(sql)) {
 //            pstmt.setInt(1, id);
 //            var rs = pstmt.executeQuery();
 //            if (rs.next()) {
-//                return new Marque(
-//                        rs.getInt("IdMarque"),
-//                        rs.getString("Nom"),
-//                        rs.getString("SiteWeb")
+//                return new Facture(
+//                        rs.getInt("IdFacture"),
+//                        rs.getInt("IdClient"),
+//                        rs.getDate("Date")
 //                );
 //            }
 //        } catch (SQLException e) {
@@ -111,19 +108,19 @@ public class MarquesDB {
 //        }
 //        return null;
 //    }
-
-//    public static int update(int id, String nom, String site_web) {
-//        var sql = "UPDATE public.\"Marque\"\n" +
-//                "\tSET \"IdMarque\", \"Nom\", \"SiteWeb\"=?\n" +
-//                "\tWHERE \"IdMarque\"=?;";
+//
+//    public static int update(int id, int idMarque, java.sql.Date date) {
+//        var sql = "UPDATE public.\"Facture\"\n" +
+//                "\tSET \"IdFacture\", \"IdClient\", \"Date\"=?\n" +
+//                "\tWHERE \"IdFacture\"=?;";
 //
 //        int affectedRows = 0;
 //
 //        try (var conn  = DB.connect();
 //             var pstmt = conn.prepareStatement(sql)) {
 //            pstmt.setInt(1, id);
-//            pstmt.setString(2, nom);
-//            pstmt.setString(3, site_web);
+//            pstmt.setInt(2, idMarque);
+//            pstmt.setDate(3, date);
 //
 //            affectedRows = pstmt.executeUpdate();
 //
@@ -134,8 +131,8 @@ public class MarquesDB {
 //    }
 
     public static int delete(int id) {
-        var sql = "DELETE FROM public.\"Marque\"\n" +
-                "\tWHERE \"IdMarque\"=?;";
+        var sql = "DELETE FROM public.\"Facture\"\n" +
+                "\tWHERE \"IdFacture\"=?;";
         try (var conn  = DB.connect();
              var pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);

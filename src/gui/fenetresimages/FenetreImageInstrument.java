@@ -1,11 +1,11 @@
-package gui.fenetresImages;
+package gui.fenetresimages;
 
 import javax.swing.*;
-import java.awt.*;
 
-public class FenetreImageInstrument extends JFrame {
+public class FenetreImageInstrument extends JDialog {
     public FenetreImageInstrument(ImageIcon imageInstrument) {
         add(new JLabel(imageInstrument));
         setSize(imageInstrument.getIconWidth() + 50, imageInstrument.getIconHeight() + 50);
+        setLocationRelativeTo(null);
     }
 }

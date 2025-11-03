@@ -1,7 +1,7 @@
 package gui.tableaux;
 
-import tablesDB.ClientsDB;
-import tablesJava.Client;
+import tablesdb.ClientsDB;
+import tablesjava.Client;
 
 
 public class TableauClients extends Tableau<Client> {

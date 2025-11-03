@@ -1,7 +1,7 @@
-package tablesDB;
+package tablesdb;
 
 import database.DB;
-import tablesJava.Modele;
+import tablesjava.Modele;
 
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -84,33 +84,32 @@ public class ModelesDB {
 
         for (Modele modele : modeles) {
             int id = modele.getId();
-            String nom = modele.getNom();
-            String cle = id + " (" + nom + ")";
+            String cle = id + " - " + modele.getNom();
             idsModeles.put(cle, id);
         }
 
         return idsModeles;
     }
 
-//    public static Modele findById(int id){
-//        var sql = "SELECT \"IdModele\", \"IdMarque\", \"Nom\"\n" +
-//                "\tFROM public.\"Modele\" WHERE \"IdModele\"=?;";
-//        try (var conn =  DB.connect();
-//             var pstmt = conn.prepareStatement(sql)) {
-//            pstmt.setInt(1, id);
-//            var rs = pstmt.executeQuery();
-//            if (rs.next()) {
-//                return new Modele(
-//                        rs.getInt("IdModele"),
-//                        rs.getInt("IdMarque"),
-//                        rs.getString("Nom")
-//                );
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
+    public static Modele findById(int id){
+        var sql = "SELECT \"IdModele\", \"IdMarque\", \"Nom\"\n" +
+                "\tFROM public.\"Modele\" WHERE \"IdModele\"=?;";
+        try (var conn =  DB.connect();
+             var pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            var rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return new Modele(
+                        rs.getInt("IdModele"),
+                        rs.getInt("IdMarque"),
+                        rs.getString("Nom")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 //    public static int update(int id, int idMarque, String nom) {
 //        var sql = "UPDATE public.\"Modele\"\n" +

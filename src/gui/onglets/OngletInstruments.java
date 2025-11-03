@@ -1,18 +1,17 @@
 package gui.onglets;
 
-import gui.fenetresImages.FenetreImageInstrument;
+import gui.fenetresimages.FenetreImageInstrument;
+import gui.fenetresmodifier.FenetreModifierInstrument;
 import gui.tableaux.TableauInstruments;
-import tablesDB.InstrumentsDB;
+import tablesdb.InstrumentsDB;
 import gui.fenetresajouter.FenetreAjouterInstrument;
-import tablesJava.Instrument;
+import tablesjava.Instrument;
 import utils.Constants;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -21,7 +20,6 @@ public class OngletInstruments extends Onglet {
     private JTable jTableau;
     private JScrollPane tableau_defilant;
     private JButton bAjouter, bSupprimer, bModifier, bAfficher;
-    private JLabel imageInstrument = new JLabel();
 
     public OngletInstruments() {
         super("Instruments", Constants.cheminIconeOngletInstruments);
@@ -53,18 +51,10 @@ public class OngletInstruments extends Onglet {
         bAfficher.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (imageInstrument.getIcon() == null) {
-                    System.out.println("good");
-                    try {
-                        afficherInstrument();
-                    }
-                    catch (IOException ex) {
-                    }
+                try {
+                    afficherInstrument();
                 }
-                else {
-                    remove(imageInstrument);
-                    imageInstrument.setIcon(null);
-                    add(tableau_defilant);
+                catch (IOException ex) {
                 }
             }
         });
@@ -110,6 +100,12 @@ public class OngletInstruments extends Onglet {
                     "Erreur",
                     JOptionPane.WARNING_MESSAGE);
         }
+        else {
+            int index = selection[0];
+            Window parent = SwingUtilities.getWindowAncestor(this);
+            FenetreModifierInstrument fenetreModifierInstrument = new FenetreModifierInstrument((JFrame) parent, tableau, index);
+            fenetreModifierInstrument.setVisible(true);
+        }
     }
 
     public void afficherInstrument() throws IOException {
@@ -140,10 +136,9 @@ public class OngletInstruments extends Onglet {
                     JOptionPane.WARNING_MESSAGE);
         }
         else {
-            BufferedImage photoInstrument = ImageIO.read(fichierPhoto);
-            imageInstrument.setIcon(new ImageIcon(photoInstrument));
-            remove(tableau_defilant);
-            add(imageInstrument);
+            ImageIcon imageInstrument = new ImageIcon(cheminPhoto);
+            FenetreImageInstrument fenetreImageInstrument = new FenetreImageInstrument(imageInstrument);
+            fenetreImageInstrument.setVisible(true);
         }
     }
 }

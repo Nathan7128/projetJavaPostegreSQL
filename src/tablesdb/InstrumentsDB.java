@@ -1,7 +1,7 @@
-package tablesDB;
+package tablesdb;
 
 import database.DB;
-import tablesJava.Instrument;
+import tablesjava.Instrument;
 
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -120,30 +120,31 @@ public class InstrumentsDB {
         }
         return null;
     }
-//
-//    public static int update(int id, String numSerie, int idModele, String couleur, int prix, String photo) {
-//        var sql = "UPDATE public.\"Instrument\"\n" +
-//                "\tSET \"IdInstrument\"=?, \"NumSerie\"=?, \"IdModele\"=?, \"Couleur\"=?, \"Prix\"=?, \"Photo\"=?\n" +
-//                "\tWHERE \"IdInstrument\"=?;";
-//
-//        int affectedRows = 0;
-//
-//        try (var conn  = DB.connect();
-//             var pstmt = conn.prepareStatement(sql)) {
-//            pstmt.setInt(1, id);
-//            pstmt.setString(2, numSerie);
-//            pstmt.setInt(3, idModele);
-//            pstmt.setString(4, couleur);
-//            pstmt.setInt(5, prix);
-//            pstmt.setString(6, photo);
-//
-//            affectedRows = pstmt.executeUpdate();
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return affectedRows;
-//    }
+
+    public static int update(int id, String numSerie, int idModele, String couleur, int prix, String photo) {
+        var sql = "UPDATE public.\"Instrument\"\n" +
+                "\tSET \"IdInstrument\"=?, \"NumSerie\"=?, \"IdModele\"=?, \"Couleur\"=?, \"Prix\"=?, \"Photo\"=?\n" +
+                "\tWHERE \"IdInstrument\"=?;";
+
+        int affectedRows = 0;
+
+        try (var conn  = DB.connect();
+             var pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            pstmt.setString(2, numSerie);
+            pstmt.setInt(3, idModele);
+            pstmt.setString(4, couleur);
+            pstmt.setInt(5, prix);
+            pstmt.setString(6, photo);
+            pstmt.setInt(7, id);
+
+            affectedRows = pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return affectedRows;
+    }
 
     public static int delete(int id) {
         var sql = "DELETE FROM public.\"Instrument\"\n" +

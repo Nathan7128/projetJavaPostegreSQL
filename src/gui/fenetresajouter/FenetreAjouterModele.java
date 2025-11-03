@@ -1,9 +1,9 @@
 package gui.fenetresajouter;
 
 import gui.tableaux.TableauModeles;
-import tablesDB.ModelesDB;
-import tablesDB.MarquesDB;
-import tablesJava.Modele;
+import tablesdb.ModelesDB;
+import tablesdb.MarquesDB;
+import tablesjava.Modele;
 
 import javax.swing.*;
 import java.awt.*;

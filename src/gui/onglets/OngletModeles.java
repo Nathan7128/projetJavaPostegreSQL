@@ -2,7 +2,7 @@ package gui.onglets;
 
 import gui.fenetresajouter.FenetreAjouterModele;
 import gui.tableaux.TableauModeles;
-import tablesDB.ModelesDB;
+import tablesdb.ModelesDB;
 
 import javax.swing.*;
 import java.awt.*;
