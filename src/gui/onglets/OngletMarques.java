@@ -1,10 +1,13 @@
 package gui.onglets;
 
 import gui.fenetresajouter.FenetreAjouterMarque;
+import gui.fenetresmodifier.FenetreModifierMarque;
 import gui.tableaux.TableauMarques;
 import tablesdb.MarquesDB;
 
 import javax.swing.*;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,8 +15,8 @@ import java.awt.event.ActionListener;
 public class OngletMarques extends Onglet {
     private TableauMarques tableau = new TableauMarques();
     private JTable jTableau;
-    private JScrollPane tableau_defilant;
-    private JButton bAjouter, bSupprimer;
+    private JScrollPane tableauDefilant;
+    private JButton bAjouter, bSupprimer, bModifier;
 
     public OngletMarques() {
         super("Marques", "src/gui/images/icone_marques.png");
@@ -34,19 +37,31 @@ public class OngletMarques extends Onglet {
                 supprimerMarque();
             }
         });
+        bModifier = new JButton("Modifier");
+        bModifier.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                modifierMarque();
+            }
+        });
 
         JPanel boutons = new JPanel();
         boutons.add(bAjouter);
         boutons.add(bSupprimer);
+        boutons.add(bModifier);
 
         add(boutons, BorderLayout.SOUTH);
     }
 
     private void construireTableau() {
         jTableau = new JTable(tableau);
-        tableau_defilant = new JScrollPane(jTableau);
-        tableau_defilant.setBorder(BorderFactory.createEmptyBorder(20, 100, 20, 100));
-        add(tableau_defilant, BorderLayout.CENTER);
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableau);
+        jTableau.setRowSorter(sorter);
+        sorter.toggleSortOrder(0);
+
+        tableauDefilant = new JScrollPane(jTableau);
+        tableauDefilant.setBorder(BorderFactory.createEmptyBorder(20, 100, 20, 100));
+        add(tableauDefilant, BorderLayout.CENTER);
     }
 
     public void ajouterMarque() {
@@ -60,9 +75,25 @@ public class OngletMarques extends Onglet {
 
         for(int i = selection.length - 1; i >= 0; i--){
             int index = selection[i];
-            int id_marque = (int) tableau.getValueAt(index, 0);
+            int idMarque = (int) tableau.getValueAt(index, 0);
             tableau.supprDonnee(index);
-            MarquesDB.delete(id_marque);
+            MarquesDB.delete(idMarque);
+        }
+    }
+
+    public void modifierMarque() {
+        int[] selection = jTableau.getSelectedRows();
+        if (selection.length != 1) {
+            JOptionPane.showMessageDialog(this,
+                    "Veuillez choisir exactement 1 marque à modifier.",
+                    "Erreur",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+        else {
+            int index = selection[0];
+            Window parent = SwingUtilities.getWindowAncestor(this);
+            FenetreModifierMarque fenetreModifierMarque = new FenetreModifierMarque((JFrame) parent, tableau, index);
+            fenetreModifierMarque.setVisible(true);
         }
     }
 }

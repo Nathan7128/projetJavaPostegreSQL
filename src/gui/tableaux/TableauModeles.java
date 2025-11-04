@@ -1,7 +1,10 @@
 package gui.tableaux;
 
 import tablesdb.ModelesDB;
+import tablesjava.Instrument;
 import tablesjava.Modele;
+
+import java.util.Comparator;
 
 
 public class TableauModeles extends Tableau<Modele> {

@@ -1,4 +1,4 @@
-package gui.fenetresajouter;
+package gui.fenetresmodifier;
 
 import gui.tableaux.TableauMarques;
 import tablesdb.MarquesDB;
@@ -8,28 +8,35 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 
-public class FenetreAjouterMarque extends JDialog {
+public class FenetreModifierMarque extends JDialog {
 
     private Marque marqueCreee = null;
 
     private final JTextField champNom = new JTextField(15);
     private final JTextField champSiteWeb = new JTextField(15);
     private TableauMarques tableauMarques;
+    int indexTableau;
+    private Marque marque;
 
-    public FenetreAjouterMarque(JFrame parent, TableauMarques tableauMarques) {
-        super(parent, "Ajouter une marque", true);
+    public FenetreModifierMarque(JFrame parent, TableauMarques tableauMarques, int indexTableau) {
+        super(parent, "Modifier la marque", true);
         this.tableauMarques = tableauMarques;
-
+        this.indexTableau = indexTableau;
+        int idMarque = (int) tableauMarques.getValueAt(indexTableau, 0);
+        this.marque = MarquesDB.findById(idMarque);
         setLayout(new BorderLayout(10, 10));
 
         JPanel panelForm = new JPanel(new GridLayout(2, 2, 20, 20));
 
         panelForm.add(new JLabel("Nom :"));
         panelForm.add(champNom);
+        champNom.setText(marque.getNom());
 
         panelForm.add(new JLabel("Site Web :"));
         panelForm.add(champSiteWeb);
+        champSiteWeb.setText(marque.getSiteWeb());
 
         add(panelForm, BorderLayout.CENTER);
 
@@ -46,7 +53,7 @@ public class FenetreAjouterMarque extends JDialog {
         boutonValider.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                creerMarque();
+                modifierMarque();
             }
         });
 
@@ -58,8 +65,7 @@ public class FenetreAjouterMarque extends JDialog {
         setLocationRelativeTo(parent);
     }
 
-    private void creerMarque() {
-        int idMarque = MarquesDB.createNewId();
+    private void modifierMarque() {
         String nom = champNom.getText().trim();
         String siteWeb = champSiteWeb.getText().trim();
 
@@ -72,9 +78,10 @@ public class FenetreAjouterMarque extends JDialog {
         }
         // Si tout est correct
         else {
-            marqueCreee = new Marque(idMarque, nom, siteWeb);
-            MarquesDB.add(marqueCreee);
-            tableauMarques.addDonnee(marqueCreee);
+            this.marque.setNom(nom);
+            this.marque.setSiteWeb(siteWeb);
+            MarquesDB.update(this.marque.getId(), nom, siteWeb);
+            tableauMarques.modifierLigne(this.indexTableau, this.marque);
             dispose();
         }
     }

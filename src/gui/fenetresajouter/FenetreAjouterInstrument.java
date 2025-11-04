@@ -99,14 +99,14 @@ public class FenetreAjouterInstrument extends JDialog {
     }
 
     private void creerInstrument() {
-        int id_instrument = InstrumentsDB.createNewId();
-        String num_serie = champNumSerie.getText().trim();
-        int id_modele = allIDsModeles.get((String) champModele.getSelectedItem());
+        int idInstrument = InstrumentsDB.createNewId();
+        String numSerie = champNumSerie.getText().trim();
+        int idModele = allIDsModeles.get((String) champModele.getSelectedItem());
         String couleur = champCouleur.getText().trim();
         int prix = (int) champPrix.getValue();
 
         // Vérifie si un champ obligatoire est vide
-        if (num_serie.isEmpty()) {
+        if (numSerie.isEmpty()) {
             JOptionPane.showMessageDialog(this,
                     "Veuillez remplir tous les champs obligatoires (Numéro de série).",
                     "Erreur",
@@ -114,7 +114,7 @@ public class FenetreAjouterInstrument extends JDialog {
         }
         // Si tout est correct
         else {
-            instrumentCree = new Instrument(id_instrument, num_serie, id_modele, couleur, prix, champPhoto);
+            instrumentCree = new Instrument(idInstrument, numSerie, idModele, couleur, prix, champPhoto);
             InstrumentsDB.add(instrumentCree);
             tableauInstruments.addDonnee(instrumentCree);
             dispose();

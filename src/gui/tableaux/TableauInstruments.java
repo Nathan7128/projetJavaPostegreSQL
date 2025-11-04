@@ -28,10 +28,4 @@ public class TableauInstruments extends Tableau<Instrument> {
             default -> null;
         };
     }
-
-    public void modifierLigne(int ligne, Instrument instrument) {
-        donnees.set(ligne, instrument);
-        donnees.sort(Comparator.comparingInt(Instrument::getId));
-        fireTableDataChanged();
-    }
 }

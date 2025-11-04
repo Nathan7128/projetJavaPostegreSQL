@@ -1,7 +1,10 @@
 package gui.tableaux;
 
 import tablesdb.MarquesDB;
+import tablesjava.Instrument;
 import tablesjava.Marque;
+
+import java.util.Comparator;
 
 
 public class TableauMarques extends Tableau<Marque> {

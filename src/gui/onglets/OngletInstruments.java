@@ -9,6 +9,7 @@ import tablesjava.Instrument;
 import utils.Constants;
 
 import javax.swing.*;
+import javax.swing.table.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.*;
@@ -18,7 +19,7 @@ import java.io.IOException;
 public class OngletInstruments extends Onglet {
     private TableauInstruments tableau = new TableauInstruments();
     private JTable jTableau;
-    private JScrollPane tableau_defilant;
+    private JScrollPane tableauDefilant;
     private JButton bAjouter, bSupprimer, bModifier, bAfficher;
 
     public OngletInstruments() {
@@ -70,9 +71,13 @@ public class OngletInstruments extends Onglet {
 
     public void construireTableau() {
         jTableau = new JTable(tableau);
-        tableau_defilant = new JScrollPane(jTableau);
-        tableau_defilant.setBorder(BorderFactory.createEmptyBorder(20, 100, 20, 100));
-        add(tableau_defilant, BorderLayout.CENTER);
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableau);
+        jTableau.setRowSorter(sorter);
+        sorter.toggleSortOrder(0);
+
+        tableauDefilant = new JScrollPane(jTableau);
+        tableauDefilant.setBorder(BorderFactory.createEmptyBorder(20, 100, 20, 100));
+        add(tableauDefilant, BorderLayout.CENTER);
     }
 
     public void ajouterInstrument() {
@@ -86,9 +91,9 @@ public class OngletInstruments extends Onglet {
 
         for(int i = selection.length - 1; i >= 0; i--){
             int index = selection[i];
-            int id_instrument = (int) tableau.getValueAt(index, 0);
+            int idInstrument = (int) tableau.getValueAt(index, 0);
             tableau.supprDonnee(index);
-            InstrumentsDB.delete(id_instrument);
+            InstrumentsDB.delete(idInstrument);
         }
     }
 
@@ -118,8 +123,8 @@ public class OngletInstruments extends Onglet {
         }
 
         int index = selection[0];
-        int id_instrument = (int) tableau.getValueAt(index, 0);
-        Instrument instrument = InstrumentsDB.findById(id_instrument);
+        int idInstrument = (int) tableau.getValueAt(index, 0);
+        Instrument instrument = InstrumentsDB.findById(idInstrument);
         String photo = instrument.getPhoto();
         String cheminPhoto = Constants.cheminPhotosInstruments + Constants.sep + photo;
         File fichierPhoto = new File(cheminPhoto);

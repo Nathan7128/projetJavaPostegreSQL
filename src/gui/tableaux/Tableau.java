@@ -1,6 +1,9 @@
 package gui.tableaux;
 
+import tablesjava.Instrument;
+
 import javax.swing.table.AbstractTableModel;
+import java.util.Comparator;
 import java.util.List;
 
 abstract class Tableau<T> extends AbstractTableModel {
@@ -31,6 +34,11 @@ abstract class Tableau<T> extends AbstractTableModel {
         donnees.add(donnee);
 
         fireTableRowsInserted(donnees.size() - 1, donnees.size() - 1);
+    }
+
+    public void modifierLigne(int ligne, T donnee) {
+        donnees.set(ligne, donnee);
+        fireTableDataChanged();
     }
 
     public void supprDonnee(int index) {

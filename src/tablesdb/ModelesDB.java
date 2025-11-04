@@ -111,26 +111,27 @@ public class ModelesDB {
         return null;
     }
 
-//    public static int update(int id, int idMarque, String nom) {
-//        var sql = "UPDATE public.\"Modele\"\n" +
-//                "\tSET \"IdModele\", \"IdMarque\", \"Nom\"=?\n" +
-//                "\tWHERE \"IdModele\"=?;";
-//
-//        int affectedRows = 0;
-//
-//        try (var conn  = DB.connect();
-//             var pstmt = conn.prepareStatement(sql)) {
-//            pstmt.setInt(1, id);
-//            pstmt.setInt(2, idMarque);
-//            pstmt.setString(3, nom);
-//
-//            affectedRows = pstmt.executeUpdate();
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return affectedRows;
-//    }
+    public static int update(int id, int idMarque, String nom) {
+        var sql = "UPDATE public.\"Modele\"\n" +
+                "\tSET \"IdModele\"=?, \"IdMarque\"=?, \"Nom\"=?\n" +
+                "\tWHERE \"IdModele\"=?;";
+
+        int affectedRows = 0;
+
+        try (var conn  = DB.connect();
+             var pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            pstmt.setInt(2, idMarque);
+            pstmt.setString(3, nom);
+            pstmt.setInt(4, id);
+
+            affectedRows = pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return affectedRows;
+    }
 
     public static int delete(int id) {
         var sql = "DELETE FROM public.\"Modele\"\n" +

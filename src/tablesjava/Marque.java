@@ -16,13 +16,13 @@ public class Marque {
 //        this.id = id;
 //    }
 
-//    public void setNom(String nom) {
-//        this.nom = nom;
-//    }
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
 
-//    public void setSiteWeb(String site_web) {
-//        this.siteWeb = site_web;
-//    }
+    public void setSiteWeb(String site_web) {
+        this.siteWeb = site_web;
+    }
 
     public int getId() {
         return id;
