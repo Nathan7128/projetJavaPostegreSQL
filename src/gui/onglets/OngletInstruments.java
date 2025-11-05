@@ -23,7 +23,7 @@ public class OngletInstruments extends Onglet {
     private JButton bAjouter, bSupprimer, bModifier, bAfficher;
 
     public OngletInstruments() {
-        super("Instruments", Constants.cheminIconeOngletInstruments);
+        super("Instruments");
 
         construireTableau();
 

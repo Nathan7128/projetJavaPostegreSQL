@@ -4,6 +4,7 @@ import gui.fenetresajouter.FenetreAjouterModele;
 import gui.fenetresmodifier.FenetreModifierModele;
 import gui.tableaux.TableauModeles;
 import tablesdb.ModelesDB;
+import utils.Constants;
 
 import javax.swing.*;
 import javax.swing.table.TableModel;
@@ -12,6 +13,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
 public class OngletModeles extends Onglet {
     private TableauModeles tableau = new TableauModeles();
     private JTable jTableau;
@@ -19,7 +21,7 @@ public class OngletModeles extends Onglet {
     private JButton bAjouter, bSupprimer, bModifier;
 
     public OngletModeles() {
-        super("Modeles", "src/gui/images/icone_modeles.png");
+        super("Modeles");
 
         construireTableau();
 

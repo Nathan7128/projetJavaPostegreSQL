@@ -4,6 +4,7 @@ import gui.fenetresajouter.FenetreAjouterClient;
 import gui.fenetresmodifier.FenetreModifierClient;
 import gui.tableaux.TableauClients;
 import tablesdb.ClientsDB;
+import utils.Constants;
 
 import javax.swing.*;
 import javax.swing.table.TableModel;
@@ -19,7 +20,7 @@ public class OngletClients extends Onglet {
     private JButton bAjouter, bSupprimer, bModifier;
 
     public OngletClients() {
-        super("Clients", "src/gui/images/icone_clients.png");
+        super("Clients");
 
         construireTableau();
 

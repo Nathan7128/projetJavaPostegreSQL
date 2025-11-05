@@ -29,19 +29,19 @@ public class FenetrePrincipale extends JFrame {
         JTabbedPane onglets = new JTabbedPane();
 
         OngletInstruments ongletInstruments = new OngletInstruments();
-        onglets.addTab(ongletInstruments.getTitre(), ongletInstruments.getIcone(), ongletInstruments);
+        onglets.addTab(ongletInstruments.getTitre(), ongletInstruments);
 
         OngletModeles ongletModeles = new OngletModeles();
-        onglets.addTab(ongletModeles.getTitre(), ongletModeles.getIcone(), ongletModeles);
+        onglets.addTab(ongletModeles.getTitre(), ongletModeles);
 
         OngletMarques ongletMarques = new OngletMarques();
-        onglets.addTab(ongletMarques.getTitre(), ongletMarques.getIcone(), ongletMarques);
+        onglets.addTab(ongletMarques.getTitre(), ongletMarques);
 
         OngletClients ongletClients = new OngletClients();
-        onglets.addTab(ongletClients.getTitre(), ongletClients.getIcone(), ongletClients);
+        onglets.addTab(ongletClients.getTitre(), ongletClients);
 
         OngletFactures ongletFactures = new OngletFactures();
-        onglets.addTab(ongletFactures.getTitre(), ongletFactures.getIcone(), ongletFactures);
+        onglets.addTab(ongletFactures.getTitre(), ongletFactures);
 
         return onglets;
     }

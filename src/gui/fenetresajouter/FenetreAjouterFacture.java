@@ -5,6 +5,7 @@ import tablesdb.ClientsDB;
 import tablesdb.FacturesDB;
 import tablesdb.InstrumentsDB;
 import tablesjava.Facture;
+import utils.Constants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -51,8 +52,16 @@ public class FenetreAjouterFacture extends JDialog {
         panelForm.add(new JLabel("Instrument(s) :"));
         JPanel panelInstrument = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panelInstrument.add(champInstrument);
-//        Ajouter bouton + pour ajouter instrument
-//        Ajouter bouton - pour supprimer instrument
+        JButton bAjouterInstrument = new JButton("+");
+        bAjouterInstrument.setBackground(new Color(46, 204, 113)); // vert
+        bAjouterInstrument.setForeground(Color.WHITE);
+        JButton bSupprimerInstrument = new JButton("−");
+        bSupprimerInstrument.setBackground(new Color(231, 76, 60)); // rouge
+        bSupprimerInstrument.setForeground(Color.WHITE);
+        bAjouterInstrument.setFont(new Font("Arial", Font.BOLD, 14));
+        bSupprimerInstrument.setFont(new Font("Arial", Font.BOLD, 14));
+        panelInstrument.add(bAjouterInstrument);
+        panelInstrument.add(bSupprimerInstrument);
         panelForm.add(panelInstrument);
 
         add(panelForm, BorderLayout.CENTER);

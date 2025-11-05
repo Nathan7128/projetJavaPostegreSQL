@@ -4,6 +4,7 @@ import gui.fenetresajouter.FenetreAjouterMarque;
 import gui.fenetresmodifier.FenetreModifierMarque;
 import gui.tableaux.TableauMarques;
 import tablesdb.MarquesDB;
+import utils.Constants;
 
 import javax.swing.*;
 import javax.swing.table.TableModel;
@@ -12,6 +13,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
 public class OngletMarques extends Onglet {
     private TableauMarques tableau = new TableauMarques();
     private JTable jTableau;
@@ -19,7 +21,7 @@ public class OngletMarques extends Onglet {
     private JButton bAjouter, bSupprimer, bModifier;
 
     public OngletMarques() {
-        super("Marques", "src/gui/images/icone_marques.png");
+        super("Marques");
 
         construireTableau();
 

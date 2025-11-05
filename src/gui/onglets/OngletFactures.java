@@ -4,6 +4,7 @@ import gui.fenetresajouter.FenetreAjouterFacture;
 import gui.fenetresmodifier.FenetreModifierFacture;
 import gui.tableaux.TableauFactures;
 import tablesdb.FacturesDB;
+import utils.Constants;
 
 import javax.swing.*;
 import javax.swing.table.TableModel;
@@ -19,7 +20,7 @@ public class OngletFactures extends Onglet {
     private JButton bAjouter, bSupprimer, bModifier;
 
     public OngletFactures() {
-        super("Factures", "src/gui/images/icone_factures.png");
+        super("Factures");
 
         construireTableau();
 
