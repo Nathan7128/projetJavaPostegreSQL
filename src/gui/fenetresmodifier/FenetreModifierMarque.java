@@ -12,8 +12,6 @@ import java.util.Map;
 
 public class FenetreModifierMarque extends JDialog {
 
-    private Marque marqueCreee = null;
-
     private final JTextField champNom = new JTextField(15);
     private final JTextField champSiteWeb = new JTextField(15);
     private TableauMarques tableauMarques;

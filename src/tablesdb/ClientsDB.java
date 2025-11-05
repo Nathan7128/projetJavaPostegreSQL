@@ -90,57 +90,58 @@ public class ClientsDB {
             int id = client.getId();
             String nom = client.getNom();
             String prenom = client.getPrenom();
-            String cle = id + " (" + prenom + " " + nom + ")";
+            String cle = id + " - " + prenom + " " + nom;
             idsClients.put(cle, id);
         }
 
         return idsClients;
     }
 
-//    public static Client findById(int id){
-//        var sql = "SELECT \"IdClient\", \"Nom\", \"Prenom\", \"Adresse\", \"Email\"\n" +
-//                "\tFROM public.\"Client\" WHERE \"IdClient\"=?;";
-//        try (var conn =  DB.connect();
-//             var pstmt = conn.prepareStatement(sql)) {
-//            pstmt.setInt(1, id);
-//            var rs = pstmt.executeQuery();
-//            if (rs.next()) {
-//                return new Client(
-//                        rs.getInt("IdClient"),
-//                        rs.getString("Nom"),
-//                        rs.getString("Prenom"),
-//                        rs.getString("Adresse"),
-//                        rs.getString("Mail")
-//                );
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
+    public static Client findById(int id){
+        var sql = "SELECT \"IdClient\", \"Nom\", \"Prenom\", \"Adresse\", \"Email\"\n" +
+                "\tFROM public.\"Client\" WHERE \"IdClient\"=?;";
+        try (var conn =  DB.connect();
+             var pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            var rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return new Client(
+                        rs.getInt("IdClient"),
+                        rs.getString("Nom"),
+                        rs.getString("Prenom"),
+                        rs.getString("Adresse"),
+                        rs.getString("Email")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-//    public static int update(int id, String nom, String prenom, String adresse, String email) {
-//        var sql = "UPDATE public.\"Client\"\n" +
-//                "\tSET \"IdClient\"=?, \"Nom\"=?, \"Prenom\"=?, \"Adresse\"=?, \"Email\"=?\n" +
-//                "\tWHERE \"IdClient\"=?;";
-//
-//        int affectedRows = 0;
-//
-//        try (var conn  = DB.connect();
-//             var pstmt = conn.prepareStatement(sql)) {
-//            pstmt.setInt(1, id);
-//            pstmt.setString(2, nom);
-//            pstmt.setString(3, prenom);
-//            pstmt.setString(4, adresse);
-//            pstmt.setString(5, email);
-//
-//            affectedRows = pstmt.executeUpdate();
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return affectedRows;
-//    }
+    public static int update(int id, String nom, String prenom, String adresse, String email) {
+        var sql = "UPDATE public.\"Client\"\n" +
+                "\tSET \"IdClient\"=?, \"Nom\"=?, \"Prenom\"=?, \"Adresse\"=?, \"Email\"=?\n" +
+                "\tWHERE \"IdClient\"=?;";
+
+        int affectedRows = 0;
+
+        try (var conn  = DB.connect();
+             var pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            pstmt.setString(2, nom);
+            pstmt.setString(3, prenom);
+            pstmt.setString(4, adresse);
+            pstmt.setString(5, email);
+            pstmt.setInt(6, id);
+
+            affectedRows = pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return affectedRows;
+    }
 
     public static int delete(int id) {
         var sql = "DELETE FROM public.\"Client\"\n" +

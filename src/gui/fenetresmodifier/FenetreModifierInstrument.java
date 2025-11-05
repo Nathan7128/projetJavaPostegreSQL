@@ -16,8 +16,6 @@ import java.util.Map;
 
 public class FenetreModifierInstrument extends JDialog {
 
-    private Instrument instrumentCree = null;
-
     private final JTextField champNumSerie = new JTextField(15);
     private final Map<String, Integer> allIDsModeles = ModelesDB.getAllIDsModeles();
     private final JComboBox champModele = new JComboBox(allIDsModeles.keySet().toArray());

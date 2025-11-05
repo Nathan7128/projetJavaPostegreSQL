@@ -16,8 +16,6 @@ import java.util.Map;
 
 public class FenetreModifierModele extends JDialog {
 
-    private Modele modeleCree = null;
-
     private final Map<String, Integer> allIDsMarques = MarquesDB.getAllIDsMarques();
     private final JComboBox champMarque = new JComboBox(allIDsMarques.keySet().toArray());
     private final JTextField champNom = new JTextField(15);

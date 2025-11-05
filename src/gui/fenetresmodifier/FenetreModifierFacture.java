@@ -1,21 +1,20 @@
-package gui.fenetresajouter;
+package gui.fenetresmodifier;
 
 import gui.tableaux.TableauFactures;
 import tablesdb.ClientsDB;
 import tablesdb.FacturesDB;
+import tablesjava.Client;
 import tablesjava.Facture;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Map;
+import java.sql.Date;
 
-public class FenetreAjouterFacture extends JDialog {
-
-    private Facture factureCreee = null;
+public class FenetreModifierFacture extends JDialog {
 
     private final Map<String, Integer> allIDsClients = ClientsDB.getAllIDsClients();
     private final JComboBox champClient = new JComboBox(allIDsClients.keySet().toArray());
@@ -27,16 +26,23 @@ public class FenetreAjouterFacture extends JDialog {
     });
     private final JSpinner champAnnee = new JSpinner(new SpinnerNumberModel(2025, 1950, 2050, 1));
     private TableauFactures tableauFactures;
+    int indexTableau;
+    private Facture facture;
 
-    public FenetreAjouterFacture(JFrame parent, TableauFactures tableauFactures) {
-        super(parent, "Ajouter une facture", true);
+    public FenetreModifierFacture(JFrame parent, TableauFactures tableauFactures, int indexTableau) {
+        super(parent, "Modifier le modèle", true);
         this.tableauFactures = tableauFactures;
+        this.indexTableau = indexTableau;
+        int idFacture = (int) tableauFactures.getValueAt(indexTableau, 0);
+        this.facture = FacturesDB.findById(idFacture);
         setLayout(new BorderLayout(10, 10));
 
         JPanel panelForm = new JPanel(new GridLayout(2, 2, 20, 20));
 
         panelForm.add(new JLabel("Client :"));
         panelForm.add(champClient);
+        Client client = ClientsDB.findById(facture.getIdClient());
+        champClient.setSelectedItem(client.getId() + " - " + client.getPrenom() + " " + client.getNom());
 
         panelForm.add(new JLabel("Date de la facture :"));
         JPanel panelDate = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -44,8 +50,13 @@ public class FenetreAjouterFacture extends JDialog {
         panelDate.add(champMois);
         panelDate.add(champAnnee);
         panelForm.add(panelDate);
+        LocalDate localDate = facture.getDate().toLocalDate();
+        champJour.setValue(localDate.getDayOfMonth());
+        champMois.setSelectedIndex(localDate.getMonthValue() - 1); // index de 0 à 11
+        champAnnee.setValue(localDate.getYear());
 
         add(panelForm, BorderLayout.CENTER);
+
 
         JPanel panelBoutons = new JPanel();
         JButton boutonValider = new JButton("Valider");
@@ -55,20 +66,23 @@ public class FenetreAjouterFacture extends JDialog {
         panelBoutons.add(boutonAnnuler);
         add(panelBoutons, BorderLayout.SOUTH);
 
+
         boutonValider.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                creerFacture();
+                modifierFacture();
             }
         });
 
-        boutonAnnuler.addActionListener(e -> dispose());
+        boutonAnnuler.addActionListener(e -> {
+            dispose();
+        });
 
         pack();
         setLocationRelativeTo(parent);
     }
 
-    private void creerFacture() {
+    private void modifierFacture() {
         int idFacture = FacturesDB.createNewId();
         int idClient = allIDsClients.get((String) champClient.getSelectedItem());
 
@@ -90,9 +104,10 @@ public class FenetreAjouterFacture extends JDialog {
 
         Date date = Date.valueOf(localDate);
 
-        factureCreee = new Facture(idFacture, idClient, date);
-        FacturesDB.add(factureCreee);
-        tableauFactures.addDonnee(factureCreee);
+        this.facture.setIdClient(idClient);
+        this.facture.setDate(date);
+        FacturesDB.update(this.facture.getId(), idClient, date);
+        tableauFactures.modifierLigne(this.indexTableau, this.facture);
         dispose();
     }
 }

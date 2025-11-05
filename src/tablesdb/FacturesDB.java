@@ -89,46 +89,47 @@ public class FacturesDB {
         return idsFactures;
     }
 
-//    public static Facture findById(int id){
-//        var sql = "SELECT \"IdFacture\", \"IdClient\", \"Date\"\n" +
-//                "\tFROM public.\"Facture\" WHERE \"IdFacture\"=?;";
-//        try (var conn =  DB.connect();
-//             var pstmt = conn.prepareStatement(sql)) {
-//            pstmt.setInt(1, id);
-//            var rs = pstmt.executeQuery();
-//            if (rs.next()) {
-//                return new Facture(
-//                        rs.getInt("IdFacture"),
-//                        rs.getInt("IdClient"),
-//                        rs.getDate("Date")
-//                );
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//
-//    public static int update(int id, int idMarque, java.sql.Date date) {
-//        var sql = "UPDATE public.\"Facture\"\n" +
-//                "\tSET \"IdFacture\", \"IdClient\", \"Date\"=?\n" +
-//                "\tWHERE \"IdFacture\"=?;";
-//
-//        int affectedRows = 0;
-//
-//        try (var conn  = DB.connect();
-//             var pstmt = conn.prepareStatement(sql)) {
-//            pstmt.setInt(1, id);
-//            pstmt.setInt(2, idMarque);
-//            pstmt.setDate(3, date);
-//
-//            affectedRows = pstmt.executeUpdate();
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return affectedRows;
-//    }
+    public static Facture findById(int id){
+        var sql = "SELECT \"IdFacture\", \"IdClient\", \"Date\"\n" +
+                "\tFROM public.\"Facture\" WHERE \"IdFacture\"=?;";
+        try (var conn =  DB.connect();
+             var pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            var rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return new Facture(
+                        rs.getInt("IdFacture"),
+                        rs.getInt("IdClient"),
+                        rs.getDate("Date")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static int update(int id, int idClient, java.sql.Date date) {
+        var sql = "UPDATE public.\"Facture\"\n" +
+                "\tSET \"IdFacture\"=?, \"IdClient\"=?, \"Date\"=?\n" +
+                "\tWHERE \"IdFacture\"=?;";
+
+        int affectedRows = 0;
+
+        try (var conn  = DB.connect();
+             var pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            pstmt.setInt(2, idClient);
+            pstmt.setDate(3, date);
+            pstmt.setInt(4, id);
+
+            affectedRows = pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return affectedRows;
+    }
 
     public static int delete(int id) {
         var sql = "DELETE FROM public.\"Facture\"\n" +

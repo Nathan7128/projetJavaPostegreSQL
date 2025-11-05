@@ -19,11 +19,11 @@ public class Facture {
 //        this.id = id;
 //    }
 //
-//    public void setIdClient(int id_client) { this.idClient = id_client; }
-//
-//    public void setDate(Date date) {
-//        this.date = date;
-//    }
+    public void setIdClient(int id_client) { this.idClient = id_client; }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
     public int getId() {
         return id;
