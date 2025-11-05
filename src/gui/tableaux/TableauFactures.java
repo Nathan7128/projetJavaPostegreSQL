@@ -9,7 +9,7 @@ public class TableauFactures extends Tableau<Facture> {
     public TableauFactures() {
         super(
                 FacturesDB.findAll(),
-                new String[]{"IdFacture", "IdClient", "Date"}
+                new String[]{"ID Facture", "Client", "Date"}
         );
     }
 

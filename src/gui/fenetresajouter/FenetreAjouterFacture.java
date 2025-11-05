@@ -3,6 +3,7 @@ package gui.fenetresajouter;
 import gui.tableaux.TableauFactures;
 import tablesdb.ClientsDB;
 import tablesdb.FacturesDB;
+import tablesdb.InstrumentsDB;
 import tablesjava.Facture;
 
 import javax.swing.*;
@@ -26,6 +27,8 @@ public class FenetreAjouterFacture extends JDialog {
             "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
     });
     private final JSpinner champAnnee = new JSpinner(new SpinnerNumberModel(2025, 1950, 2050, 1));
+//    private final Map<String, Integer> dictIdsInstruments = InstrumentsDB.getAllIDsInstruments();
+    private final JComboBox champInstrument = new JComboBox();
     private TableauFactures tableauFactures;
 
     public FenetreAjouterFacture(JFrame parent, TableauFactures tableauFactures) {
@@ -33,7 +36,7 @@ public class FenetreAjouterFacture extends JDialog {
         this.tableauFactures = tableauFactures;
         setLayout(new BorderLayout(10, 10));
 
-        JPanel panelForm = new JPanel(new GridLayout(2, 2, 20, 20));
+        JPanel panelForm = new JPanel(new GridLayout(3, 2, 20, 20));
 
         panelForm.add(new JLabel("Client :"));
         panelForm.add(champClient);
@@ -44,6 +47,13 @@ public class FenetreAjouterFacture extends JDialog {
         panelDate.add(champMois);
         panelDate.add(champAnnee);
         panelForm.add(panelDate);
+
+        panelForm.add(new JLabel("Instrument(s) :"));
+        JPanel panelInstrument = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelInstrument.add(champInstrument);
+//        Ajouter bouton + pour ajouter instrument
+//        Ajouter bouton - pour supprimer instrument
+        panelForm.add(panelInstrument);
 
         add(panelForm, BorderLayout.CENTER);
 

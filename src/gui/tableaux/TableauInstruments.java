@@ -11,7 +11,7 @@ public class TableauInstruments extends Tableau<Instrument> {
     public TableauInstruments() {
         super(
                 InstrumentsDB.findAll(),
-                new String[]{"IdInstrument", "NumSerie", "IdModele", "Couleur", "Prix"}
+                new String[]{"ID Instrument", "Numéro de série", "Modèle", "Couleur", "Prix"}
         );
     }
 
@@ -22,7 +22,7 @@ public class TableauInstruments extends Tableau<Instrument> {
         return switch (columnIndex) {
             case 0 -> instrument.getId();
             case 1 -> instrument.getNumSerie();
-            case 2 -> instrument.getIdModele();
+            case 2 -> instrument.getNomModele();
             case 3 -> instrument.getCouleur();
             case 4 -> instrument.getPrix();
             default -> null;

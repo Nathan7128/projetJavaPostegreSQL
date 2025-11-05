@@ -12,7 +12,7 @@ public class TableauMarques extends Tableau<Marque> {
     public TableauMarques() {
         super(
                 MarquesDB.findAll(),
-                new String[]{"IdMarque", "Nom", "SiteWeb"}
+                new String[]{"ID Marque", "Nom", "Site Web"}
         );
     }
 

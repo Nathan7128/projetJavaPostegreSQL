@@ -6,10 +6,10 @@ public class Marque {
     private String nom;
     private String siteWeb;
 
-    public Marque(int id, String nom_modele, String site_web) {
+    public Marque(int id, String nomMarque, String siteWeb) {
         this.id = id;
-        this.nom = nom_modele;
-        this.siteWeb = site_web;
+        this.nom = nomMarque;
+        this.siteWeb = siteWeb;
     }
 
 //    public void setId(int id) {
@@ -20,8 +20,8 @@ public class Marque {
         this.nom = nom;
     }
 
-    public void setSiteWeb(String site_web) {
-        this.siteWeb = site_web;
+    public void setSiteWeb(String siteWeb) {
+        this.siteWeb = siteWeb;
     }
 
     public int getId() {

@@ -9,7 +9,7 @@ public class TableauClients extends Tableau<Client> {
     public TableauClients() {
         super(
                 ClientsDB.findAll(),
-                new String[]{"IdClient", "Nom", "Prenom", "Adresse", "Email"}
+                new String[]{"ID Client", "Nom", "Prenom", "Adresse", "Email"}
         );
     }
 
