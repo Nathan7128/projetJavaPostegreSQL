@@ -11,8 +11,6 @@ import java.awt.event.ActionListener;
 
 public class FenetreAjouterClient extends JDialog {
 
-    private Client clientCree = null;
-
     private final JTextField champNom = new JTextField(15);
     private final JTextField champPrenom = new JTextField(15);
     private final JTextField champAdresse = new JTextField(15);
@@ -82,7 +80,7 @@ public class FenetreAjouterClient extends JDialog {
         }
         // Si tout est correct
         else {
-            clientCree = new Client(idClient, nom, prenom, adresse, email);
+            Client clientCree = new Client(idClient, nom, prenom, adresse, email);
             ClientsDB.add(clientCree);
             tableauClients.addDonnee(clientCree);
             dispose();

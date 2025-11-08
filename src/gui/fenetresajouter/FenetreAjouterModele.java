@@ -13,8 +13,6 @@ import java.util.Map;
 
 public class FenetreAjouterModele extends JDialog {
 
-    private Modele modeleCree = null;
-
     private final Map<String, Integer> allIDsMarques = MarquesDB.getAllIDsMarques();
     private final JComboBox champMarque = new JComboBox(allIDsMarques.keySet().toArray());
     private final JTextField champNom = new JTextField(15);
@@ -74,7 +72,7 @@ public class FenetreAjouterModele extends JDialog {
         }
         // Si tout est correct
         else {
-            modeleCree = new Modele(idModele, idMarque, nom);
+            Modele modeleCree = new Modele(idModele, idMarque, nom);
             ModelesDB.add(modeleCree);
             tableauModeles.addDonnee(modeleCree);
             dispose();

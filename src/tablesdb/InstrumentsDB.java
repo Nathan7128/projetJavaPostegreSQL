@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InstrumentsDB {
+public class    InstrumentsDB {
 
     public static int add(Instrument instrument) {
         var sql = "INSERT INTO public.\"Instrument\"(\n" +
@@ -90,9 +90,25 @@ public class InstrumentsDB {
 
         for (Instrument instrument : instruments) {
             int id = instrument.getId();
-            String num_serie = instrument.getNumSerie();
-            String cle = id + " (" + num_serie + ")";
+            String numSerie = instrument.getNumSerie();
+            String cle = id + " - " + numSerie;
             idsInstruments.put(cle, id);
+        }
+
+        return idsInstruments;
+    }
+
+    public static Map<String, Integer> getAllIDsInstruments(int idModele) {
+        List<Instrument> instruments = findAll();
+        Map<String, Integer> idsInstruments = new HashMap<>();
+
+        for (Instrument instrument : instruments) {
+            if (instrument.getIdModele() == idModele) {
+                int id = instrument.getId();
+                String numSerie = instrument.getNumSerie();
+                String cle = id + " - " + numSerie;
+                idsInstruments.put(cle, id);
+            }
         }
 
         return idsInstruments;

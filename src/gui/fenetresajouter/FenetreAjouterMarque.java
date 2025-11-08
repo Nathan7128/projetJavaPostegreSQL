@@ -11,8 +11,6 @@ import java.awt.event.ActionListener;
 
 public class FenetreAjouterMarque extends JDialog {
 
-    private Marque marqueCreee = null;
-
     private final JTextField champNom = new JTextField(15);
     private final JTextField champSiteWeb = new JTextField(15);
     private TableauMarques tableauMarques;
@@ -72,7 +70,7 @@ public class FenetreAjouterMarque extends JDialog {
         }
         // Si tout est correct
         else {
-            marqueCreee = new Marque(idMarque, nom, siteWeb);
+            Marque marqueCreee = new Marque(idMarque, nom, siteWeb);
             MarquesDB.add(marqueCreee);
             tableauMarques.addDonnee(marqueCreee);
             dispose();

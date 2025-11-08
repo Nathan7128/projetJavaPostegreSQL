@@ -14,13 +14,11 @@ import java.util.Map;
 
 public class FenetreAjouterInstrument extends JDialog {
 
-    private Instrument instrumentCree = null;
-
     private final JTextField champNumSerie = new JTextField(15);
     private final Map<String, Integer> allIDsModeles = ModelesDB.getAllIDsModeles();
     private final JComboBox champModele = new JComboBox(allIDsModeles.keySet().toArray());
     private final JTextField champCouleur = new JTextField(15);
-    private final JSpinner champPrix = new JSpinner((new SpinnerNumberModel(0, 0, 10000, 1)));
+    private final JSpinner champPrix = new JSpinner(new SpinnerNumberModel(0, 0, 10000, 1));
     private String champPhoto = null;
     private final JFileChooser selectPhoto = new JFileChooser();
     private TableauInstruments tableauInstruments;
@@ -114,7 +112,7 @@ public class FenetreAjouterInstrument extends JDialog {
         }
         // Si tout est correct
         else {
-            instrumentCree = new Instrument(idInstrument, numSerie, idModele, couleur, prix, champPhoto);
+            Instrument instrumentCree = new Instrument(idInstrument, numSerie, idModele, couleur, prix, champPhoto);
             InstrumentsDB.add(instrumentCree);
             tableauInstruments.addDonnee(instrumentCree);
             dispose();

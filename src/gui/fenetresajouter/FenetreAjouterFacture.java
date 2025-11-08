@@ -17,8 +17,6 @@ import java.util.Map;
 
 public class FenetreAjouterFacture extends JDialog {
 
-    private Facture factureCreee = null;
-
     private final Map<String, Integer> allIDsClients = ClientsDB.getAllIDsClients();
     private final JComboBox champClient = new JComboBox(allIDsClients.keySet().toArray());
 
@@ -64,6 +62,13 @@ public class FenetreAjouterFacture extends JDialog {
         panelInstrument.add(bSupprimerInstrument);
         panelForm.add(panelInstrument);
 
+        bAjouterInstrument.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ajouterInstrument();
+            }
+        });
+
         add(panelForm, BorderLayout.CENTER);
 
         JPanel panelBoutons = new JPanel();
@@ -85,6 +90,12 @@ public class FenetreAjouterFacture extends JDialog {
 
         pack();
         setLocationRelativeTo(parent);
+    }
+
+    public void ajouterInstrument() {
+        Window parent = SwingUtilities.getWindowAncestor(this);
+        FenetreAjouterInstrumentFacture fenetreAjouterInstrumentFacture = new FenetreAjouterInstrumentFacture((JFrame) parent, champInstrument);
+        fenetreAjouterInstrumentFacture.setVisible(true);
     }
 
     private void creerFacture() {
@@ -109,7 +120,7 @@ public class FenetreAjouterFacture extends JDialog {
 
         Date date = Date.valueOf(localDate);
 
-        factureCreee = new Facture(idFacture, idClient, date);
+        Facture factureCreee = new Facture(idFacture, idClient, date);
         FacturesDB.add(factureCreee);
         tableauFactures.addDonnee(factureCreee);
         dispose();

@@ -91,6 +91,21 @@ public class ModelesDB {
         return idsModeles;
     }
 
+    public static Map<String, Integer> getAllIDsModeles(int idMarque) {
+        List<Modele> modeles = findAll();
+        Map<String, Integer> idsModeles = new HashMap<>();
+
+        for (Modele modele : modeles) {
+            if (modele.getIdMarque() == idMarque) {
+                int id = modele.getId();
+                String cle = id + " - " + modele.getNom();
+                idsModeles.put(cle, id);
+            }
+        }
+
+        return idsModeles;
+    }
+
     public static Modele findById(int id){
         var sql = "SELECT \"IdModele\", \"IdMarque\", \"Nom\"\n" +
                 "\tFROM public.\"Modele\" WHERE \"IdModele\"=?;";
