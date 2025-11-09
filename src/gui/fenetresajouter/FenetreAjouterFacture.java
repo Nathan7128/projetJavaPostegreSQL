@@ -4,8 +4,9 @@ import gui.tableaux.TableauFactures;
 import tablesdb.ClientsDB;
 import tablesdb.FacturesDB;
 import tablesdb.InstrumentsDB;
+import tablesdb.LignesFacturesDB;
 import tablesjava.Facture;
-import utils.Constants;
+import tablesjava.LigneFacture;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,8 +27,8 @@ public class FenetreAjouterFacture extends JDialog {
             "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
     });
     private final JSpinner champAnnee = new JSpinner(new SpinnerNumberModel(2025, 1950, 2050, 1));
-//    private final Map<String, Integer> dictIdsInstruments = InstrumentsDB.getAllIDsInstruments();
-    private final JComboBox champInstrument = new JComboBox();
+    private final Map<String, Integer> dictIdsInstruments = InstrumentsDB.getAllIDsInstruments();
+    private final JComboBox champLigneFacture = new JComboBox();
     private TableauFactures tableauFactures;
 
     public FenetreAjouterFacture(JFrame parent, TableauFactures tableauFactures) {
@@ -49,23 +50,30 @@ public class FenetreAjouterFacture extends JDialog {
 
         panelForm.add(new JLabel("Instrument(s) :"));
         JPanel panelInstrument = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panelInstrument.add(champInstrument);
-        JButton bAjouterInstrument = new JButton("+");
-        bAjouterInstrument.setBackground(new Color(46, 204, 113)); // vert
-        bAjouterInstrument.setForeground(Color.WHITE);
-        JButton bSupprimerInstrument = new JButton("−");
-        bSupprimerInstrument.setBackground(new Color(231, 76, 60)); // rouge
-        bSupprimerInstrument.setForeground(Color.WHITE);
-        bAjouterInstrument.setFont(new Font("Arial", Font.BOLD, 14));
-        bSupprimerInstrument.setFont(new Font("Arial", Font.BOLD, 14));
-        panelInstrument.add(bAjouterInstrument);
-        panelInstrument.add(bSupprimerInstrument);
+        panelInstrument.add(champLigneFacture);
+        JButton bAjouterLigneFacture = new JButton("+");
+        bAjouterLigneFacture.setBackground(new Color(46, 204, 113)); // vert
+        bAjouterLigneFacture.setForeground(Color.WHITE);
+        JButton bSupprimerLigneFacture = new JButton("−");
+        bSupprimerLigneFacture.setBackground(new Color(231, 76, 60)); // rouge
+        bSupprimerLigneFacture.setForeground(Color.WHITE);
+        bAjouterLigneFacture.setFont(new Font("Arial", Font.BOLD, 14));
+        bSupprimerLigneFacture.setFont(new Font("Arial", Font.BOLD, 14));
+        panelInstrument.add(bAjouterLigneFacture);
+        panelInstrument.add(bSupprimerLigneFacture);
         panelForm.add(panelInstrument);
 
-        bAjouterInstrument.addActionListener(new ActionListener() {
+        bAjouterLigneFacture.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ajouterInstrument();
+                ajouterLigneFacture();
+            }
+        });
+
+        bSupprimerLigneFacture.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                supprimerLigneFacture();
             }
         });
 
@@ -92,10 +100,24 @@ public class FenetreAjouterFacture extends JDialog {
         setLocationRelativeTo(parent);
     }
 
-    public void ajouterInstrument() {
+    public void ajouterLigneFacture() {
         Window parent = SwingUtilities.getWindowAncestor(this);
-        FenetreAjouterInstrumentFacture fenetreAjouterInstrumentFacture = new FenetreAjouterInstrumentFacture((JFrame) parent, champInstrument);
+        FenetreAjouterLigneFacture fenetreAjouterInstrumentFacture = new FenetreAjouterLigneFacture((JFrame) parent, champLigneFacture);
         fenetreAjouterInstrumentFacture.setVisible(true);
+    }
+
+    public void supprimerLigneFacture() {
+        String instrumentSel = (String) champLigneFacture.getSelectedItem();
+        if (instrumentSel == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Veuillez sélectionner un instrument à supprimer.",
+                    "Erreur",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+        else {
+            champLigneFacture.removeItem(instrumentSel);
+            champLigneFacture.setSelectedItem(null);
+        }
     }
 
     private void creerFacture() {
@@ -120,9 +142,20 @@ public class FenetreAjouterFacture extends JDialog {
 
         Date date = Date.valueOf(localDate);
 
+//        Ajouter la facture à la base de données
         Facture factureCreee = new Facture(idFacture, idClient, date);
         FacturesDB.add(factureCreee);
         tableauFactures.addDonnee(factureCreee);
+
+//        Ajouter les lignes de la facture à la base de données
+        int idInstrument;
+        LigneFacture ligneFactureCreee;
+        for (int i = 0; i < champLigneFacture.getItemCount(); i++) {
+            idInstrument = dictIdsInstruments.get((String) champLigneFacture.getItemAt(i));
+            ligneFactureCreee = new LigneFacture(idFacture, idInstrument);
+            LignesFacturesDB.add(ligneFactureCreee);
+        }
+
         dispose();
     }
 }

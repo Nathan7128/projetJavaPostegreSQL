@@ -15,12 +15,12 @@ public class TableauFactures extends Tableau<Facture> {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Facture modele = donnees.get(rowIndex);
+        Facture facture = donnees.get(rowIndex);
 
         return switch (columnIndex) {
-            case 0 -> modele.getId();
-            case 1 -> modele.getIdClient();
-            case 2 -> modele.getDate();
+            case 0 -> facture.getId();
+            case 1 -> facture.getIdClient();
+            case 2 -> facture.getDate();
             default -> null;
         };
     }

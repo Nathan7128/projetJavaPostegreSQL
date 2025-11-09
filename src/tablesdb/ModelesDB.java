@@ -3,7 +3,6 @@ package tablesdb;
 import database.DB;
 import tablesjava.Modele;
 
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +30,7 @@ public class ModelesDB {
                     return rs.getInt(1);
                 }
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return -1;
@@ -54,7 +53,7 @@ public class ModelesDB {
                 );
                 modeles.add(modele);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return modeles;
@@ -72,7 +71,7 @@ public class ModelesDB {
             if (rs.next()) {
                 idMax = rs.getInt("id_max") + 1;
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return idMax;
@@ -120,7 +119,7 @@ public class ModelesDB {
                         rs.getString("Nom")
                 );
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -142,7 +141,7 @@ public class ModelesDB {
 
             affectedRows = pstmt.executeUpdate();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return affectedRows;
@@ -155,7 +154,7 @@ public class ModelesDB {
              var pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             return pstmt.executeUpdate();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;

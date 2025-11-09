@@ -1,13 +1,17 @@
 package gui.fenetresmodifier;
 
+import gui.fenetresajouter.FenetreAjouterLigneFacture;
 import gui.tableaux.TableauFactures;
-import tablesdb.ClientsDB;
-import tablesdb.FacturesDB;
+import tablesdb.*;
 import tablesjava.Client;
 import tablesjava.Facture;
+import tablesjava.Instrument;
+import tablesjava.LigneFacture;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
@@ -25,6 +29,7 @@ public class FenetreModifierFacture extends JDialog {
             "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
     });
     private final JSpinner champAnnee = new JSpinner(new SpinnerNumberModel(2025, 1950, 2050, 1));
+    private final JComboBox champLigneFacture = new JComboBox();
     private TableauFactures tableauFactures;
     int indexTableau;
     private Facture facture;
@@ -37,7 +42,7 @@ public class FenetreModifierFacture extends JDialog {
         this.facture = FacturesDB.findById(idFacture);
         setLayout(new BorderLayout(10, 10));
 
-        JPanel panelForm = new JPanel(new GridLayout(2, 2, 20, 20));
+        JPanel panelForm = new JPanel(new GridLayout(3, 2, 20, 20));
 
         panelForm.add(new JLabel("Client :"));
         panelForm.add(champClient);
@@ -54,6 +59,41 @@ public class FenetreModifierFacture extends JDialog {
         champJour.setValue(localDate.getDayOfMonth());
         champMois.setSelectedIndex(localDate.getMonthValue() - 1); // index de 0 à 11
         champAnnee.setValue(localDate.getYear());
+
+        panelForm.add(new JLabel("Instrument(s) :"));
+        JPanel panelInstrument = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelInstrument.add(champLigneFacture);
+        List<LigneFacture> lignesFacture = LignesFacturesDB.trouverLignesFacture(idFacture);
+        Instrument instrument;
+        for (LigneFacture ligneFacture : lignesFacture) {
+            instrument = InstrumentsDB.findById(ligneFacture.getIdInstrument());
+            champLigneFacture.addItem(instrument.getId() + " - " + instrument.getNumSerie());
+        }
+        JButton bAjouterLigneFacture = new JButton("+");
+        bAjouterLigneFacture.setBackground(new Color(46, 204, 113)); // vert
+        bAjouterLigneFacture.setForeground(Color.WHITE);
+        JButton bSupprimerLigneFacture = new JButton("−");
+        bSupprimerLigneFacture.setBackground(new Color(231, 76, 60)); // rouge
+        bSupprimerLigneFacture.setForeground(Color.WHITE);
+        bAjouterLigneFacture.setFont(new Font("Arial", Font.BOLD, 14));
+        bSupprimerLigneFacture.setFont(new Font("Arial", Font.BOLD, 14));
+        panelInstrument.add(bAjouterLigneFacture);
+        panelInstrument.add(bSupprimerLigneFacture);
+        panelForm.add(panelInstrument);
+
+        bAjouterLigneFacture.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ajouterLigneFacture();
+            }
+        });
+
+        bSupprimerLigneFacture.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                supprimerLigneFacture();
+            }
+        });
 
         add(panelForm, BorderLayout.CENTER);
 
@@ -82,8 +122,27 @@ public class FenetreModifierFacture extends JDialog {
         setLocationRelativeTo(parent);
     }
 
+    public void ajouterLigneFacture() {
+        Window parent = SwingUtilities.getWindowAncestor(this);
+        FenetreAjouterLigneFacture fenetreAjouterInstrumentFacture = new FenetreAjouterLigneFacture((JFrame) parent, champLigneFacture);
+        fenetreAjouterInstrumentFacture.setVisible(true);
+    }
+
+    public void supprimerLigneFacture() {
+        String instrumentSel = (String) champLigneFacture.getSelectedItem();
+        if (instrumentSel == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Veuillez sélectionner un instrument à supprimer.",
+                    "Erreur",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+        else {
+            champLigneFacture.removeItem(instrumentSel);
+            champLigneFacture.setSelectedItem(null);
+        }
+    }
+
     private void modifierFacture() {
-        int idFacture = FacturesDB.createNewId();
         int idClient = allIDsClients.get((String) champClient.getSelectedItem());
 
         // Récupération des valeurs de date
@@ -108,6 +167,14 @@ public class FenetreModifierFacture extends JDialog {
         this.facture.setDate(date);
         FacturesDB.update(this.facture.getId(), idClient, date);
         tableauFactures.modifierLigne(this.indexTableau, this.facture);
+
+        List<Integer> idsInstrument = new ArrayList<>();
+        Map<String, Integer> allIdsInstrument = InstrumentsDB.getAllIDsInstruments();
+        for (int i = 0; i < champLigneFacture.getItemCount(); i++) {
+            idsInstrument.add(allIdsInstrument.get((String) champLigneFacture.getItemAt(i)));
+        }
+        LignesFacturesDB.modifierFacture(this.facture.getId(), idsInstrument);
+
         dispose();
     }
 }

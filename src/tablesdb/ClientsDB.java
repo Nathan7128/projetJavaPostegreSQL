@@ -3,7 +3,6 @@ package tablesdb;
 import database.DB;
 import tablesjava.Client;
 
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,7 +32,7 @@ public class ClientsDB {
                     return rs.getInt(1);
                 }
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return -1;
@@ -58,7 +57,7 @@ public class ClientsDB {
                     );
                 clients.add(client);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return clients;
@@ -76,7 +75,7 @@ public class ClientsDB {
             if (rs.next()) {
                 idMax = rs.getInt("id_max") + 1;
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return idMax;
@@ -113,7 +112,7 @@ public class ClientsDB {
                         rs.getString("Email")
                 );
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -137,7 +136,7 @@ public class ClientsDB {
 
             affectedRows = pstmt.executeUpdate();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return affectedRows;
@@ -150,7 +149,7 @@ public class ClientsDB {
              var pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             return pstmt.executeUpdate();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;

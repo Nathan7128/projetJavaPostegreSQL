@@ -3,12 +3,12 @@ import java.sql.Date;
 
 public class LigneFacture {
 
-    private int id;
+    private int idFacture;
     private int IdInstrument;
 
 
-    public LigneFacture(int id, int idInstrument) {
-        this.id = id;
+    public LigneFacture(int idFacture, int idInstrument) {
+        this.idFacture = idFacture;
         this.IdInstrument = idInstrument;
     }
 
@@ -20,8 +20,8 @@ public class LigneFacture {
     public void setIdInstrument(int idInstrument) { this.IdInstrument = idInstrument; }
 
 
-    public int getId() {
-        return id;
+    public int getIdFacture() {
+        return idFacture;
     }
 
     public int getIdInstrument() {

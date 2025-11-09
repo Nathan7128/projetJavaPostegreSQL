@@ -3,7 +3,6 @@ package tablesdb;
 import database.DB;
 import tablesjava.Marque;
 
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +30,7 @@ public class MarquesDB {
                     return rs.getInt(1);
                 }
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return -1;
@@ -54,7 +53,7 @@ public class MarquesDB {
                 );
                 marques.add(marque);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return marques;
@@ -72,7 +71,7 @@ public class MarquesDB {
             if (rs.next()) {
                 idMax = rs.getInt("id_max") + 1;
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return idMax;
@@ -106,7 +105,7 @@ public class MarquesDB {
                         rs.getString("SiteWeb")
                 );
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -128,7 +127,7 @@ public class MarquesDB {
 
             affectedRows = pstmt.executeUpdate();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return affectedRows;
@@ -141,7 +140,7 @@ public class MarquesDB {
              var pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             return pstmt.executeUpdate();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;

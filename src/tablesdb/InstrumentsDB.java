@@ -3,7 +3,6 @@ package tablesdb;
 import database.DB;
 import tablesjava.Instrument;
 
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +33,7 @@ public class    InstrumentsDB {
                     return rs.getInt(1);
                 }
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return -1;
@@ -60,7 +59,7 @@ public class    InstrumentsDB {
                     );
                 instruments.add(instrument);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return instruments;
@@ -78,7 +77,7 @@ public class    InstrumentsDB {
             if (rs.next()) {
                 idMax = rs.getInt("id_max") + 1;
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return idMax;
@@ -131,7 +130,7 @@ public class    InstrumentsDB {
                         rs.getString("Photo")
                 );
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -156,7 +155,7 @@ public class    InstrumentsDB {
 
             affectedRows = pstmt.executeUpdate();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return affectedRows;
@@ -169,7 +168,7 @@ public class    InstrumentsDB {
              var pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             return pstmt.executeUpdate();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;

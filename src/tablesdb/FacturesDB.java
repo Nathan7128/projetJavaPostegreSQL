@@ -3,7 +3,6 @@ package tablesdb;
 import database.DB;
 import tablesjava.Facture;
 
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
 
@@ -28,7 +27,7 @@ public class FacturesDB {
                     return rs.getInt(1);
                 }
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return -1;
@@ -51,7 +50,7 @@ public class FacturesDB {
                 );
                 factures.add(facture);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return factures;
@@ -69,7 +68,7 @@ public class FacturesDB {
             if (rs.next()) {
                 idMax = rs.getInt("id_max") + 1;
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return idMax;
@@ -103,7 +102,7 @@ public class FacturesDB {
                         rs.getDate("Date")
                 );
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -125,7 +124,7 @@ public class FacturesDB {
 
             affectedRows = pstmt.executeUpdate();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return affectedRows;
@@ -138,7 +137,7 @@ public class FacturesDB {
              var pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             return pstmt.executeUpdate();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;

@@ -3,14 +3,11 @@ package tablesdb;
 import database.DB;
 import tablesjava.LigneFacture;
 
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class LignesFactures {
+public class LignesFacturesDB {
 
     public static int add(LigneFacture ligneFacture) {
         var sql = "INSERT INTO public.\"LigneFacture\"(\n" +
@@ -20,7 +17,7 @@ public class LignesFactures {
         try (var conn =  DB.connect();
              var pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            pstmt.setInt(1, ligneFacture.getId());
+            pstmt.setInt(1, ligneFacture.getIdFacture());
             pstmt.setInt(2, ligneFacture.getIdInstrument());
 
             int insertedRow = pstmt.executeUpdate();
@@ -30,7 +27,7 @@ public class LignesFactures {
                     return rs.getInt(1);
                 }
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return -1;
@@ -52,7 +49,7 @@ public class LignesFactures {
                 );
                 lignesFactures.add(ligneFacture);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return lignesFactures;
@@ -70,18 +67,19 @@ public class LignesFactures {
             if (rs.next()) {
                 idMax = rs.getInt("id_max") + 1;
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return idMax;
     }
 
-    public static LigneFacture findById(int id){
+    public static LigneFacture findById(int idFacture, int idInstrument){
         var sql = "SELECT \"IdFacture\", \"IdInstrument\"\n" +
-                "\tFROM public.\"LigneFacture\" WHERE \"IdFacture\"=?;";
+                "\tFROM public.\"LigneFacture\" WHERE \"IdFacture\"=? AND \"IdInstrument\"=?;";
         try (var conn =  DB.connect();
              var pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
+            pstmt.setInt(1, idFacture);
+            pstmt.setInt(2, idInstrument);
             var rs = pstmt.executeQuery();
             if (rs.next()) {
                 return new LigneFacture(
@@ -89,41 +87,64 @@ public class LignesFactures {
                         rs.getInt("IdInstrument")
                 );
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static int update(int id, int idInstrument) {
-        var sql = "UPDATE public.\"LigneFacture\"\n" +
-                "\tSET \"IdFacture\"=?, \"IdInstrument\"=?\n" +
-                "\tWHERE \"IdFacture\"=?;";
-
-        int affectedRows = 0;
-
-        try (var conn  = DB.connect();
+    public static List<LigneFacture> trouverLignesFacture(int idFacture){
+        var lignesFacture = new ArrayList<LigneFacture>();
+        var sql = "SELECT \"IdFacture\", \"IdInstrument\"\n" +
+                "\tFROM public.\"LigneFacture\" WHERE \"IdFacture\"=?";
+        try (var conn =  DB.connect();
              var pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
-            pstmt.setInt(2, idInstrument);
-            pstmt.setInt(4, id);
-
-            affectedRows = pstmt.executeUpdate();
-
-        } catch (SQLException e) {
+            pstmt.setInt(1, idFacture);
+            var rs = pstmt.executeQuery();
+            while (rs.next()) {
+                var ligneFacture = new LigneFacture(
+                        rs.getInt("IdFacture"),
+                        rs.getInt("IdInstrument")
+                );
+                lignesFacture.add(ligneFacture);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return affectedRows;
+        return lignesFacture;
     }
 
-    public static int delete(int id) {
+    public static void modifierFacture(int idFacture, List<Integer> idsInstrument) {
+        supprFacture(idFacture);
+        LigneFacture ligneFacture;
+        for (int idInstrument : idsInstrument) {
+            ligneFacture = new LigneFacture(idFacture, idInstrument);
+            add(ligneFacture);
+        }
+    }
+
+    public static int supprLigneFacture(int idFacture, int idInstrument) {
+        var sql = "DELETE FROM public.\"LigneFacture\"\n" +
+                "\tWHERE \"IdFacture\"=? AND \"IdInstrument\"=?;";
+        try (var conn  = DB.connect();
+             var pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, idFacture);
+            pstmt.setInt(1, idInstrument);
+            return pstmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static int supprFacture(int idFacture) {
         var sql = "DELETE FROM public.\"LigneFacture\"\n" +
                 "\tWHERE \"IdFacture\"=?;";
         try (var conn  = DB.connect();
              var pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
+            pstmt.setInt(1, idFacture);
             return pstmt.executeUpdate();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;
