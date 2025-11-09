@@ -1,13 +1,12 @@
 package gui.onglets;
 
+import gui.fenetresafficher.FenetreAfficherFacture;
 import gui.fenetresajouter.FenetreAjouterFacture;
-import gui.fenetresimages.FenetreImageInstrument;
+import gui.fenetresafficher.FenetreAfficherInstrument;
 import gui.fenetresmodifier.FenetreModifierFacture;
 import gui.tableaux.TableauFactures;
 import tablesdb.FacturesDB;
-import tablesdb.InstrumentsDB;
 import tablesjava.Facture;
-import tablesjava.Instrument;
 import utils.Constants;
 
 import javax.swing.*;
@@ -55,11 +54,7 @@ public class OngletFactures extends Onglet {
         bAfficher.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    afficherFacture();
-                }
-                catch (IOException ex) {
-                }
+                afficherFacture();
             }
         });
 
@@ -68,6 +63,7 @@ public class OngletFactures extends Onglet {
         boutons.add(bAjouter);
         boutons.add(bSupprimer);
         boutons.add(bModifier);
+        boutons.add(bAfficher);
 
         add(boutons, BorderLayout.SOUTH);
     }
@@ -128,25 +124,8 @@ public class OngletFactures extends Onglet {
         int index = selection[0];
         int idFacture = (int) tableau.getValueAt(index, 0);
         Facture facture = FacturesDB.findById(idFacture);
-        String photo = instrument.getPhoto();
-        String cheminPhoto = Constants.cheminPhotosInstruments + Constants.sep + photo;
-        File fichierPhoto = new File(cheminPhoto);
-        if (photo == null) {
-            JOptionPane.showMessageDialog(this,
-                    "Veuillez choisir une photo pour cet instrument.",
-                    "Erreur",
-                    JOptionPane.WARNING_MESSAGE);
-        }
-        else if (!(fichierPhoto.exists())) {
-            JOptionPane.showMessageDialog(this,
-                    "L'image " + photo + " est introuvable dans le dossier " + Constants.cheminPhotosInstruments + " .",
-                    "Erreur",
-                    JOptionPane.WARNING_MESSAGE);
-        }
-        else {
-            ImageIcon imageInstrument = new ImageIcon(cheminPhoto);
-            FenetreImageInstrument fenetreImageInstrument = new FenetreImageInstrument(imageInstrument);
-            fenetreImageInstrument.setVisible(true);
-        }
+        Window parent = SwingUtilities.getWindowAncestor(this);
+        FenetreAfficherFacture fenetreAfficherFacture = new FenetreAfficherFacture((JFrame) parent, facture);
+        fenetreAfficherFacture.setVisible(true);
     }
 }

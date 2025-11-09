@@ -1,6 +1,6 @@
 package gui.onglets;
 
-import gui.fenetresimages.FenetreImageInstrument;
+import gui.fenetresafficher.FenetreAfficherInstrument;
 import gui.fenetresmodifier.FenetreModifierInstrument;
 import gui.tableaux.TableauInstruments;
 import tablesdb.InstrumentsDB;
@@ -124,26 +124,7 @@ public class OngletInstruments extends Onglet {
 
         int index = selection[0];
         int idInstrument = (int) tableau.getValueAt(index, 0);
-        Instrument instrument = InstrumentsDB.findById(idInstrument);
-        String photo = instrument.getPhoto();
-        String cheminPhoto = Constants.cheminPhotosInstruments + Constants.sep + photo;
-        File fichierPhoto = new File(cheminPhoto);
-        if (photo == null) {
-            JOptionPane.showMessageDialog(this,
-                    "Veuillez choisir une photo pour cet instrument.",
-                    "Erreur",
-                    JOptionPane.WARNING_MESSAGE);
-        }
-        else if (!(fichierPhoto.exists())) {
-            JOptionPane.showMessageDialog(this,
-                    "L'image " + photo + " est introuvable dans le dossier " + Constants.cheminPhotosInstruments + " .",
-                    "Erreur",
-                    JOptionPane.WARNING_MESSAGE);
-        }
-        else {
-            ImageIcon imageInstrument = new ImageIcon(cheminPhoto);
-            FenetreImageInstrument fenetreImageInstrument = new FenetreImageInstrument(imageInstrument);
-            fenetreImageInstrument.setVisible(true);
-        }
+        Window parent = SwingUtilities.getWindowAncestor(this);
+        FenetreAfficherInstrument fenetreAfficherInstrument = new FenetreAfficherInstrument((JFrame) parent, idInstrument);
     }
 }
