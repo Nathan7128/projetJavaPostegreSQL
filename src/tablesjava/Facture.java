@@ -1,16 +1,20 @@
 package tablesjava;
+import tablesdb.ClientsDB;
+
 import java.sql.Date;
 
 public class Facture {
 
     private int id;
     private int idClient;
+    private Client client;
     private Date date;
 
 
     public Facture(int id, int id_client, Date date) {
         this.id = id;
         this.idClient = id_client;
+        this.client = ClientsDB.findById(id_client);
         this.date = date;
     }
 
@@ -31,6 +35,10 @@ public class Facture {
 
     public int getIdClient() {
         return idClient;
+    }
+
+    public String getNomClientComplet() {
+        return client.getPrenom() + " " + client.getNom();
     }
 
     public Date getDate() {

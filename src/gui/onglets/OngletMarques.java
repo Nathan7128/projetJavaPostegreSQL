@@ -76,7 +76,7 @@ public class OngletMarques extends Onglet {
         int[] selection = jTableau.getSelectedRows();
 
         for(int i = selection.length - 1; i >= 0; i--){
-            int index = selection[i];
+            int index = jTableau.convertRowIndexToModel(selection[i]);
             int idMarque = (int) tableau.getValueAt(index, 0);
             tableau.supprDonnee(index);
             MarquesDB.delete(idMarque);
@@ -92,7 +92,7 @@ public class OngletMarques extends Onglet {
                     JOptionPane.WARNING_MESSAGE);
         }
         else {
-            int index = selection[0];
+            int index = jTableau.convertRowIndexToModel(selection[0]);
             Window parent = SwingUtilities.getWindowAncestor(this);
             FenetreModifierMarque fenetreModifierMarque = new FenetreModifierMarque((JFrame) parent, tableau, index);
             fenetreModifierMarque.setVisible(true);

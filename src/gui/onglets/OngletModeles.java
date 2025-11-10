@@ -76,7 +76,7 @@ public class OngletModeles extends Onglet {
         int[] selection = jTableau.getSelectedRows();
 
         for(int i = selection.length - 1; i >= 0; i--){
-            int index = selection[i];
+            int index = jTableau.convertRowIndexToModel(selection[i]);
             int id_modele = (int) tableau.getValueAt(index, 0);
             tableau.supprDonnee(index);
             ModelesDB.delete(id_modele);
@@ -92,7 +92,7 @@ public class OngletModeles extends Onglet {
                     JOptionPane.WARNING_MESSAGE);
         }
         else {
-            int index = selection[0];
+            int index = jTableau.convertRowIndexToModel(selection[0]);
             Window parent = SwingUtilities.getWindowAncestor(this);
             FenetreModifierModele fenetreModifierModele = new FenetreModifierModele((JFrame) parent, tableau, index);
             fenetreModifierModele.setVisible(true);

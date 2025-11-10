@@ -89,7 +89,7 @@ public class OngletFactures extends Onglet {
         int[] selection = jTableau.getSelectedRows();
 
         for(int i = selection.length - 1; i >= 0; i--){
-            int index = selection[i];
+            int index = jTableau.convertRowIndexToModel(selection[i]);
             int id_facture = (int) tableau.getValueAt(index, 0);
             tableau.supprDonnee(index);
             FacturesDB.delete(id_facture);
@@ -105,7 +105,7 @@ public class OngletFactures extends Onglet {
                     JOptionPane.WARNING_MESSAGE);
         }
         else {
-            int index = selection[0];
+            int index = jTableau.convertRowIndexToModel(selection[0]);
             Window parent = SwingUtilities.getWindowAncestor(this);
             FenetreModifierFacture fenetreModifierFacture = new FenetreModifierFacture((JFrame) parent, tableau, index);
             fenetreModifierFacture.setVisible(true);
@@ -121,7 +121,7 @@ public class OngletFactures extends Onglet {
                     JOptionPane.WARNING_MESSAGE);
         }
 
-        int index = selection[0];
+        int index = jTableau.convertRowIndexToModel(selection[0]);
         int idFacture = (int) tableau.getValueAt(index, 0);
         Facture facture = FacturesDB.findById(idFacture);
         Window parent = SwingUtilities.getWindowAncestor(this);

@@ -90,7 +90,7 @@ public class OngletInstruments extends Onglet {
         int[] selection = jTableau.getSelectedRows();
 
         for(int i = selection.length - 1; i >= 0; i--){
-            int index = selection[i];
+            int index = jTableau.convertRowIndexToModel(selection[i]);
             int idInstrument = (int) tableau.getValueAt(index, 0);
             tableau.supprDonnee(index);
             InstrumentsDB.delete(idInstrument);
@@ -106,7 +106,7 @@ public class OngletInstruments extends Onglet {
                     JOptionPane.WARNING_MESSAGE);
         }
         else {
-            int index = selection[0];
+            int index = jTableau.convertRowIndexToModel(selection[0]);
             Window parent = SwingUtilities.getWindowAncestor(this);
             FenetreModifierInstrument fenetreModifierInstrument = new FenetreModifierInstrument((JFrame) parent, tableau, index);
             fenetreModifierInstrument.setVisible(true);
@@ -122,7 +122,7 @@ public class OngletInstruments extends Onglet {
                     JOptionPane.WARNING_MESSAGE);
         }
 
-        int index = selection[0];
+        int index = jTableau.convertRowIndexToModel(selection[0]);
         int idInstrument = (int) tableau.getValueAt(index, 0);
         Window parent = SwingUtilities.getWindowAncestor(this);
         FenetreAfficherInstrument fenetreAfficherInstrument = new FenetreAfficherInstrument((JFrame) parent, idInstrument);

@@ -1,16 +1,13 @@
 package gui.fenetresafficher;
 
 import gui.tableaux.TableauLignesFacture;
-import tablesdb.LignesFacturesDB;
 import tablesjava.Facture;
-import tablesjava.Instrument;
-import utils.Constants;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
-import java.io.File;
 
 public class FenetreAfficherFacture extends JDialog {
     private final TableauLignesFacture tableauLignesFacture;
@@ -18,33 +15,47 @@ public class FenetreAfficherFacture extends JDialog {
     private JScrollPane tableauDefilant;
 
     public FenetreAfficherFacture(JFrame parent, Facture facture) {
-        super(parent, "Lignes de la facture " + facture.getId());
+        super(parent, "Lignes de la facture " + facture.getId(), true);
         tableauLignesFacture = new TableauLignesFacture(facture.getId());
 
         construireTableau();
 
-        JPanel panelForm = new JPanel(new GridLayout(2, 2, 20, 20));
-        panelForm.add(tableauDefilant);
+        JPanel panneauPrincipal = new JPanel(new BorderLayout(10, 10));
+        panneauPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JPanel panelFacture = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panelFacture.add(new JLabel("Date " + facture.getDate().toString()));
-        panelFacture.add(new JLabel("Prix total : " + tableauLignesFacture.calculerPrixTotal()));
+        // --- En-tête facture ---
+        JPanel panelEntete = new JPanel(new GridLayout(1, 3, 5, 5));
+        panelEntete.add(new JLabel("Client : " + facture.getNomClientComplet()));
+        panelEntete.add(new JLabel("Date : " + facture.getDate()));
+        panelEntete.add(new JLabel("Prix total : " + tableauLignesFacture.calculerPrixTotal() + " €"));
 
-        panelForm.add(panelFacture);
+        // --- Ajout des composants dans le bon ordre ---
+        panneauPrincipal.add(panelEntete, BorderLayout.NORTH);
+        panneauPrincipal.add(tableauDefilant, BorderLayout.CENTER);
 
-        add(panelForm, BorderLayout.CENTER);
+        // --- Bouton de fermeture ---
+        JButton boutonFermer = new JButton("Fermer");
+        boutonFermer.addActionListener(e -> dispose());
+        JPanel panelBas = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panelBas.add(boutonFermer);
+        panneauPrincipal.add(panelBas, BorderLayout.SOUTH);
+
+        add(panneauPrincipal);
 
         pack();
         setLocationRelativeTo(parent);
+        setMinimumSize(new Dimension(600, 400));
     }
 
     private void construireTableau() {
         jTableau = new JTable(tableauLignesFacture);
+
         TableRowSorter<TableModel> trieurTableau = new TableRowSorter<>(tableauLignesFacture);
         jTableau.setRowSorter(trieurTableau);
         trieurTableau.toggleSortOrder(0);
 
+        jTableau.setFillsViewportHeight(true);
+        jTableau.setRowHeight(25);
         tableauDefilant = new JScrollPane(jTableau);
-//        tableauDefilant.setBorder(BorderFactory.createEmptyBorder(20, 100, 20, 100));
     }
 }

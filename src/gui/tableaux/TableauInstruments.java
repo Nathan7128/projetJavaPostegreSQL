@@ -5,7 +5,6 @@ import tablesjava.Instrument;
 
 import java.util.Comparator;
 
-
 public class TableauInstruments extends Tableau<Instrument> {
 
     public TableauInstruments() {
