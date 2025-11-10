@@ -7,6 +7,7 @@ import tablesdb.InstrumentsDB;
 import tablesdb.LignesFacturesDB;
 import tablesjava.Facture;
 import tablesjava.LigneFacture;
+import utils.Constants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,9 +49,8 @@ public class FenetreAjouterFacture extends JDialog {
         panelDate.add(champAnnee);
         panelForm.add(panelDate);
 
-        panelForm.add(new JLabel("Instrument(s) :"));
         JPanel panelInstrument = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panelInstrument.add(champLigneFacture);
+        panelInstrument.add(new JLabel("Instrument(s) :"));
         JButton bAjouterLigneFacture = new JButton("+");
         bAjouterLigneFacture.setBackground(new Color(46, 204, 113)); // vert
         bAjouterLigneFacture.setForeground(Color.WHITE);
@@ -62,6 +62,7 @@ public class FenetreAjouterFacture extends JDialog {
         panelInstrument.add(bAjouterLigneFacture);
         panelInstrument.add(bSupprimerLigneFacture);
         panelForm.add(panelInstrument);
+        panelForm.add(champLigneFacture);
 
         bAjouterLigneFacture.addActionListener(new ActionListener() {
             @Override
@@ -104,6 +105,7 @@ public class FenetreAjouterFacture extends JDialog {
         Window parent = SwingUtilities.getWindowAncestor(this);
         FenetreAjouterLigneFacture fenetreAjouterInstrumentFacture = new FenetreAjouterLigneFacture((JFrame) parent, champLigneFacture);
         fenetreAjouterInstrumentFacture.setVisible(true);
+        repaint();
     }
 
     public void supprimerLigneFacture() {

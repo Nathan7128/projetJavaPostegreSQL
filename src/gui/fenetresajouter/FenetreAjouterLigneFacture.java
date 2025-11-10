@@ -5,6 +5,7 @@ import tablesdb.LignesFacturesDB;
 import tablesdb.MarquesDB;
 import tablesdb.ModelesDB;
 import tablesjava.LigneFacture;
+import utils.Constants;
 
 import javax.swing.*;
 import java.awt.*;
