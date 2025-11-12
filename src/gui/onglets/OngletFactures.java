@@ -6,6 +6,7 @@ import gui.fenetresafficher.FenetreAfficherInstrument;
 import gui.fenetresmodifier.FenetreModifierFacture;
 import gui.tableaux.TableauFactures;
 import tablesdb.FacturesDB;
+import tablesdb.LignesFacturesDB;
 import tablesjava.Facture;
 import utils.Constants;
 
@@ -92,6 +93,7 @@ public class OngletFactures extends Onglet {
             int index = jTableau.convertRowIndexToModel(selection[i]);
             int id_facture = (int) tableau.getValueAt(index, 0);
             tableau.supprDonnee(index);
+            LignesFacturesDB.supprFacture(id_facture);
             FacturesDB.delete(id_facture);
         }
     }

@@ -19,7 +19,7 @@ public class TableauFactures extends Tableau<Facture> {
 
         return switch (columnIndex) {
             case 0 -> facture.getId();
-            case 1 -> facture.getIdClient();
+            case 1 -> facture.getNomClientComplet();
             case 2 -> facture.getDate();
             default -> null;
         };
