@@ -124,7 +124,7 @@ public class FenetreAjouterFacture extends JDialog {
 
     private void creerFacture() {
         int idFacture = FacturesDB.createNewId();
-        int idClient = allIDsClients.get((String) champClient.getSelectedItem());
+        String clientSelect = (String) champClient.getSelectedItem();
 
         // Récupération des valeurs de date
         int jour = (int) champJour.getValue();
@@ -144,20 +144,31 @@ public class FenetreAjouterFacture extends JDialog {
 
         Date date = Date.valueOf(localDate);
 
-//        Ajouter la facture à la base de données
-        Facture factureCreee = new Facture(idFacture, idClient, date);
-        FacturesDB.add(factureCreee);
-        tableauFactures.addDonnee(factureCreee);
-
-//        Ajouter les lignes de la facture à la base de données
-        int idInstrument;
-        LigneFacture ligneFactureCreee;
-        for (int i = 0; i < champLigneFacture.getItemCount(); i++) {
-            idInstrument = dictIdsInstruments.get((String) champLigneFacture.getItemAt(i));
-            ligneFactureCreee = new LigneFacture(idFacture, idInstrument);
-            LignesFacturesDB.add(ligneFactureCreee);
+        // Vérifie si un champ obligatoire est vide
+        if (clientSelect == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Veuillez remplir tous les champs obligatoires (Client).",
+                    "Erreur",
+                    JOptionPane.WARNING_MESSAGE);
         }
 
-        dispose();
+        else {
+            //        Ajouter la facture à la base de données
+            int idClient = allIDsClients.get(clientSelect);
+            Facture factureCreee = new Facture(idFacture, idClient, date);
+            FacturesDB.add(factureCreee);
+            tableauFactures.addDonnee(factureCreee);
+
+//        Ajouter les lignes de la facture à la base de données
+            int idInstrument;
+            LigneFacture ligneFactureCreee;
+            for (int i = 0; i < champLigneFacture.getItemCount(); i++) {
+                idInstrument = dictIdsInstruments.get((String) champLigneFacture.getItemAt(i));
+                ligneFactureCreee = new LigneFacture(idFacture, idInstrument);
+                LignesFacturesDB.add(ligneFactureCreee);
+            }
+
+            dispose();
+        }
     }
 }

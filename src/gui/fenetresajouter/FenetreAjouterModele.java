@@ -60,18 +60,19 @@ public class FenetreAjouterModele extends JDialog {
 
     private void creerModele() {
         int idModele = ModelesDB.createNewId();
-        int idMarque = allIDsMarques.get((String) champMarque.getSelectedItem());
+        String marqueSelect = (String) champMarque.getSelectedItem();
         String nom = champNom.getText().trim();
 
         // Vérifie si un champ obligatoire est vide
-        if (nom.isEmpty()) {
+        if (nom.isEmpty() | marqueSelect == null) {
             JOptionPane.showMessageDialog(this,
-                    "Veuillez remplir tous les champs obligatoires (Nom).",
+                    "Veuillez remplir tous les champs obligatoires (Nom et Marque).",
                     "Erreur",
                     JOptionPane.WARNING_MESSAGE);
         }
         // Si tout est correct
         else {
+            int idMarque = allIDsMarques.get(marqueSelect);
             Modele modeleCree = new Modele(idModele, idMarque, nom);
             ModelesDB.add(modeleCree);
             tableauModeles.addDonnee(modeleCree);
