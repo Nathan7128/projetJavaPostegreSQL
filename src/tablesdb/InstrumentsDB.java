@@ -1,17 +1,25 @@
 package tablesdb;
 
+
+// Importation des bibliothèques internes
 import database.DB;
 import tablesjava.Instrument;
 
+
+// Importation des bibliothèques externes
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class    InstrumentsDB {
 
-    public static int add(Instrument instrument) {
+/**
+ * Classe implémentant la table "Instrument" de la bdd
+ */
+public class InstrumentsDB {
+
+    public static int ajouter(Instrument instrument) {
         var sql = "INSERT INTO public.\"Instrument\"(\n" +
                 "\t\"IdInstrument\", \"NumSerie\", \"IdModele\", \"Couleur\", \"Prix\", \"Photo\")\n" +
                 "\tVALUES (?, ?, ?, ?, ?, ?);";
@@ -39,7 +47,7 @@ public class    InstrumentsDB {
         return -1;
     }
 
-    public static List<Instrument> findAll() {
+    public static List<Instrument> getInstruments() {
         var instruments = new ArrayList<Instrument>();
         var sql = "SELECT \"IdInstrument\", \"NumSerie\", \"IdModele\", \"Couleur\", \"Prix\", \"Photo\"\n" +
                 "\tFROM public.\"Instrument\";";
@@ -65,7 +73,7 @@ public class    InstrumentsDB {
         return instruments;
     }
 
-    public static int createNewId() {
+    public static int creerNouvelId() {
         var sql = "SELECT MAX(\"IdInstrument\") AS id_max\n" +
                 "\tFROM public.\"Instrument\";";
         int idMax = 0;
@@ -83,37 +91,46 @@ public class    InstrumentsDB {
         return idMax;
     }
 
-    public static Map<String, Integer> getAllIDsInstruments() {
-        List<Instrument> instruments = findAll();
-        Map<String, Integer> idsInstruments = new HashMap<>();
+    /**
+     * Renvoie un dictionnaire avec comme clés une combinaison de l'identifiant et
+     * du numéro de série de chaque instrument, et comme valeurs les identifiants des instruments
+     */
+    public static Map<String, Integer> getIdsInstrument() {
+        List<Instrument> instruments = getInstruments();
+        Map<String, Integer> idsInstrument = new HashMap<>();
 
         for (Instrument instrument : instruments) {
             int id = instrument.getId();
             String numSerie = instrument.getNumSerie();
             String cle = id + " - " + numSerie;
-            idsInstruments.put(cle, id);
+            idsInstrument.put(cle, id);
         }
 
-        return idsInstruments;
+        return idsInstrument;
     }
 
-    public static Map<String, Integer> getAllIDsInstruments(int idModele) {
-        List<Instrument> instruments = findAll();
-        Map<String, Integer> idsInstruments = new HashMap<>();
+    /**
+     * Renvoie un dictionnaire avec comme clés une combinaison de l'identifiant et
+     * du numéro de série de chaque instrument, et comme valeurs les identifiants des instruments
+     * liés au modèle identifié par idModele
+     */
+    public static Map<String, Integer> getIdsInstrument(int idModele) {
+        List<Instrument> instruments = getInstruments();
+        Map<String, Integer> idsInstrument = new HashMap<>();
 
         for (Instrument instrument : instruments) {
             if (instrument.getIdModele() == idModele) {
                 int id = instrument.getId();
                 String numSerie = instrument.getNumSerie();
                 String cle = id + " - " + numSerie;
-                idsInstruments.put(cle, id);
+                idsInstrument.put(cle, id);
             }
         }
 
-        return idsInstruments;
+        return idsInstrument;
     }
 
-    public static Instrument findById(int id){
+    public static Instrument getById(int id){
         var sql = "SELECT \"IdInstrument\", \"NumSerie\", \"IdModele\", \"Couleur\", \"Prix\", \"Photo\"\n" +
                 "\tFROM public.\"Instrument\" WHERE \"IdInstrument\"=?;";
         try (var conn =  DB.connect();
@@ -136,7 +153,7 @@ public class    InstrumentsDB {
         return null;
     }
 
-    public static int update(int id, String numSerie, int idModele, String couleur, int prix, String photo) {
+    public static int modifier(int id, String numSerie, int idModele, String couleur, int prix, String photo) {
         var sql = "UPDATE public.\"Instrument\"\n" +
                 "\tSET \"IdInstrument\"=?, \"NumSerie\"=?, \"IdModele\"=?, \"Couleur\"=?, \"Prix\"=?, \"Photo\"=?\n" +
                 "\tWHERE \"IdInstrument\"=?;";
@@ -161,7 +178,7 @@ public class    InstrumentsDB {
         return affectedRows;
     }
 
-    public static int delete(int id) {
+    public static int supprimer(int id) {
         var sql = "DELETE FROM public.\"Instrument\"\n" +
                 "\tWHERE \"IdInstrument\"=?;";
         try (var conn  = DB.connect();

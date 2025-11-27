@@ -65,7 +65,7 @@ public class FenetreAjouterClient extends JDialog {
     }
 
     private void creerClient() {
-        int idClient = ClientsDB.createNewId();
+        int idClient = ClientsDB.creerNouvelId();
         String nom = champNom.getText().trim();
         String prenom = champPrenom.getText().trim();
         String adresse = champAdresse.getText().trim();
@@ -81,8 +81,8 @@ public class FenetreAjouterClient extends JDialog {
         // Si tout est correct
         else {
             Client clientCree = new Client(idClient, nom, prenom, adresse, email);
-            ClientsDB.add(clientCree);
-            tableauClients.addDonnee(clientCree);
+            ClientsDB.ajouter(clientCree);
+            tableauClients.ajouterDonnee(clientCree);
             dispose();
         }
     }

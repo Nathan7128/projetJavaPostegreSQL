@@ -17,7 +17,7 @@ import java.util.Map;
 public class FenetreModifierInstrument extends JDialog {
 
     private final JTextField champNumSerie = new JTextField(15);
-    private final Map<String, Integer> allIDsModeles = ModelesDB.getAllIDsModeles();
+    private final Map<String, Integer> allIDsModeles = ModelesDB.getIdsModele();
     private final JComboBox champModele = new JComboBox(allIDsModeles.keySet().toArray());
     private final JTextField champCouleur = new JTextField(15);
     private final JSpinner champPrix = new JSpinner((new SpinnerNumberModel(0, 0, 10000, 1)));
@@ -32,7 +32,7 @@ public class FenetreModifierInstrument extends JDialog {
         this.tableauInstruments = tableauInstruments;
         this.indexTableau = indexTableau;
         int idInstrument = (int) tableauInstruments.getValueAt(indexTableau, 0);
-        this.instrument = InstrumentsDB.findById(idInstrument);
+        this.instrument = InstrumentsDB.getById(idInstrument);
         setLayout(new BorderLayout(10, 10));
 
         creerSelecteurPhoto();
@@ -45,7 +45,7 @@ public class FenetreModifierInstrument extends JDialog {
 
         panelForm.add(new JLabel("Modèle :"));
         panelForm.add(champModele);
-        Modele modele = ModelesDB.findById(instrument.getIdModele());
+        Modele modele = ModelesDB.getById(instrument.getIdModele());
         champModele.setSelectedItem(modele.getId() + " - " + modele.getNom());
 
         panelForm.add(new JLabel("Couleur :"));
@@ -131,7 +131,7 @@ public class FenetreModifierInstrument extends JDialog {
             this.instrument.setCouleur(couleur);
             this.instrument.setPrix(prix);
             this.instrument.setPhoto(champPhoto);
-            InstrumentsDB.update(this.instrument.getId(), numSerie, idModele, couleur, prix, champPhoto);
+            InstrumentsDB.modifier(this.instrument.getId(), numSerie, idModele, couleur, prix, champPhoto);
             tableauInstruments.modifierLigne(this.indexTableau, this.instrument);
             dispose();
         }

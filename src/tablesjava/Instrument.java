@@ -1,7 +1,12 @@
 package tablesjava;
 
+// Importation des bibliothèques internes
 import tablesdb.ModelesDB;
 
+
+/**
+ * Classe permettant de modéliser en Java la table "Instrument" de la bdd
+ */
 public class Instrument {
 
     private int id;
@@ -17,17 +22,13 @@ public class Instrument {
         this.id = id;
         this.numSerie = numSerie;
         this.idModele = idModele;
-        this.nomModele = ModelesDB.findById(idModele).getNom();
+        this.nomModele = ModelesDB.getById(idModele).getNom();
         this.couleur = couleur;
         this.prix = prix;
         this.photo = photo;
     }
 
 
-//    public void setId(int id) {
-//        this.id = id;
-//    }
-//
     public void setNumSerie(String numSerie) {
         this.numSerie = numSerie;
     }

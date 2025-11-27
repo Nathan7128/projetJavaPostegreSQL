@@ -1,7 +1,12 @@
 package tablesjava;
 
+// Importation des bibliothèques internes
 import tablesdb.MarquesDB;
 
+
+/**
+ * Classe permettant de modéliser en Java la table "Modèle" de la bdd
+ */
 public class Modele {
 
     private int id;
@@ -13,14 +18,10 @@ public class Modele {
     public Modele(int id, int idMarque, String nomModele) {
         this.id = id;
         this.idMarque = idMarque;
-        this.nomMarque = MarquesDB.findById(idMarque).getNom();
+        this.nomMarque = MarquesDB.getById(idMarque).getNom();
         this.nom = nomModele;
     }
 
-
-//    public void setId(int id) {
-//        this.id = id;
-//    }
 
     public void setIdMarque(int idMarque) { this.idMarque = idMarque; }
 

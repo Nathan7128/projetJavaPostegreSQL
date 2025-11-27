@@ -1,19 +1,27 @@
 package gui.tableaux;
 
-import tablesjava.Instrument;
 
+// Importation des bibliothèques externes
 import javax.swing.table.AbstractTableModel;
-import java.util.Comparator;
 import java.util.List;
 
+
+/**
+ * Classe mère abstraite modélisant un tableau contenant les données d'une table de la bdd
+ * Un tableau est affiché dans un onglet de l'application
+ * Elle doit être dérivée pour implémenter des tableaux plus spécifiques, comme celui qui contient les données des clients, des factures, etc.
+ */
 abstract class Tableau<T> extends AbstractTableModel {
+
     protected List<T> donnees;
     private final String[] entetes;
+
 
     Tableau(List<T> donnees, String[] entetes) {
         this.donnees = donnees;
         this.entetes = entetes;
     }
+
 
     @Override
     public int getRowCount() {
@@ -30,7 +38,7 @@ abstract class Tableau<T> extends AbstractTableModel {
         return entetes[columnIndex];
     }
 
-    public void addDonnee(T donnee) {
+    public void ajouterDonnee(T donnee) {
         donnees.add(donnee);
 
         fireTableRowsInserted(donnees.size() - 1, donnees.size() - 1);

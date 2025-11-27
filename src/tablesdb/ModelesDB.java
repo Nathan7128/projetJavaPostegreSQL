@@ -1,17 +1,25 @@
 package tablesdb;
 
+
+// Importation des bibliothèques internes
 import database.DB;
 import tablesjava.Modele;
 
+
+// Importation des bibliothèques externes
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * Classe implémentant la table "Modele" de la bdd
+ */
 public class ModelesDB {
 
-    public static int add(Modele modele) {
+    public static int ajouter(Modele modele) {
         var sql = "INSERT INTO public.\"Modele\"(\n" +
                 "\t\"IdModele\", \"IdMarque\", \"Nom\")\n" +
                 "\tVALUES (?, ?, ?);";
@@ -36,7 +44,7 @@ public class ModelesDB {
         return -1;
     }
 
-    public static List<Modele> findAll() {
+    public static List<Modele> getModeles() {
         var modeles = new ArrayList<Modele>();
         var sql = "SELECT \"IdModele\", \"IdMarque\", \"Nom\"\n" +
                 "\tFROM public.\"Modele\";";
@@ -59,7 +67,7 @@ public class ModelesDB {
         return modeles;
     }
 
-    public static int createNewId() {
+    public static int creerNouvelId() {
         var sql = "SELECT MAX(\"IdModele\") AS id_max\n" +
                 "\tFROM public.\"Modele\";";
         int idMax = 0;
@@ -77,35 +85,44 @@ public class ModelesDB {
         return idMax;
     }
 
-    public static Map<String, Integer> getAllIDsModeles() {
-        List<Modele> modeles = findAll();
-        Map<String, Integer> idsModeles = new HashMap<>();
+    /**
+     * Renvoie un dictionnaire avec comme clés une combinaison de l'identifiant et
+     * du nom de chaque modèle, et comme valeurs les identifiants des modèles
+     */
+    public static Map<String, Integer> getIdsModele() {
+        List<Modele> modeles = getModeles();
+        Map<String, Integer> idsModele = new HashMap<>();
 
         for (Modele modele : modeles) {
             int id = modele.getId();
             String cle = id + " - " + modele.getNom();
-            idsModeles.put(cle, id);
+            idsModele.put(cle, id);
         }
 
-        return idsModeles;
+        return idsModele;
     }
 
-    public static Map<String, Integer> getAllIDsModeles(int idMarque) {
-        List<Modele> modeles = findAll();
-        Map<String, Integer> idsModeles = new HashMap<>();
+    /**
+     * Renvoie un dictionnaire avec comme clés une combinaison de l'identifiant et
+     * du nom de chaque modèle, et comme valeurs les identifiants des modèles
+     * liés à la marque identifié par idMarque
+     */
+    public static Map<String, Integer> getIdsModele(int idMarque) {
+        List<Modele> modeles = getModeles();
+        Map<String, Integer> idsModele = new HashMap<>();
 
         for (Modele modele : modeles) {
             if (modele.getIdMarque() == idMarque) {
                 int id = modele.getId();
                 String cle = id + " - " + modele.getNom();
-                idsModeles.put(cle, id);
+                idsModele.put(cle, id);
             }
         }
 
-        return idsModeles;
+        return idsModele;
     }
 
-    public static Modele findById(int id){
+    public static Modele getById(int id){
         var sql = "SELECT \"IdModele\", \"IdMarque\", \"Nom\"\n" +
                 "\tFROM public.\"Modele\" WHERE \"IdModele\"=?;";
         try (var conn =  DB.connect();
@@ -125,7 +142,7 @@ public class ModelesDB {
         return null;
     }
 
-    public static int update(int id, int idMarque, String nom) {
+    public static int modifier(int id, int idMarque, String nom) {
         var sql = "UPDATE public.\"Modele\"\n" +
                 "\tSET \"IdModele\"=?, \"IdMarque\"=?, \"Nom\"=?\n" +
                 "\tWHERE \"IdModele\"=?;";
@@ -147,7 +164,7 @@ public class ModelesDB {
         return affectedRows;
     }
 
-    public static int delete(int id) {
+    public static int supprimer(int id) {
         var sql = "DELETE FROM public.\"Modele\"\n" +
                 "\tWHERE \"IdModele\"=?;";
         try (var conn  = DB.connect();

@@ -1,11 +1,14 @@
 package gui.onglets;
 
+
+// Importation des bibliothèques internes
 import gui.fenetresajouter.FenetreAjouterMarque;
 import gui.fenetresmodifier.FenetreModifierMarque;
 import gui.tableaux.TableauMarques;
 import tablesdb.MarquesDB;
-import utils.Constants;
 
+
+// Importation des bibliothèques externes
 import javax.swing.*;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -14,8 +17,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
+/**
+ * Classe implémentant l'onglet permettant de gérer les marques dans l'application
+ */
 public class OngletMarques extends Onglet {
-    private TableauMarques tableau = new TableauMarques();
+    
+    private TableauMarques tableauMarques = new TableauMarques();
     private JTable jTableau;
     private JScrollPane tableauDefilant;
     private JButton bAjouter, bSupprimer, bModifier;
@@ -25,6 +32,14 @@ public class OngletMarques extends Onglet {
 
         construireTableau();
 
+        construireBoutons();
+    }
+
+
+    /**
+     * Construit les boutons présents dans l'onglet
+     */
+    private void construireBoutons() {
         bAjouter = new JButton("Ajouter");
         bAjouter.addActionListener(new ActionListener() {
             @Override
@@ -55,11 +70,14 @@ public class OngletMarques extends Onglet {
         add(boutons, BorderLayout.SOUTH);
     }
 
+    /**
+     * Construit le tableau contenant les marques et qui est affiché dans l'onglet
+     */
     private void construireTableau() {
-        jTableau = new JTable(tableau);
-        TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableau);
-        jTableau.setRowSorter(sorter);
-        sorter.toggleSortOrder(0);
+        jTableau = new JTable(tableauMarques);
+        TableRowSorter<TableModel> trieurLignesTableau = new TableRowSorter<>(tableauMarques);
+        jTableau.setRowSorter(trieurLignesTableau);
+        trieurLignesTableau.toggleSortOrder(0);
 
         tableauDefilant = new JScrollPane(jTableau);
         tableauDefilant.setBorder(BorderFactory.createEmptyBorder(20, 100, 20, 100));
@@ -68,7 +86,7 @@ public class OngletMarques extends Onglet {
 
     public void ajouterMarque() {
         Window parent = SwingUtilities.getWindowAncestor(this);
-        FenetreAjouterMarque fenetreAjouterMarque = new FenetreAjouterMarque((JFrame) parent, tableau);
+        FenetreAjouterMarque fenetreAjouterMarque = new FenetreAjouterMarque((JFrame) parent, tableauMarques);
         fenetreAjouterMarque.setVisible(true);
     }
 
@@ -77,9 +95,9 @@ public class OngletMarques extends Onglet {
 
         for(int i = selection.length - 1; i >= 0; i--){
             int index = jTableau.convertRowIndexToModel(selection[i]);
-            int idMarque = (int) tableau.getValueAt(index, 0);
-            tableau.supprDonnee(index);
-            MarquesDB.delete(idMarque);
+            int idMarque = (int) tableauMarques.getValueAt(index, 0);
+            tableauMarques.supprDonnee(index);
+            MarquesDB.supprimer(idMarque);
         }
     }
 
@@ -94,7 +112,7 @@ public class OngletMarques extends Onglet {
         else {
             int index = jTableau.convertRowIndexToModel(selection[0]);
             Window parent = SwingUtilities.getWindowAncestor(this);
-            FenetreModifierMarque fenetreModifierMarque = new FenetreModifierMarque((JFrame) parent, tableau, index);
+            FenetreModifierMarque fenetreModifierMarque = new FenetreModifierMarque((JFrame) parent, tableauMarques, index);
             fenetreModifierMarque.setVisible(true);
         }
     }

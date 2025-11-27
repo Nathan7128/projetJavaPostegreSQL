@@ -1,6 +1,9 @@
 package tablesjava;
-import java.sql.Date;
 
+
+/**
+ * Classe permettant de modéliser en Java la table "LigneFacture" de la bdd
+ */
 public class LigneFacture {
 
     private int idFacture;
@@ -11,13 +14,6 @@ public class LigneFacture {
         this.idFacture = idFacture;
         this.IdInstrument = idInstrument;
     }
-
-
-//    public void setId(int id) {
-//        this.id = id;
-//    }
-//
-    public void setIdInstrument(int idInstrument) { this.IdInstrument = idInstrument; }
 
 
     public int getIdFacture() {

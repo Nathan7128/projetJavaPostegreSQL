@@ -4,10 +4,9 @@ import gui.tableaux.TableauFactures;
 import tablesdb.ClientsDB;
 import tablesdb.FacturesDB;
 import tablesdb.InstrumentsDB;
-import tablesdb.LignesFacturesDB;
+import tablesdb.LignesFactureDB;
 import tablesjava.Facture;
 import tablesjava.LigneFacture;
-import utils.Constants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +18,7 @@ import java.util.Map;
 
 public class FenetreAjouterFacture extends JDialog {
 
-    private final Map<String, Integer> allIDsClients = ClientsDB.getAllIDsClients();
+    private final Map<String, Integer> allIDsClients = ClientsDB.getIdsClient();
     private final JComboBox champClient = new JComboBox(allIDsClients.keySet().toArray());
 
     private final JSpinner champJour = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
@@ -28,7 +27,7 @@ public class FenetreAjouterFacture extends JDialog {
             "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
     });
     private final JSpinner champAnnee = new JSpinner(new SpinnerNumberModel(2025, 1950, 2050, 1));
-    private final Map<String, Integer> dictIdsInstruments = InstrumentsDB.getAllIDsInstruments();
+    private final Map<String, Integer> dictIdsInstruments = InstrumentsDB.getIdsInstrument();
     private final JComboBox champLigneFacture = new JComboBox();
     private TableauFactures tableauFactures;
 
@@ -101,14 +100,14 @@ public class FenetreAjouterFacture extends JDialog {
         setLocationRelativeTo(parent);
     }
 
-    public void ajouterLigneFacture() {
+    private void ajouterLigneFacture() {
         Window parent = SwingUtilities.getWindowAncestor(this);
         FenetreAjouterLigneFacture fenetreAjouterInstrumentFacture = new FenetreAjouterLigneFacture((JFrame) parent, champLigneFacture);
         fenetreAjouterInstrumentFacture.setVisible(true);
         repaint();
     }
 
-    public void supprimerLigneFacture() {
+    private void supprimerLigneFacture() {
         String instrumentSel = (String) champLigneFacture.getSelectedItem();
         if (instrumentSel == null) {
             JOptionPane.showMessageDialog(this,
@@ -123,7 +122,7 @@ public class FenetreAjouterFacture extends JDialog {
     }
 
     private void creerFacture() {
-        int idFacture = FacturesDB.createNewId();
+        int idFacture = FacturesDB.creerNouvelId();
         String clientSelect = (String) champClient.getSelectedItem();
 
         // Récupération des valeurs de date
@@ -156,19 +155,22 @@ public class FenetreAjouterFacture extends JDialog {
             //        Ajouter la facture à la base de données
             int idClient = allIDsClients.get(clientSelect);
             Facture factureCreee = new Facture(idFacture, idClient, date);
-            FacturesDB.add(factureCreee);
-            tableauFactures.addDonnee(factureCreee);
+            FacturesDB.ajouter(factureCreee);
+            tableauFactures.ajouterDonnee(factureCreee);
 
-//        Ajouter les lignes de la facture à la base de données
-            int idInstrument;
-            LigneFacture ligneFactureCreee;
-            for (int i = 0; i < champLigneFacture.getItemCount(); i++) {
-                idInstrument = dictIdsInstruments.get((String) champLigneFacture.getItemAt(i));
-                ligneFactureCreee = new LigneFacture(idFacture, idInstrument);
-                LignesFacturesDB.add(ligneFactureCreee);
-            }
+            creerLignesFacture(idFacture);
 
             dispose();
+        }
+    }
+
+    private void creerLignesFacture(int idFacture) {
+        int idInstrument;
+        LigneFacture ligneFactureCreee;
+        for (int i = 0; i < champLigneFacture.getItemCount(); i++) {
+            idInstrument = dictIdsInstruments.get((String) champLigneFacture.getItemAt(i));
+            ligneFactureCreee = new LigneFacture(idFacture, idInstrument);
+            LignesFactureDB.ajouter(ligneFactureCreee);
         }
     }
 }

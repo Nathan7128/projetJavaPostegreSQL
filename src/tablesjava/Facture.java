@@ -1,8 +1,16 @@
 package tablesjava;
+
+
+// Importation des bibliothèques internes
 import tablesdb.ClientsDB;
 
+// Importation des bibliothèques externes
 import java.sql.Date;
 
+
+/**
+ * Classe permettant de modéliser en Java la table "Facture" de la bdd
+ */
 public class Facture {
 
     private int id;
@@ -11,19 +19,15 @@ public class Facture {
     private Date date;
 
 
-    public Facture(int id, int id_client, Date date) {
+    public Facture(int id, int idClient, Date date) {
         this.id = id;
-        this.idClient = id_client;
-        this.client = ClientsDB.findById(id_client);
+        this.idClient = idClient;
+        this.client = ClientsDB.getById(idClient);
         this.date = date;
     }
 
 
-//    public void setId(int id) {
-//        this.id = id;
-//    }
-//
-    public void setIdClient(int id_client) { this.idClient = id_client; }
+    public void setIdClient(int idClient) { this.idClient = idClient; }
 
     public void setDate(Date date) {
         this.date = date;

@@ -1,32 +1,46 @@
 package gui.onglets;
 
+
+// Importation des bibliothèques internes
 import gui.fenetresafficher.FenetreAfficherInstrument;
 import gui.fenetresmodifier.FenetreModifierInstrument;
 import gui.tableaux.TableauInstruments;
 import tablesdb.InstrumentsDB;
 import gui.fenetresajouter.FenetreAjouterInstrument;
-import tablesjava.Instrument;
-import utils.Constants;
 
+
+// Importation des bibliothèques externes
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
+
+/**
+ * Classe implémentant l'onglet permettant de gérer les instruments dans l'application
+ */
 public class OngletInstruments extends Onglet {
-    private TableauInstruments tableau = new TableauInstruments();
+    
+    private TableauInstruments tableauInstruments = new TableauInstruments();
     private JTable jTableau;
     private JScrollPane tableauDefilant;
     private JButton bAjouter, bSupprimer, bModifier, bAfficher;
+
 
     public OngletInstruments() {
         super("Instruments");
 
         construireTableau();
 
+        construireBoutons();
+    }
+
+
+    /**
+     * Construit les boutons présents dans l'onglet
+     */
+    private void construireBoutons() {
         bAjouter = new JButton("Ajouter");
         bAjouter.addActionListener(new ActionListener() {
             @Override
@@ -55,7 +69,7 @@ public class OngletInstruments extends Onglet {
                 try {
                     afficherInstrument();
                 }
-                catch (IOException ex) {
+                catch (Exception ex) {
                 }
             }
         });
@@ -69,11 +83,14 @@ public class OngletInstruments extends Onglet {
         add(boutons, BorderLayout.SOUTH);
     }
 
-    public void construireTableau() {
-        jTableau = new JTable(tableau);
-        TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableau);
-        jTableau.setRowSorter(sorter);
-        sorter.toggleSortOrder(0);
+    /**
+     * Construit le tableau contenant les instruments et qui est affiché dans l'onglet
+     */
+    private void construireTableau() {
+        jTableau = new JTable(tableauInstruments);
+        TableRowSorter<TableModel> trieurLignesTableau = new TableRowSorter<>(tableauInstruments);
+        jTableau.setRowSorter(trieurLignesTableau);
+        trieurLignesTableau.toggleSortOrder(0);
 
         tableauDefilant = new JScrollPane(jTableau);
         tableauDefilant.setBorder(BorderFactory.createEmptyBorder(20, 100, 20, 100));
@@ -82,7 +99,7 @@ public class OngletInstruments extends Onglet {
 
     public void ajouterInstrument() {
         Window parent = SwingUtilities.getWindowAncestor(this);
-        FenetreAjouterInstrument fenetreAjouterInstrument = new FenetreAjouterInstrument((JFrame) parent, tableau);
+        FenetreAjouterInstrument fenetreAjouterInstrument = new FenetreAjouterInstrument((JFrame) parent, tableauInstruments);
         fenetreAjouterInstrument.setVisible(true);
     }
 
@@ -91,9 +108,9 @@ public class OngletInstruments extends Onglet {
 
         for(int i = selection.length - 1; i >= 0; i--){
             int index = jTableau.convertRowIndexToModel(selection[i]);
-            int idInstrument = (int) tableau.getValueAt(index, 0);
-            tableau.supprDonnee(index);
-            InstrumentsDB.delete(idInstrument);
+            int idInstrument = (int) tableauInstruments.getValueAt(index, 0);
+            tableauInstruments.supprDonnee(index);
+            InstrumentsDB.supprimer(idInstrument);
         }
     }
 
@@ -108,12 +125,12 @@ public class OngletInstruments extends Onglet {
         else {
             int index = jTableau.convertRowIndexToModel(selection[0]);
             Window parent = SwingUtilities.getWindowAncestor(this);
-            FenetreModifierInstrument fenetreModifierInstrument = new FenetreModifierInstrument((JFrame) parent, tableau, index);
+            FenetreModifierInstrument fenetreModifierInstrument = new FenetreModifierInstrument((JFrame) parent, tableauInstruments, index);
             fenetreModifierInstrument.setVisible(true);
         }
     }
 
-    public void afficherInstrument() throws IOException {
+    public void afficherInstrument() throws Exception {
         int[] selection = jTableau.getSelectedRows();
         if (selection.length != 1) {
             JOptionPane.showMessageDialog(this,
@@ -123,7 +140,7 @@ public class OngletInstruments extends Onglet {
         }
 
         int index = jTableau.convertRowIndexToModel(selection[0]);
-        int idInstrument = (int) tableau.getValueAt(index, 0);
+        int idInstrument = (int) tableauInstruments.getValueAt(index, 0);
         Window parent = SwingUtilities.getWindowAncestor(this);
         FenetreAfficherInstrument fenetreAfficherInstrument = new FenetreAfficherInstrument((JFrame) parent, idInstrument);
     }

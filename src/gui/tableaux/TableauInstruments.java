@@ -1,29 +1,35 @@
 package gui.tableaux;
 
+
+// Importation des bibliothèques internes
 import tablesdb.InstrumentsDB;
 import tablesjava.Instrument;
 
-import java.util.Comparator;
 
+/**
+ * Classe dérivée de la classe mère Tableau, et qui modélise le tableau
+ * contenant les données de la table Instrument de la bdd
+ */
 public class TableauInstruments extends Tableau<Instrument> {
 
     public TableauInstruments() {
         super(
-                InstrumentsDB.findAll(),
+                InstrumentsDB.getInstruments(),
                 new String[]{"ID Instrument", "Numéro de série", "Modèle", "Couleur", "Prix"}
         );
     }
 
-    @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
-        Instrument instrument = donnees.get(rowIndex);
 
-        return switch (columnIndex) {
+    @Override
+    public Object getValueAt(int indexLigne, int indexColonne) {
+        Instrument instrument = donnees.get(indexLigne);
+
+        return switch (indexColonne) {
             case 0 -> instrument.getId();
             case 1 -> instrument.getNumSerie();
             case 2 -> instrument.getNomModele();
             case 3 -> instrument.getCouleur();
-            case 4 -> instrument.getPrix();
+            case 4 -> instrument.getPrix() + " €";
             default -> null;
         };
     }

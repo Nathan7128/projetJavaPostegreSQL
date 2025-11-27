@@ -20,7 +20,7 @@ import java.sql.Date;
 
 public class FenetreModifierFacture extends JDialog {
 
-    private final Map<String, Integer> allIDsClients = ClientsDB.getAllIDsClients();
+    private final Map<String, Integer> allIDsClients = ClientsDB.getIdsClient();
     private final JComboBox champClient = new JComboBox(allIDsClients.keySet().toArray());
 
     private final JSpinner champJour = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
@@ -39,14 +39,14 @@ public class FenetreModifierFacture extends JDialog {
         this.tableauFactures = tableauFactures;
         this.indexTableau = indexTableau;
         int idFacture = (int) tableauFactures.getValueAt(indexTableau, 0);
-        this.facture = FacturesDB.findById(idFacture);
+        this.facture = FacturesDB.getById(idFacture);
         setLayout(new BorderLayout(10, 10));
 
         JPanel panelForm = new JPanel(new GridLayout(3, 2, 20, 20));
 
         panelForm.add(new JLabel("Client :"));
         panelForm.add(champClient);
-        Client client = ClientsDB.findById(facture.getIdClient());
+        Client client = ClientsDB.getById(facture.getIdClient());
         champClient.setSelectedItem(client.getId() + " - " + client.getPrenom() + " " + client.getNom());
 
         panelForm.add(new JLabel("Date de la facture :"));
@@ -74,10 +74,10 @@ public class FenetreModifierFacture extends JDialog {
         panelInstrument.add(bSupprimerLigneFacture);
         panelForm.add(panelInstrument);
         panelForm.add(champLigneFacture);
-        List<LigneFacture> lignesFacture = LignesFacturesDB.trouverLignesFacture(idFacture);
+        List<LigneFacture> lignesFacture = LignesFactureDB.getLignesFacture(idFacture);
         Instrument instrument;
         for (LigneFacture ligneFacture : lignesFacture) {
-            instrument = InstrumentsDB.findById(ligneFacture.getIdInstrument());
+            instrument = InstrumentsDB.getById(ligneFacture.getIdInstrument());
             champLigneFacture.addItem(instrument.getId() + " - " + instrument.getNumSerie());
         }
 
@@ -165,15 +165,15 @@ public class FenetreModifierFacture extends JDialog {
 
         this.facture.setIdClient(idClient);
         this.facture.setDate(date);
-        FacturesDB.update(this.facture.getId(), idClient, date);
+        FacturesDB.modifier(this.facture.getId(), idClient, date);
         tableauFactures.modifierLigne(this.indexTableau, this.facture);
 
         List<Integer> idsInstrument = new ArrayList<>();
-        Map<String, Integer> allIdsInstrument = InstrumentsDB.getAllIDsInstruments();
+        Map<String, Integer> allIdsInstrument = InstrumentsDB.getIdsInstrument();
         for (int i = 0; i < champLigneFacture.getItemCount(); i++) {
             idsInstrument.add(allIdsInstrument.get((String) champLigneFacture.getItemAt(i)));
         }
-        LignesFacturesDB.modifierFacture(this.facture.getId(), idsInstrument);
+        LignesFactureDB.modifierFacture(this.facture.getId(), idsInstrument);
 
         dispose();
     }

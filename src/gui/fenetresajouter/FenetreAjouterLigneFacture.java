@@ -1,11 +1,8 @@
 package gui.fenetresajouter;
 
 import tablesdb.InstrumentsDB;
-import tablesdb.LignesFacturesDB;
 import tablesdb.MarquesDB;
 import tablesdb.ModelesDB;
-import tablesjava.LigneFacture;
-import utils.Constants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,12 +13,12 @@ import java.util.Map;
 
 public class FenetreAjouterLigneFacture extends JDialog {
 
-    private final Map<String, Integer> allIDsMarques = MarquesDB.getAllIDsMarques();
+    private final Map<String, Integer> allIDsMarques = MarquesDB.getIdsMarque();
     private final JComboBox champMarque = new JComboBox(allIDsMarques.keySet().toArray());
-    private Map<String, Integer> allIDsModeles = ModelesDB.getAllIDsModeles();
+    private Map<String, Integer> allIDsModeles = ModelesDB.getIdsModele();
     private String[] listeNomsModele = allIDsModeles.keySet().toArray(new String[0]);
     private JComboBox champModele = new JComboBox(Arrays.stream(listeNomsModele).sorted().toArray(String[]::new));
-    private Map<String, Integer> allIDsInstruments = InstrumentsDB.getAllIDsInstruments();
+    private Map<String, Integer> allIDsInstruments = InstrumentsDB.getIdsInstrument();
     private String[] listeNomsInstrument = allIDsInstruments.keySet().toArray(new String[0]);
     private JComboBox champInstrument = new JComboBox(allIDsInstruments.keySet().toArray());
 
@@ -36,6 +33,7 @@ public class FenetreAjouterLigneFacture extends JDialog {
 
         panelForm.add(new JLabel("Filtrer marque :"));
         panelForm.add(champMarque);
+        champMarque.setSelectedItem(null);
         champMarque.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -45,6 +43,7 @@ public class FenetreAjouterLigneFacture extends JDialog {
 
         panelForm.add(new JLabel("Filtrer modèle :"));
         panelForm.add(champModele);
+        champModele.setSelectedItem(null);
         champModele.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -54,6 +53,7 @@ public class FenetreAjouterLigneFacture extends JDialog {
 
         panelForm.add(new JLabel("Choisir instrument :"));
         panelForm.add(champInstrument);
+        champInstrument.setSelectedItem(null);
 
         add(panelForm, BorderLayout.CENTER);
 
@@ -83,7 +83,7 @@ public class FenetreAjouterLigneFacture extends JDialog {
     public void filtrerModeles() {
         String modeleActuel = (String) champModele.getSelectedItem();
         int idMarque = allIDsMarques.get((String) champMarque.getSelectedItem());
-        allIDsModeles = ModelesDB.getAllIDsModeles(idMarque);
+        allIDsModeles = ModelesDB.getIdsModele(idMarque);
         listeNomsModele = allIDsModeles.keySet().toArray(new String[0]);
         champModele.removeAllItems();
         for (String nomModele : listeNomsModele) {
@@ -100,7 +100,7 @@ public class FenetreAjouterLigneFacture extends JDialog {
         champInstrument.removeAllItems();
         if (modeleActuel != null) {
             int idModele = allIDsModeles.get(modeleActuel);
-            allIDsInstruments = InstrumentsDB.getAllIDsInstruments(idModele);
+            allIDsInstruments = InstrumentsDB.getIdsInstrument(idModele);
             listeNomsInstrument = allIDsInstruments.keySet().toArray(new String[0]);
             for (String nomInstrument : listeNomsInstrument) {
                 champInstrument.addItem(nomInstrument);

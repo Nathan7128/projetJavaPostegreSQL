@@ -24,7 +24,7 @@ public class FenetreModifierClient extends JDialog {
         this.tableauClients = tableauClients;
         this.indexTableau = indexTableau;
         int idClient = (int) tableauClients.getValueAt(indexTableau, 0);
-        this.client = ClientsDB.findById(idClient);
+        this.client = ClientsDB.getById(idClient);
         setLayout(new BorderLayout(10, 10));
 
         JPanel panelForm = new JPanel(new GridLayout(4, 2, 20, 20));
@@ -91,7 +91,7 @@ public class FenetreModifierClient extends JDialog {
             this.client.setPrenom(prenom);
             this.client.setAdresse(adresse);
             this.client.setEmail(email);
-            ClientsDB.update(this.client.getId(), nom, prenom, adresse, email);
+            ClientsDB.modifier(this.client.getId(), nom, prenom, adresse, email);
             tableauClients.modifierLigne(this.indexTableau, this.client);
             dispose();
         }

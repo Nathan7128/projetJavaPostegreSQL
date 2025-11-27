@@ -1,17 +1,24 @@
 package tablesdb;
 
+
+// Importation des bibliothèques internes
 import database.DB;
 import tablesjava.Client;
 
+// Importation des bibliothèques externes
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * Classe implémentant la table "Client" de la bdd
+ */
 public class ClientsDB {
 
-    public static int add(Client client) {
+    public static int ajouter(Client client) {
         var sql = "INSERT INTO public.\"Client\"(\n" +
                 "\t\"IdClient\", \"Nom\", \"Prenom\", \"Adresse\", \"Email\")\n" +
                 "\tVALUES (?, ?, ?, ?, ?);";
@@ -38,7 +45,7 @@ public class ClientsDB {
         return -1;
     }
 
-    public static List<Client> findAll() {
+    public static List<Client> getClients() {
         var clients = new ArrayList<Client>();
         var sql = "SELECT \"IdClient\", \"Nom\", \"Prenom\", \"Adresse\", \"Email\"\n" +
                 "\tFROM public.\"Client\";";
@@ -63,7 +70,7 @@ public class ClientsDB {
         return clients;
     }
 
-    public static int createNewId() {
+    public static int creerNouvelId() {
         var sql = "SELECT MAX(\"IdClient\") AS id_max\n" +
                 "\tFROM public.\"Client\";";
         int idMax = 0;
@@ -81,22 +88,26 @@ public class ClientsDB {
         return idMax;
     }
 
-    public static Map<String, Integer> getAllIDsClients() {
-        List<Client> clients = findAll();
-        Map<String, Integer> idsClients = new HashMap<>();
+    /**
+     * Renvoie un dictionnaire avec comme clés une combinaison de l'identifiant,
+     * du prénom et du nom de chaque client, et comme valeurs les identifiants des clients
+     */
+    public static Map<String, Integer> getIdsClient() {
+        List<Client> clients = getClients();
+        Map<String, Integer> idsClient = new HashMap<>();
 
         for (Client client : clients) {
             int id = client.getId();
             String nom = client.getNom();
             String prenom = client.getPrenom();
             String cle = id + " - " + prenom + " " + nom;
-            idsClients.put(cle, id);
+            idsClient.put(cle, id);
         }
 
-        return idsClients;
+        return idsClient;
     }
 
-    public static Client findById(int id){
+    public static Client getById(int id){
         var sql = "SELECT \"IdClient\", \"Nom\", \"Prenom\", \"Adresse\", \"Email\"\n" +
                 "\tFROM public.\"Client\" WHERE \"IdClient\"=?;";
         try (var conn =  DB.connect();
@@ -118,7 +129,7 @@ public class ClientsDB {
         return null;
     }
 
-    public static int update(int id, String nom, String prenom, String adresse, String email) {
+    public static int modifier(int id, String nom, String prenom, String adresse, String email) {
         var sql = "UPDATE public.\"Client\"\n" +
                 "\tSET \"IdClient\"=?, \"Nom\"=?, \"Prenom\"=?, \"Adresse\"=?, \"Email\"=?\n" +
                 "\tWHERE \"IdClient\"=?;";
@@ -142,7 +153,7 @@ public class ClientsDB {
         return affectedRows;
     }
 
-    public static int delete(int id) {
+    public static int supprimer(int id) {
         var sql = "DELETE FROM public.\"Client\"\n" +
                 "\tWHERE \"IdClient\"=?;";
         try (var conn  = DB.connect();

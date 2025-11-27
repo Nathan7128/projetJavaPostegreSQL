@@ -1,35 +1,49 @@
 package gui.onglets;
 
+
+// Importation des bibliothèques internes
 import gui.fenetresafficher.FenetreAfficherFacture;
 import gui.fenetresajouter.FenetreAjouterFacture;
-import gui.fenetresafficher.FenetreAfficherInstrument;
 import gui.fenetresmodifier.FenetreModifierFacture;
 import gui.tableaux.TableauFactures;
 import tablesdb.FacturesDB;
-import tablesdb.LignesFacturesDB;
+import tablesdb.LignesFactureDB;
 import tablesjava.Facture;
-import utils.Constants;
 
+
+// Importation des bibliothèques externes
 import javax.swing.*;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 
+
+/**
+ * Classe implémentant l'onglet permettant de gérer les factures dans l'application
+ */
 public class OngletFactures extends Onglet {
-    private TableauFactures tableau = new TableauFactures();
+    
+    private TableauFactures tableauFactures = new TableauFactures();
     private JTable jTableau;
-    private JScrollPane tableau_defilant;
+    private JScrollPane tableauDefilant;
     private JButton bAjouter, bSupprimer, bModifier, bAfficher;
+
 
     public OngletFactures() {
         super("Factures");
 
         construireTableau();
 
+        construireBoutons();
+    }
+
+
+    /**
+     * Construit les boutons présents dans l'onglet
+     */
+    private void construireBoutons() {
         bAjouter = new JButton("Ajouter");
         bAjouter.addActionListener(new ActionListener() {
             @Override
@@ -69,20 +83,23 @@ public class OngletFactures extends Onglet {
         add(boutons, BorderLayout.SOUTH);
     }
 
+    /**
+     * Construit le tableau contenant les factures et qui est affiché dans l'onglet
+     */
     private void construireTableau() {
-        jTableau = new JTable(tableau);
-        TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableau);
-        jTableau.setRowSorter(sorter);
-        sorter.toggleSortOrder(0);
+        jTableau = new JTable(tableauFactures);
+        TableRowSorter<TableModel> trieurLignesTableau = new TableRowSorter<>(tableauFactures);
+        jTableau.setRowSorter(trieurLignesTableau);
+        trieurLignesTableau.toggleSortOrder(0);
 
-        tableau_defilant = new JScrollPane(jTableau);
-        tableau_defilant.setBorder(BorderFactory.createEmptyBorder(20, 100, 20, 100));
-        add(tableau_defilant, BorderLayout.CENTER);
+        tableauDefilant = new JScrollPane(jTableau);
+        tableauDefilant.setBorder(BorderFactory.createEmptyBorder(20, 100, 20, 100));
+        add(tableauDefilant, BorderLayout.CENTER);
     }
 
     public void ajouterFacture() {
         Window parent = SwingUtilities.getWindowAncestor(this);
-        FenetreAjouterFacture fenetreAjouterFacture = new FenetreAjouterFacture((JFrame) parent, tableau);
+        FenetreAjouterFacture fenetreAjouterFacture = new FenetreAjouterFacture((JFrame) parent, tableauFactures);
         fenetreAjouterFacture.setVisible(true);
     }
 
@@ -91,10 +108,10 @@ public class OngletFactures extends Onglet {
 
         for(int i = selection.length - 1; i >= 0; i--){
             int index = jTableau.convertRowIndexToModel(selection[i]);
-            int id_facture = (int) tableau.getValueAt(index, 0);
-            tableau.supprDonnee(index);
-            LignesFacturesDB.supprFacture(id_facture);
-            FacturesDB.delete(id_facture);
+            int idFacture = (int) tableauFactures.getValueAt(index, 0);
+            tableauFactures.supprDonnee(index);
+            LignesFactureDB.supprLignesFacture(idFacture);
+            FacturesDB.supprimer(idFacture);
         }
     }
 
@@ -109,7 +126,7 @@ public class OngletFactures extends Onglet {
         else {
             int index = jTableau.convertRowIndexToModel(selection[0]);
             Window parent = SwingUtilities.getWindowAncestor(this);
-            FenetreModifierFacture fenetreModifierFacture = new FenetreModifierFacture((JFrame) parent, tableau, index);
+            FenetreModifierFacture fenetreModifierFacture = new FenetreModifierFacture((JFrame) parent, tableauFactures, index);
             fenetreModifierFacture.setVisible(true);
         }
     }
@@ -124,8 +141,8 @@ public class OngletFactures extends Onglet {
         }
 
         int index = jTableau.convertRowIndexToModel(selection[0]);
-        int idFacture = (int) tableau.getValueAt(index, 0);
-        Facture facture = FacturesDB.findById(idFacture);
+        int idFacture = (int) tableauFactures.getValueAt(index, 0);
+        Facture facture = FacturesDB.getById(idFacture);
         Window parent = SwingUtilities.getWindowAncestor(this);
         FenetreAfficherFacture fenetreAfficherFacture = new FenetreAfficherFacture((JFrame) parent, facture);
         fenetreAfficherFacture.setVisible(true);

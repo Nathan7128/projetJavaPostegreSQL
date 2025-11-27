@@ -1,31 +1,36 @@
 package gui.tableaux;
 
-import tablesdb.FacturesDB;
+
+// Importation des bibliothèques internes
 import tablesdb.InstrumentsDB;
-import tablesdb.LignesFacturesDB;
-import tablesjava.Facture;
+import tablesdb.LignesFactureDB;
 import tablesjava.Instrument;
 import tablesjava.LigneFacture;
 
 
+/**
+ * Classe dérivée de la classe mère Tableau, et qui modélise le tableau
+ * contenant les données de la table LigneFacture de la bdd
+ */
 public class TableauLignesFacture extends Tableau<LigneFacture> {
 
     public TableauLignesFacture(int idFacture) {
         super(
-                LignesFacturesDB.trouverLignesFacture(idFacture),
+                LignesFactureDB.getLignesFacture(idFacture),
                 new String[]{"Numéro de série", "Modèle", "Prix"}
         );
     }
 
-    @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
-        LigneFacture ligneFacture = donnees.get(rowIndex);
-        Instrument instrument = InstrumentsDB.findById(ligneFacture.getIdInstrument());
 
-        return switch (columnIndex) {
+    @Override
+    public Object getValueAt(int indexLigne, int indexColonne) {
+        LigneFacture ligneFacture = donnees.get(indexLigne);
+        Instrument instrument = InstrumentsDB.getById(ligneFacture.getIdInstrument());
+
+        return switch (indexColonne) {
             case 0 -> instrument.getNumSerie();
             case 1 -> instrument.getNomModele();
-            case 2 -> instrument.getPrix();
+            case 2 -> instrument.getPrix() + " €";
             default -> null;
         };
     }
@@ -34,7 +39,7 @@ public class TableauLignesFacture extends Tableau<LigneFacture> {
         int prixTotal = 0;
         Instrument instrument;
         for (LigneFacture ligneFacture : donnees) {
-            instrument = InstrumentsDB.findById(ligneFacture.getIdInstrument());
+            instrument = InstrumentsDB.getById(ligneFacture.getIdInstrument());
             prixTotal += instrument.getPrix();
         }
         return prixTotal;

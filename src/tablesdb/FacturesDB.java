@@ -1,14 +1,21 @@
 package tablesdb;
 
+
+// Importation des bibliothèques internes
 import database.DB;
 import tablesjava.Facture;
 
+// Importation des bibliothèques externes
 import java.sql.Statement;
 import java.util.*;
 
+
+/**
+ * Classe implémentant la table "Facture" de la bdd
+ */
 public class FacturesDB {
 
-    public static int add(Facture facture) {
+    public static int ajouter(Facture facture) {
         var sql = "INSERT INTO public.\"Facture\"(\n" +
                 "\t\"IdFacture\", \"IdClient\", \"Date\")\n" +
                 "\tVALUES (?, ?, ?);";
@@ -33,7 +40,7 @@ public class FacturesDB {
         return -1;
     }
 
-    public static List<Facture> findAll() {
+    public static List<Facture> getFactures() {
         var factures = new ArrayList<Facture>();
         var sql = "SELECT \"IdFacture\", \"IdClient\", \"Date\"\n" +
                 "\tFROM public.\"Facture\";";
@@ -56,7 +63,7 @@ public class FacturesDB {
         return factures;
     }
 
-    public static int createNewId() {
+    public static int creerNouvelId() {
         var sql = "SELECT MAX(\"IdFacture\") AS id_max\n" +
                 "\tFROM public.\"Facture\";";
         int idMax = 0;
@@ -74,21 +81,25 @@ public class FacturesDB {
         return idMax;
     }
 
-    public static Map<String, Integer> getAllIDsFactures() {
-        List<Facture> factures = findAll();
-        Map<String, Integer> idsFactures = new HashMap<>();
+    /**
+     * Renvoie un dictionnaire avec comme clés une combinaison de l'identifiant et
+     * de la date de chaque facture, et comme valeurs les identifiants des factures
+     */
+    public static Map<String, Integer> getIdsFacture() {
+        List<Facture> factures = getFactures();
+        Map<String, Integer> idsFacture = new HashMap<>();
 
         for (Facture facture : factures) {
             int id = facture.getId();
             java.sql.Date date = facture.getDate();
             String cle = id + " (" + date.toString() + ")";
-            idsFactures.put(cle, id);
+            idsFacture.put(cle, id);
         }
 
-        return idsFactures;
+        return idsFacture;
     }
 
-    public static Facture findById(int id){
+    public static Facture getById(int id){
         var sql = "SELECT \"IdFacture\", \"IdClient\", \"Date\"\n" +
                 "\tFROM public.\"Facture\" WHERE \"IdFacture\"=?;";
         try (var conn =  DB.connect();
@@ -108,7 +119,7 @@ public class FacturesDB {
         return null;
     }
 
-    public static int update(int id, int idClient, java.sql.Date date) {
+    public static int modifier(int id, int idClient, java.sql.Date date) {
         var sql = "UPDATE public.\"Facture\"\n" +
                 "\tSET \"IdFacture\"=?, \"IdClient\"=?, \"Date\"=?\n" +
                 "\tWHERE \"IdFacture\"=?;";
@@ -130,7 +141,7 @@ public class FacturesDB {
         return affectedRows;
     }
 
-    public static int delete(int id) {
+    public static int supprimer(int id) {
         var sql = "DELETE FROM public.\"Facture\"\n" +
                 "\tWHERE \"IdFacture\"=?;";
         try (var conn  = DB.connect();

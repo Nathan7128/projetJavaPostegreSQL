@@ -1,11 +1,13 @@
 package gui.onglets;
 
+
+// Importation des bibliothèques internes
 import gui.fenetresajouter.FenetreAjouterClient;
 import gui.fenetresmodifier.FenetreModifierClient;
 import gui.tableaux.TableauClients;
 import tablesdb.ClientsDB;
-import utils.Constants;
 
+// Importation des bibliothèques externes
 import javax.swing.*;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -13,17 +15,31 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
+/**
+ * Classe implémentant l'onglet permettant de gérer les clients dans l'application
+ */
 public class OngletClients extends Onglet {
-    private TableauClients tableau = new TableauClients();
+    
+    private TableauClients tableauClients = new TableauClients();
     private JTable jTableau;
-    private JScrollPane tableau_defilant;
+    private JScrollPane tableauDefilant;
     private JButton bAjouter, bSupprimer, bModifier;
+
 
     public OngletClients() {
         super("Clients");
 
         construireTableau();
 
+        construireBoutons();
+    }
+
+
+    /**
+     * Construit les boutons présents dans l'onglet
+     */
+    private void construireBoutons() {
         bAjouter = new JButton("Ajouter");
         bAjouter.addActionListener(new ActionListener() {
             @Override
@@ -54,20 +70,23 @@ public class OngletClients extends Onglet {
         add(boutons, BorderLayout.SOUTH);
     }
 
+    /**
+     * Construit le tableau contenant les clients et qui est affiché dans l'onglet
+     */
     private void construireTableau() {
-        jTableau = new JTable(tableau);
-        TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableau);
-        jTableau.setRowSorter(sorter);
-        sorter.toggleSortOrder(0);
+        jTableau = new JTable(tableauClients);
+        TableRowSorter<TableModel> trieurLignesTableau = new TableRowSorter<>(tableauClients);
+        jTableau.setRowSorter(trieurLignesTableau);
+        trieurLignesTableau.toggleSortOrder(0);
 
-        tableau_defilant = new JScrollPane(jTableau);
-        tableau_defilant.setBorder(BorderFactory.createEmptyBorder(20, 100, 20, 100));
-        add(tableau_defilant, BorderLayout.CENTER);
+        tableauDefilant = new JScrollPane(jTableau);
+        tableauDefilant.setBorder(BorderFactory.createEmptyBorder(20, 100, 20, 100));
+        add(tableauDefilant, BorderLayout.CENTER);
     }
 
     public void ajouterClient() {
         Window parent = SwingUtilities.getWindowAncestor(this);
-        FenetreAjouterClient fenetreAjouterClient = new FenetreAjouterClient((JFrame) parent, tableau);
+        FenetreAjouterClient fenetreAjouterClient = new FenetreAjouterClient((JFrame) parent, tableauClients);
         fenetreAjouterClient.setVisible(true);
     }
 
@@ -76,9 +95,9 @@ public class OngletClients extends Onglet {
 
         for(int i = selection.length - 1; i >= 0; i--){
             int index = jTableau.convertRowIndexToModel(selection[i]);
-            int id_client = (int) tableau.getValueAt(index, 0);
-            tableau.supprDonnee(index);
-            ClientsDB.delete(id_client);
+            int idClient = (int) tableauClients.getValueAt(index, 0);
+            tableauClients.supprDonnee(index);
+            ClientsDB.supprimer(idClient);
         }
     }
 
@@ -93,7 +112,7 @@ public class OngletClients extends Onglet {
         else {
             int index = jTableau.convertRowIndexToModel(selection[0]);
             Window parent = SwingUtilities.getWindowAncestor(this);
-            FenetreModifierClient fenetreModifierClient = new FenetreModifierClient((JFrame) parent, tableau, index);
+            FenetreModifierClient fenetreModifierClient = new FenetreModifierClient((JFrame) parent, tableauClients, index);
             fenetreModifierClient.setVisible(true);
         }
     }

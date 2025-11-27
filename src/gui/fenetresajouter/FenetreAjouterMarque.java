@@ -57,7 +57,7 @@ public class FenetreAjouterMarque extends JDialog {
     }
 
     private void creerMarque() {
-        int idMarque = MarquesDB.createNewId();
+        int idMarque = MarquesDB.creerNouvelId();
         String nom = champNom.getText().trim();
         String siteWeb = champSiteWeb.getText().trim();
 
@@ -71,8 +71,8 @@ public class FenetreAjouterMarque extends JDialog {
         // Si tout est correct
         else {
             Marque marqueCreee = new Marque(idMarque, nom, siteWeb);
-            MarquesDB.add(marqueCreee);
-            tableauMarques.addDonnee(marqueCreee);
+            MarquesDB.ajouter(marqueCreee);
+            tableauMarques.ajouterDonnee(marqueCreee);
             dispose();
         }
     }

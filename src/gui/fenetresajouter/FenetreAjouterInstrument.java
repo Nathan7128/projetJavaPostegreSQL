@@ -15,7 +15,7 @@ import java.util.Map;
 public class FenetreAjouterInstrument extends JDialog {
 
     private final JTextField champNumSerie = new JTextField(15);
-    private final Map<String, Integer> allIDsModeles = ModelesDB.getAllIDsModeles();
+    private final Map<String, Integer> allIDsModeles = ModelesDB.getIdsModele();
     private final JComboBox champModele = new JComboBox(allIDsModeles.keySet().toArray());
     private final JTextField champCouleur = new JTextField(15);
     private final JSpinner champPrix = new JSpinner(new SpinnerNumberModel(0, 0, 10000, 1));
@@ -97,7 +97,7 @@ public class FenetreAjouterInstrument extends JDialog {
     }
 
     private void creerInstrument() {
-        int idInstrument = InstrumentsDB.createNewId();
+        int idInstrument = InstrumentsDB.creerNouvelId();
         String numSerie = champNumSerie.getText().trim();
         String modeleSelect = (String) champModele.getSelectedItem();
         String couleur = champCouleur.getText().trim();
@@ -114,8 +114,8 @@ public class FenetreAjouterInstrument extends JDialog {
         else {
             int idModele = allIDsModeles.get(modeleSelect);
             Instrument instrumentCree = new Instrument(idInstrument, numSerie, idModele, couleur, prix, champPhoto);
-            InstrumentsDB.add(instrumentCree);
-            tableauInstruments.addDonnee(instrumentCree);
+            InstrumentsDB.ajouter(instrumentCree);
+            tableauInstruments.ajouterDonnee(instrumentCree);
             dispose();
         }
     }

@@ -8,7 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Map;
 
 public class FenetreModifierMarque extends JDialog {
 
@@ -23,7 +22,7 @@ public class FenetreModifierMarque extends JDialog {
         this.tableauMarques = tableauMarques;
         this.indexTableau = indexTableau;
         int idMarque = (int) tableauMarques.getValueAt(indexTableau, 0);
-        this.marque = MarquesDB.findById(idMarque);
+        this.marque = MarquesDB.getById(idMarque);
         setLayout(new BorderLayout(10, 10));
 
         JPanel panelForm = new JPanel(new GridLayout(2, 2, 20, 20));
@@ -78,7 +77,7 @@ public class FenetreModifierMarque extends JDialog {
         else {
             this.marque.setNom(nom);
             this.marque.setSiteWeb(siteWeb);
-            MarquesDB.update(this.marque.getId(), nom, siteWeb);
+            MarquesDB.modifier(this.marque.getId(), nom, siteWeb);
             tableauMarques.modifierLigne(this.indexTableau, this.marque);
             dispose();
         }

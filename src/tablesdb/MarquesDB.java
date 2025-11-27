@@ -1,17 +1,25 @@
 package tablesdb;
 
+
+// Importation des bibliothèques internes
 import database.DB;
 import tablesjava.Marque;
 
+
+// Importation des bibliothèques externes
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * Classe implémentant la table "Marque" de la bdd
+ */
 public class MarquesDB {
 
-    public static int add(Marque marque) {
+    public static int ajouter(Marque marque) {
         var sql = "INSERT INTO public.\"Marque\"(\n" +
                 "\t\"IdMarque\", \"Nom\", \"SiteWeb\")\n" +
                 "\tVALUES (?, ?, ?);";
@@ -36,7 +44,7 @@ public class MarquesDB {
         return -1;
     }
 
-    public static List<Marque> findAll() {
+    public static List<Marque> getMarques() {
         var marques = new ArrayList<Marque>();
         var sql = "SELECT \"IdMarque\", \"Nom\", \"SiteWeb\"\n" +
                 "\tFROM public.\"Marque\";";
@@ -59,7 +67,7 @@ public class MarquesDB {
         return marques;
     }
 
-    public static int createNewId() {
+    public static int creerNouvelId() {
         var sql = "SELECT MAX(\"IdMarque\") AS id_max\n" +
                 "\tFROM public.\"Marque\";";
         int idMax = 0;
@@ -77,21 +85,25 @@ public class MarquesDB {
         return idMax;
     }
 
-    public static Map<String, Integer> getAllIDsMarques() {
-        List<Marque> marques = findAll();
-        Map<String, Integer> idsMarques = new HashMap<>();
+    /**
+     * Renvoie un dictionnaire avec comme clés une combinaison de l'identifiant
+     * et du nom de chaque marque, et comme valeurs les identifiants des marques
+     */
+    public static Map<String, Integer> getIdsMarque() {
+        List<Marque> marques = getMarques();
+        Map<String, Integer> idsMarque = new HashMap<>();
 
         for (Marque marque : marques) {
             int id = marque.getId();
             String nom = marque.getNom();
             String cle = id + " - " + nom;
-            idsMarques.put(cle, id);
+            idsMarque.put(cle, id);
         }
 
-        return idsMarques;
+        return idsMarque;
     }
 
-    public static Marque findById(int id){
+    public static Marque getById(int id){
         var sql = "SELECT \"IdMarque\", \"Nom\", \"SiteWeb\"\n" +
                 "\tFROM public.\"Marque\" WHERE \"IdMarque\"=?;";
         try (var conn =  DB.connect();
@@ -111,7 +123,7 @@ public class MarquesDB {
         return null;
     }
 
-    public static int update(int id, String nom, String siteWeb) {
+    public static int modifier(int id, String nom, String siteWeb) {
         var sql = "UPDATE public.\"Marque\"\n" +
                 "\tSET \"IdMarque\"=?, \"Nom\"=?, \"SiteWeb\"=?\n" +
                 "\tWHERE \"IdMarque\"=?;";
@@ -133,7 +145,7 @@ public class MarquesDB {
         return affectedRows;
     }
 
-    public static int delete(int id) {
+    public static int supprimer(int id) {
         var sql = "DELETE FROM public.\"Marque\"\n" +
                 "\tWHERE \"IdMarque\"=?;";
         try (var conn  = DB.connect();

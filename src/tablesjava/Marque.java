@@ -1,5 +1,9 @@
 package tablesjava;
 
+
+/**
+ * Classe permettant de modéliser en Java la table "Marque" de la bdd
+ */
 public class Marque {
 
     private int id;
@@ -12,9 +16,6 @@ public class Marque {
         this.siteWeb = siteWeb;
     }
 
-//    public void setId(int id) {
-//        this.id = id;
-//    }
 
     public void setNom(String nom) {
         this.nom = nom;
