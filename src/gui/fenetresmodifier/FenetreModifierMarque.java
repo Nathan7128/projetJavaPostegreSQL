@@ -1,65 +1,48 @@
 package gui.fenetresmodifier;
 
+
+// Importation des bibliothèques internes
+import gui.fenetresajouter.FenetreAjouterMarque;
 import gui.tableaux.TableauMarques;
 import tablesdb.MarquesDB;
 import tablesjava.Marque;
 
+// Importation des bibliothèques externes
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class FenetreModifierMarque extends JDialog {
 
-    private final JTextField champNom = new JTextField(15);
-    private final JTextField champSiteWeb = new JTextField(15);
-    private TableauMarques tableauMarques;
+/**
+ * Cette classe hérite de la classe mère "FenetreAjouterMarque" et est utilisée pour modifier une marque
+ * déjà présent dans la BDD.
+ * Elle hérite de cette classe car elle lui est très semblable : elle possède les mêmes champs, labels, etc.,
+ * à la différence que certains d'entre eux sont remplis par défaut car la marque a déjà été saisie.
+ */
+public class FenetreModifierMarque extends FenetreAjouterMarque {
+
     int indexTableau;
     private Marque marque;
 
+
     public FenetreModifierMarque(JFrame parent, TableauMarques tableauMarques, int indexTableau) {
-        super(parent, "Modifier la marque", true);
-        this.tableauMarques = tableauMarques;
+        super(parent, tableauMarques);
+
         this.indexTableau = indexTableau;
         int idMarque = (int) tableauMarques.getValueAt(indexTableau, 0);
         this.marque = MarquesDB.getById(idMarque);
-        setLayout(new BorderLayout(10, 10));
 
-        JPanel panelForm = new JPanel(new GridLayout(2, 2, 20, 20));
-
-        panelForm.add(new JLabel("Nom :"));
-        panelForm.add(champNom);
         champNom.setText(marque.getNom());
-
-        panelForm.add(new JLabel("Site Web :"));
-        panelForm.add(champSiteWeb);
         champSiteWeb.setText(marque.getSiteWeb());
 
-        add(panelForm, BorderLayout.CENTER);
-
-
-        JPanel panelBoutons = new JPanel();
-        JButton boutonValider = new JButton("Valider");
-        JButton boutonAnnuler = new JButton("Annuler");
-
-        panelBoutons.add(boutonValider);
-        panelBoutons.add(boutonAnnuler);
-        add(panelBoutons, BorderLayout.SOUTH);
-
-
-        boutonValider.addActionListener(new ActionListener() {
+        bValider.removeActionListener(bValider.getActionListeners()[0]);
+        bValider.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 modifierMarque();
             }
         });
-
-        boutonAnnuler.addActionListener(e -> {
-            dispose();
-        });
-
-        pack();
-        setLocationRelativeTo(parent);
     }
 
     private void modifierMarque() {

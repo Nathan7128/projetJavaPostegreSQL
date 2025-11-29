@@ -1,5 +1,7 @@
 package gui.fenetresajouter;
 
+
+// Importation des bibliothèques internes
 import gui.tableaux.TableauFactures;
 import tablesdb.ClientsDB;
 import tablesdb.FacturesDB;
@@ -8,6 +10,8 @@ import tablesdb.LignesFactureDB;
 import tablesjava.Facture;
 import tablesjava.LigneFacture;
 
+
+// Importation des bibliothèques externes
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,88 +20,116 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Map;
 
+
+/**
+ * Cette classe représente une fenêtre de dialogue permettant d'ajouter une facture.
+ * Elle est instanciée lorsque l'utilisateur clique sur "Ajouter" une facture, et permet de
+ * saisir les informations de la facture via sa boite de dialogue.
+ */
 public class FenetreAjouterFacture extends JDialog {
 
-    private final Map<String, Integer> allIDsClients = ClientsDB.getIdsClient();
-    private final JComboBox champClient = new JComboBox(allIDsClients.keySet().toArray());
+    protected Map<String, Integer> allIDsClients;
+    protected JComboBox champClient;
+    protected JSpinner champJour;
+    protected JComboBox<String> champMois;
+    protected JSpinner champAnnee;
+    protected Map<String, Integer> dictIdsInstruments;
+    protected JComboBox champLigneFacture;
+    protected TableauFactures tableauFactures;
+    protected JButton bValider;
+    protected JButton bAnnuler;
 
-    private final JSpinner champJour = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
-    private final JComboBox<String> champMois = new JComboBox<>(new String[]{
-            "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-            "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
-    });
-    private final JSpinner champAnnee = new JSpinner(new SpinnerNumberModel(2025, 1950, 2050, 1));
-    private final Map<String, Integer> dictIdsInstruments = InstrumentsDB.getIdsInstrument();
-    private final JComboBox champLigneFacture = new JComboBox();
-    private TableauFactures tableauFactures;
 
     public FenetreAjouterFacture(JFrame parent, TableauFactures tableauFactures) {
         super(parent, "Ajouter une facture", true);
         this.tableauFactures = tableauFactures;
         setLayout(new BorderLayout(10, 10));
 
+        creerChamps();
+        creerBoutons();
+
+        pack();
+        setLocationRelativeTo(parent);
+    }
+
+    private void creerChamps() {
         JPanel panelForm = new JPanel(new GridLayout(3, 2, 20, 20));
 
+
+        allIDsClients = ClientsDB.getIdsClient();
+        champClient = new JComboBox(allIDsClients.keySet().toArray());
         panelForm.add(new JLabel("Client :"));
         panelForm.add(champClient);
 
-        panelForm.add(new JLabel("Date de la facture :"));
+
         JPanel panelDate = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        champJour = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
         panelDate.add(champJour);
+        champMois = new JComboBox<>(new String[]{
+                "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+                "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+        });
         panelDate.add(champMois);
+        champAnnee = new JSpinner(new SpinnerNumberModel(2025, 1950, 2050, 1));
         panelDate.add(champAnnee);
+        panelForm.add(new JLabel("Date de la facture :"));
         panelForm.add(panelDate);
 
+
         JPanel panelInstrument = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        dictIdsInstruments = InstrumentsDB.getIdsInstrument();
         panelInstrument.add(new JLabel("Instrument(s) :"));
+
         JButton bAjouterLigneFacture = new JButton("+");
         bAjouterLigneFacture.setBackground(new Color(46, 204, 113)); // vert
         bAjouterLigneFacture.setForeground(Color.WHITE);
-        JButton bSupprimerLigneFacture = new JButton("−");
-        bSupprimerLigneFacture.setBackground(new Color(231, 76, 60)); // rouge
-        bSupprimerLigneFacture.setForeground(Color.WHITE);
         bAjouterLigneFacture.setFont(new Font("Arial", Font.BOLD, 14));
-        bSupprimerLigneFacture.setFont(new Font("Arial", Font.BOLD, 14));
-        panelInstrument.add(bAjouterLigneFacture);
-        panelInstrument.add(bSupprimerLigneFacture);
-        panelForm.add(panelInstrument);
-        panelForm.add(champLigneFacture);
-
         bAjouterLigneFacture.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ajouterLigneFacture();
             }
         });
+        panelInstrument.add(bAjouterLigneFacture);
 
+        JButton bSupprimerLigneFacture = new JButton("−");
+        bSupprimerLigneFacture.setBackground(new Color(231, 76, 60)); // rouge
+        bSupprimerLigneFacture.setForeground(Color.WHITE);
+        bSupprimerLigneFacture.setFont(new Font("Arial", Font.BOLD, 14));
         bSupprimerLigneFacture.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 supprimerLigneFacture();
             }
         });
+        panelInstrument.add(bSupprimerLigneFacture);
+
+        panelForm.add(panelInstrument);
+
+        champLigneFacture = new JComboBox();
+        panelForm.add(champLigneFacture);
 
         add(panelForm, BorderLayout.CENTER);
+    }
 
+    private void creerBoutons() {
         JPanel panelBoutons = new JPanel();
-        JButton boutonValider = new JButton("Valider");
-        JButton boutonAnnuler = new JButton("Annuler");
 
-        panelBoutons.add(boutonValider);
-        panelBoutons.add(boutonAnnuler);
-        add(panelBoutons, BorderLayout.SOUTH);
-
-        boutonValider.addActionListener(new ActionListener() {
+        bValider = new JButton("Valider");
+        bValider.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 creerFacture();
             }
         });
+        panelBoutons.add(bValider);
 
-        boutonAnnuler.addActionListener(e -> dispose());
+        bAnnuler = new JButton("Annuler");
+        bAnnuler.addActionListener(e -> dispose());
+        panelBoutons.add(bAnnuler);
 
-        pack();
-        setLocationRelativeTo(parent);
+        add(panelBoutons, BorderLayout.SOUTH);
     }
 
     private void ajouterLigneFacture() {

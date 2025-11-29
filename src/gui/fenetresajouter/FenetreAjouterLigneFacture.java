@@ -1,9 +1,12 @@
 package gui.fenetresajouter;
 
+
+// Importation des bibliothèques internes
 import tablesdb.InstrumentsDB;
 import tablesdb.MarquesDB;
 import tablesdb.ModelesDB;
 
+// Importation des bibliothèques externes
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,26 +14,45 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Map;
 
+
+/**
+ * Cette classe représente une fenêtre de dialogue permettant d'ajouter une ligne de facture.
+ * Elle est instanciée lorsque l'utilisateur clique sur "Ajouter" une ligne de facture, et permet de
+ * saisir les informations de la ligne de facture via sa boite de dialogue.
+ */
 public class FenetreAjouterLigneFacture extends JDialog {
 
-    private final Map<String, Integer> allIDsMarques = MarquesDB.getIdsMarque();
-    private final JComboBox champMarque = new JComboBox(allIDsMarques.keySet().toArray());
-    private Map<String, Integer> allIDsModeles = ModelesDB.getIdsModele();
-    private String[] listeNomsModele = allIDsModeles.keySet().toArray(new String[0]);
-    private JComboBox champModele = new JComboBox(Arrays.stream(listeNomsModele).sorted().toArray(String[]::new));
-    private Map<String, Integer> allIDsInstruments = InstrumentsDB.getIdsInstrument();
-    private String[] listeNomsInstrument = allIDsInstruments.keySet().toArray(new String[0]);
-    private JComboBox champInstrument = new JComboBox(allIDsInstruments.keySet().toArray());
-
-    private final JComboBox champLigneFacture ;
+    private Map<String, Integer> allIDsMarques;
+    private JComboBox champMarque;
+    private Map<String, Integer> allIDsModeles;
+    private String[] listeNomsModele;
+    private JComboBox champModele;
+    private Map<String, Integer> allIDsInstruments;
+    private String[] listeNomsInstrument;
+    private JComboBox champInstrument;
+    private JComboBox champLigneFacture;
+    private JButton bValider;
+    private JButton bAnnuler;
 
     public FenetreAjouterLigneFacture(JFrame parent, JComboBox champLigneFacture) {
         super(parent, "Ajouter un instrument à la facture", true);
+
         this.champLigneFacture = champLigneFacture;
+
         setLayout(new BorderLayout(10, 10));
 
+        creerChamps();
+        creerBoutons();
+
+        pack();
+        setLocationRelativeTo(parent);
+    }
+
+    private void creerChamps() {
         JPanel panelForm = new JPanel(new GridLayout(3, 2, 20, 20));
 
+        allIDsMarques = MarquesDB.getIdsMarque();
+        champMarque = new JComboBox(allIDsMarques.keySet().toArray());
         panelForm.add(new JLabel("Filtrer marque :"));
         panelForm.add(champMarque);
         champMarque.setSelectedItem(null);
@@ -41,6 +63,9 @@ public class FenetreAjouterLigneFacture extends JDialog {
             }
         });
 
+        allIDsModeles = ModelesDB.getIdsModele();
+        listeNomsModele = allIDsModeles.keySet().toArray(new String[0]);
+        champModele = new JComboBox(Arrays.stream(listeNomsModele).sorted().toArray(String[]::new));
         panelForm.add(new JLabel("Filtrer modèle :"));
         panelForm.add(champModele);
         champModele.setSelectedItem(null);
@@ -51,36 +76,35 @@ public class FenetreAjouterLigneFacture extends JDialog {
             }
         });
 
+        allIDsInstruments = InstrumentsDB.getIdsInstrument();
+        listeNomsInstrument = allIDsInstruments.keySet().toArray(new String[0]);
+        champInstrument = new JComboBox(allIDsInstruments.keySet().toArray());
         panelForm.add(new JLabel("Choisir instrument :"));
         panelForm.add(champInstrument);
         champInstrument.setSelectedItem(null);
 
         add(panelForm, BorderLayout.CENTER);
+    }
 
-        add(panelForm, BorderLayout.CENTER);
-
+    private void creerBoutons() {
         JPanel panelBoutons = new JPanel();
-        JButton boutonValider = new JButton("Valider");
-        JButton boutonAnnuler = new JButton("Annuler");
-
-        panelBoutons.add(boutonValider);
-        panelBoutons.add(boutonAnnuler);
-        add(panelBoutons, BorderLayout.SOUTH);
-
-        boutonValider.addActionListener(new ActionListener() {
+        bValider = new JButton("Valider");
+        panelBoutons.add(bValider);
+        bValider.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ajouterLigneFacture();
             }
         });
 
-        boutonAnnuler.addActionListener(e -> dispose());
+        bAnnuler = new JButton("Annuler");
+        panelBoutons.add(bAnnuler);
+        bAnnuler.addActionListener(e -> dispose());
 
-        pack();
-        setLocationRelativeTo(parent);
+        add(panelBoutons, BorderLayout.SOUTH);
     }
 
-    public void filtrerModeles() {
+    private void filtrerModeles() {
         String modeleActuel = (String) champModele.getSelectedItem();
         int idMarque = allIDsMarques.get((String) champMarque.getSelectedItem());
         allIDsModeles = ModelesDB.getIdsModele(idMarque);
@@ -94,7 +118,7 @@ public class FenetreAjouterLigneFacture extends JDialog {
         }
     }
 
-    public void filtrerInstruments() {
+    private void filtrerInstruments() {
         String instrumentActuel = (String) champInstrument.getSelectedItem();
         String modeleActuel = (String) champModele.getSelectedItem();
         champInstrument.removeAllItems();
@@ -114,7 +138,7 @@ public class FenetreAjouterLigneFacture extends JDialog {
         }
     }
 
-    public void ajouterLigneFacture() {
+    private void ajouterLigneFacture() {
         String instrumentSel = (String) champInstrument.getSelectedItem();
 //        On vérifie si l'instrument n'a pas déjà été ajouté
         boolean instrumentAjt = false;

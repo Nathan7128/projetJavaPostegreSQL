@@ -12,7 +12,6 @@ public class Instrument {
     private int id;
     private String numSerie;
     private int idModele;
-    private String nomModele;
     private String couleur;
     private int prix;
     private String photo;
@@ -22,7 +21,6 @@ public class Instrument {
         this.id = id;
         this.numSerie = numSerie;
         this.idModele = idModele;
-        this.nomModele = ModelesDB.getById(idModele).getNom();
         this.couleur = couleur;
         this.prix = prix;
         this.photo = photo;
@@ -62,7 +60,7 @@ public class Instrument {
     }
 
     public String getNomModele() {
-        return nomModele;
+        return ModelesDB.getById(idModele).getNom();
     }
 
     public String getCouleur() {

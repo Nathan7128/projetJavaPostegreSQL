@@ -1,67 +1,85 @@
 package gui.fenetresajouter;
 
+
+// Importation des bibliothèques internes
 import gui.tableaux.TableauClients;
 import tablesdb.ClientsDB;
 import tablesjava.Client;
 
+// Importation des bibliothèques externes
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Cette classe représente une fenêtre de dialogue permettant d'ajouter un client.
+ * Elle est instanciée lorsque l'utilisateur clique sur "Ajouter" un client, et permet de
+ * saisir les informations du client via sa boite de dialogue.
+ */
 public class FenetreAjouterClient extends JDialog {
 
-    private final JTextField champNom = new JTextField(15);
-    private final JTextField champPrenom = new JTextField(15);
-    private final JTextField champAdresse = new JTextField(15);
-    private final JTextField champEmail = new JTextField(15);
-    private TableauClients tableauClients;
+    protected JTextField champNom;
+    protected JTextField champPrenom;
+    protected JTextField champAdresse;
+    protected JTextField champEmail;
+    protected TableauClients tableauClients;
+    protected JButton bValider;
+    protected JButton bAnnuler;
 
     public FenetreAjouterClient(JFrame parent, TableauClients tableauClients) {
         super(parent, "Ajouter un client", true);
         this.tableauClients = tableauClients;
         setLayout(new BorderLayout(10, 10));
 
+        creerChamps();
+        creerBoutons();
 
+        pack();
+        setLocationRelativeTo(parent);
+    }
+
+    private void creerChamps() {
         JPanel panelForm = new JPanel(new GridLayout(4, 2, 20, 20));
 
+        champNom = new JTextField(15);
         panelForm.add(new JLabel("Nom :"));
         panelForm.add(champNom);
 
+        champPrenom = new JTextField(15);
         panelForm.add(new JLabel("Prénom :"));
         panelForm.add(champPrenom);
 
+        champAdresse = new JTextField(15);
         panelForm.add(new JLabel("Adresse :"));
         panelForm.add(champAdresse);
 
+        champEmail = new JTextField(15);
         panelForm.add(new JLabel("Email :"));
         panelForm.add(champEmail);
 
         add(panelForm, BorderLayout.CENTER);
+    }
 
-
+    private void creerBoutons() {
         JPanel panelBoutons = new JPanel();
-        JButton boutonValider = new JButton("Valider");
-        JButton boutonAnnuler = new JButton("Annuler");
 
-        panelBoutons.add(boutonValider);
-        panelBoutons.add(boutonAnnuler);
-        add(panelBoutons, BorderLayout.SOUTH);
-
-
-        boutonValider.addActionListener(new ActionListener() {
+        bValider = new JButton("Valider");
+        panelBoutons.add(bValider);
+        bValider.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 creerClient();
             }
         });
 
-        boutonAnnuler.addActionListener(e -> {
+        bAnnuler = new JButton("Annuler");
+        bAnnuler.addActionListener(e -> {
             dispose();
         });
+        panelBoutons.add(bAnnuler);
 
-        pack();
-        setLocationRelativeTo(parent);
+        add(panelBoutons, BorderLayout.SOUTH);
     }
 
     private void creerClient() {

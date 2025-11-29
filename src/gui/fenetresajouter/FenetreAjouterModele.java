@@ -1,61 +1,83 @@
 package gui.fenetresajouter;
 
+
+// Importation des bibliothèques internes
 import gui.tableaux.TableauModeles;
 import tablesdb.ModelesDB;
 import tablesdb.MarquesDB;
 import tablesjava.Modele;
 
+// Importation des bibliothèques externes
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 
+
+/**
+ * Cette classe représente une fenêtre de dialogue permettant d'ajouter un modèle.
+ * Elle est instanciée lorsque l'utilisateur clique sur "Ajouter" un modèle, et permet de
+ * saisir les informations du modèle via sa boite de dialogue.
+ */
 public class FenetreAjouterModele extends JDialog {
 
-    protected final Map<String, Integer> allIDsMarques = MarquesDB.getIdsMarque();
-    protected final JComboBox champMarque = new JComboBox(allIDsMarques.keySet().toArray());
-    protected final JTextField champNom = new JTextField(15);
+    protected Map<String, Integer> allIdsMarque;
+    protected JComboBox champMarque;
+    protected JTextField champNom;
     protected TableauModeles tableauModeles;
+    protected JButton bValider;
+    protected JButton bAnnuler;
+
 
     public FenetreAjouterModele(JFrame parent, TableauModeles tableauModeles) {
         super(parent, "Ajouter un modèle", true);
+
         this.tableauModeles = tableauModeles;
+
         setLayout(new BorderLayout(10, 10));
 
+        creerChamps();
+        creerBoutons();
+
+        pack();
+        setLocationRelativeTo(parent);
+    }
+
+    private void creerChamps() {
         JPanel panelForm = new JPanel(new GridLayout(3, 2, 20, 20));
 
+        allIdsMarque = MarquesDB.getIdsMarque();
+        champMarque = new JComboBox(allIdsMarque.keySet().toArray());
         panelForm.add(new JLabel("Marque :"));
         panelForm.add(champMarque);
 
+        champNom = new JTextField(15);
         panelForm.add(new JLabel("Nom :"));
         panelForm.add(champNom);
 
         add(panelForm, BorderLayout.CENTER);
+    }
 
+    private void creerBoutons() {
+        bValider = new JButton("Valider");
+        bAnnuler = new JButton("Annuler");
 
-        JPanel panelBoutons = new JPanel();
-        JButton boutonValider = new JButton("Valider");
-        JButton boutonAnnuler = new JButton("Annuler");
-
-        panelBoutons.add(boutonValider);
-        panelBoutons.add(boutonAnnuler);
-        add(panelBoutons, BorderLayout.SOUTH);
-
-
-        boutonValider.addActionListener(new ActionListener() {
+        bValider.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 creerModele();
             }
         });
 
-        boutonAnnuler.addActionListener(e -> {
+        bAnnuler.addActionListener(e -> {
             dispose();
         });
 
-        pack();
-        setLocationRelativeTo(parent);
+        JPanel panelBoutons = new JPanel();
+        panelBoutons.add(bValider);
+        panelBoutons.add(bAnnuler);
+        add(panelBoutons, BorderLayout.SOUTH);
     }
 
     private void creerModele() {
@@ -72,7 +94,7 @@ public class FenetreAjouterModele extends JDialog {
         }
         // Si tout est correct
         else {
-            int idMarque = allIDsMarques.get(marqueSelect);
+            int idMarque = allIdsMarque.get(marqueSelect);
             Modele modeleCree = new Modele(idModele, idMarque, nom);
             ModelesDB.ajouter(modeleCree);
             tableauModeles.ajouterDonnee(modeleCree);

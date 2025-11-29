@@ -11,14 +11,12 @@ public class Modele {
 
     private int id;
     private int idMarque;
-    private String nomMarque;
     private String nom;
 
 
     public Modele(int id, int idMarque, String nomModele) {
         this.id = id;
         this.idMarque = idMarque;
-        this.nomMarque = MarquesDB.getById(idMarque).getNom();
         this.nom = nomModele;
     }
 
@@ -38,7 +36,7 @@ public class Modele {
     }
 
     public String getNomMarque() {
-        return nomMarque;
+        return MarquesDB.getById(idMarque).getNom();
     }
 
     public String getNom() {

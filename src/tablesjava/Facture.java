@@ -15,14 +15,12 @@ public class Facture {
 
     private int id;
     private int idClient;
-    private Client client;
     private Date date;
 
 
     public Facture(int id, int idClient, Date date) {
         this.id = id;
         this.idClient = idClient;
-        this.client = ClientsDB.getById(idClient);
         this.date = date;
     }
 
@@ -42,6 +40,7 @@ public class Facture {
     }
 
     public String getNomClientComplet() {
+        Client client = ClientsDB.getById(idClient);
         return client.getPrenom() + " " + client.getNom();
     }
 
